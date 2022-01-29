@@ -3,8 +3,9 @@ import Navbar from './components/Navbar';
 const App = () => {
   return(
     <React.Fragment>
-      <Navbar></Navbar>
-      <h2>Hello world</h2>
+      <Navbar/>
+      <h3>ferry</h3>
+      
     </React.Fragment>
   )
 }
