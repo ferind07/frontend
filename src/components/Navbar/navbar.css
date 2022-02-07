@@ -6,7 +6,7 @@ ul, li {
 }
 nav {
   height: 80px;
-  background-color: black;
+  background-color: #D1D1D1;
   display: flex;
   padding: 0.5rem;
   z-index: 99;
