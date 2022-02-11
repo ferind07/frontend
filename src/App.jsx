@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import Navbar from './components/Navbar';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import Home from './pages/home';
+
 const App = () => {
-  return(
-    <React.Fragment>
-      <Navbar/>
-      <h3>ferry</h3>
-      
-    </React.Fragment>
-  )
+  return (
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Home/>}/>
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
 }
 
 export default App;

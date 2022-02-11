@@ -1,53 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400&family=Zen+Kaku+Gothic+Antique:wght@300;400&display=swap');
 ul, li {
   margin: 0;
-  pad: 0;
-  color: aliceblue;
+  list-style: none;
   
 }
 nav {
-  height: 80px;
-  background-color: #D1D1D1;
+  background-color: #ffffff;
   display: flex;
   padding: 0.5rem;
   z-index: 99;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+  justify-content: space-between;
 }
 
-.flex-start {
-  justify-content: flex-start;
+.nav-logo {
+  display: flex;
+  margin-left: 20px;
+}
+.nav-logo button {
+  background-color: transparent;
+  border: none;
+  margin-left: 30px;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+.nav-middle {
+  background-color: green;
 }
 
-.flex-end {
-  justify-content: flex-end;
+.nav-right {
+  display: flex;
+}
+.nav-right p {
+  margin-right: 15px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 400;
+}
+.nav-right button {
+  margin: 0px 5px 0px 5px;
+  border-radius: 0px;
 }
 
-nav > .nav-items {
-  z-index: 99;
+.nav-title {
+  font-size: 1.75rem;
+  letter-spacing: 0.25rem;
+  margin-left: 0.25rem;
+  font-family: 'Zen Kaku Gothic Antique', sans-serif;
 }
 
-nav > .nav-items > ul {
+.nav-link {
+  color: black !important;
+}
+.nav-link:hover {
+  color: rgba(0, 0, 0, 0.72) !important;
+}
+
+nav p {
+  margin-bottom: 0;
+}
+
+nav img {
+  height: 50px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
   align-items: center;
-  position: relative;
 }
 
-nav > .nav-items > ul > li {
-  display: inline-block;
-  text-transform: capitalize;
-  position: relative;
-}
-
-nav > .nav-items > ul > li > a {
-  color: white;
-  display: block;
-  letter-spacing: 0.12rem;
-  overflow: hidden;
-  position: relative;
-  text-decoration: none;
-  
-}
-
-nav > .nav-items > ul > li:not(.logo) > a {
-  margin: 0 0.5rem;
-  padding: 0.5em 1em;
-}
 
 
