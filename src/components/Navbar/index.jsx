@@ -14,7 +14,7 @@ const Navbar = () => {
             <p className='nav-title'>DREY</p>
             
             <NavDropdown
-              title="Catagories"
+              title="Categories"
               className='center'
             >
               <NavDropdown.Item href="#action/3.1">Language</NavDropdown.Item>
