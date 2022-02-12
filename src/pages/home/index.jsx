@@ -1,28 +1,26 @@
 import React, { Component } from 'react';
 import Navbar from '../../components/Navbar';
-import styled from 'styled-components';
+import './index.css';
 
 const Home = () => { 
   return (
     <>
       <Navbar/>
-      <div
-        style={{
-          height: '500px',
-          background: 'url("/asset/home/programming.jpg") no-repeat center center fixed',
-          backgroundSize: 'cover',
-        }}
-      >
-
+      <div className='billboard'>
+        <img src="/asset/home/banner.jpg"/>
+        <div className='banner'>
+          <h2>Learning thats gets you</h2>
+          <p>Skill for your present and your future. Now come to your home</p>
+        </div>
       </div>
+      <div className='catagory-container'>
+        <h2>Top Categories</h2>
+      </div>
+      
     </>
   );
 }
 
-const Campain = styled.div`
-  height: 500px;
-  background-color: red;
-  background-image: url();
-`;
+
 
 export default Home;

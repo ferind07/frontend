@@ -1,5 +1,4 @@
 import React, { Component, useState } from 'react';
-import { AiFillCaretDown } from "react-icons/ai";
 import {NavDropdown} from "react-bootstrap";
 
 //css
