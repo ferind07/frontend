@@ -18,7 +18,7 @@ const Navbar = () => {
               className='center'
             >
               <NavDropdown.Item href="#action/3.1">Language</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Baking</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">Cooking</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">Sports</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.4">Design</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.5">Programming</NavDropdown.Item>

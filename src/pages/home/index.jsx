@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
+import Card from './card';
 import './index.css';
 
 const Home = () => { 
@@ -14,9 +16,32 @@ const Home = () => {
         </div>
       </div>
       <div className='catagory-container'>
-        <h2>Top Categories</h2>
+        <h3>Top Categories</h3>
+        <hr />
+        <div className='container-fluid'>
+          <div className='row'>
+            <Card catagory="Cooking" url="/asset/home/cooking.png"/>
+            <Card catagory="Design" url="/asset/home/design.png"/>
+            <Card catagory="Language" url="/asset/home/lang.png"/>
+            <Card catagory="Programming" url="/asset/home/progamming.png"/>
+            <Card catagory="Sport" url="/asset/home/sport.png"/>
+          </div>
+        </div>
+        <hr />
       </div>
       
+      <div className='mentor-container'>
+        <img src="/asset/home/mentor.jpeg"/>
+        <div className='mentor-container-text center'>
+          <div>
+            <h2>Become an instructor</h2>
+            <p>Many instructor teach millions of students on Odrey. We provide platform for you to be an insturctor in here</p>
+            <button className='btn btn-dark'>Register here</button>
+          </div>
+        </div>
+        
+      </div>
+      <Footer/>
     </>
   );
 }
