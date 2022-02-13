@@ -10,7 +10,7 @@ const Login = () => {
     <>
       <Navbar/>
       <div className='container-login'>
-        <h5>Log in to your Odrey account</h5>
+        <h5>Log in to your account</h5>
         <hr style={{width: "80%", marginLeft: "auto", marginRight: "auto"}}/>
         <div style={{marginTop: '3vw', width: '70%', marginLeft: 'auto', marginRight: 'auto'}}>
           <Input size="large" placeholder="Email" prefix={<AiOutlineMail />} />
