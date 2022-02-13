@@ -1,10 +1,13 @@
 import React, { Component, useState } from 'react';
 import {NavDropdown} from "react-bootstrap";
+import { useNavigate } from 'react-router-dom';
 
 //css
 import './navbar.css';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <header>
@@ -27,8 +30,8 @@ const Navbar = () => {
           </div>
           <div className='nav-right'>
             <p className='center'>Become Teacher</p>
-            <button className='btn btn-outline-dark'>Login</button>
-            <button className='btn btn-dark'>Register</button>
+            <button className='btn btn-outline-dark' onClick={(e) => {navigate("/login")}}>Login</button>
+            <button className='btn btn-dark' onClick={(e) => {navigate("/register")}}>Register</button>
           </div>
           
         </nav>
