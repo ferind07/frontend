@@ -59,8 +59,8 @@ const Register = () => {
           <Input size="large" placeholder="Name" prefix={<AiOutlineUser />} className='mt-2' value={name} onChange={e => {setName(e.target.value)}}/>
           <Input className='w-100 mt-2' controls={false} placeholder="Phone number" type='number' prefix={<AiOutlineMobile/>} value={phoneNumber} onChange={e => {setPhoneNumber(e.target.value)}}/>
 
-          <Dropdown overlay={menu} className='mt-2'>
-            <Button  style={{width: '100%'}}>
+          <Dropdown overlay={menu} className='mt-2' trigger={['click']}>
+            <Button style={{width: '100%'}}>
               {returnRole()} <DownOutlined />
             </Button>
           </Dropdown>
