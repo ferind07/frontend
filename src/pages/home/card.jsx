@@ -5,7 +5,7 @@ const Card = (props) => {
   return (
     <div className='col-4'>
       <div className='card' style={{backgroundColor : '#efefef'}}>
-        <img src={props.url} width='100%'/>
+        <img className='card-img' src={props.url} width='100%'/>
       </div>
       <h5 style={{marginTop: '10px', marginBottom: '20px'}}>{props.catagory}</h5>
     </div>

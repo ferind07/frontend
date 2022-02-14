@@ -1,3 +1,5 @@
-html {
-  min-width: 768px;
-}
+/* *,
+*::before,
+*::after {
+  box-sizing: border-box;
+} */

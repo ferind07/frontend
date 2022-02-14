@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import {NavDropdown} from "react-bootstrap";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 //css
 import './navbar.css';
@@ -13,14 +13,15 @@ const Navbar = () => {
       <header>
         <nav>
           <div className='nav-logo'>
-            <img src="/asset/image/logo.png" />
-            <p className='nav-title'>DREY</p>
-            
+            <Link to='/' style={{display: 'flex'}}>
+              <img src="/asset/image/logo.png" />
+              <p className='nav-title'>DREY</p>
+            </Link>
             <NavDropdown
               title="Categories"
               className='center'
             >
-              <NavDropdown.Item href="#action/3.1">Language</NavDropdown.Item>
+              <NavDropdown.Item href="/categories">Language</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Cooking</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">Sports</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.4">Design</NavDropdown.Item>

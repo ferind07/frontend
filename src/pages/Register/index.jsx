@@ -35,6 +35,32 @@ const Register = () => {
     }
   }
 
+  const [emailError, setEmailError] = useState({});
+  const [nameError, setNameError] = useState({});
+  const [passwordError, setPasswordError] = useState({});
+  const [passwordConfirmationError, setPasswordConfirmationError] = useState({});
+  const [phoneNumberError, setPhoneNumberError] = useState({});
+
+  function validateEmail (email) {
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if ( re.test(email) ) {
+      return true;
+    }
+    else {
+      if (email == "") { message.error("Insert email"); return false; }
+      message.error('Wrong email');
+      return false;
+    }
+  };
+
+  const registerClick = (e) => {
+    e.preventDefault();
+    if (!validateEmail(email)) {
+      setEmailError({borderColor : 'red'});
+    }
+  }
+
   const menu = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="1">
@@ -53,7 +79,7 @@ const Register = () => {
         <hr style={{width: "80%", marginLeft: "auto", marginRight: "auto"}}/>
         <AiOutlineUserAdd size='5vw'/>
         <div style={{marginTop: '1vw', width: '70%', marginLeft: 'auto', marginRight: 'auto'}}>
-          <Input size="large" placeholder="Email" prefix={<AiOutlineMail />} value={email} onChange={e => {setEmail(e.target.value)}}/>
+          <Input size="large" placeholder="Email" prefix={<AiOutlineMail />} style={emailError} value={email} onChange={e => {setEmail(e.target.value)}}/>
           <Input.Password size="large" placeholder="Password" prefix={<AiFillLock />} className='mt-2' value={password} onChange={e => {setPassword(e.target.value)}}/>
           <Input.Password size="large" placeholder="Password confirmation" prefix={<AiFillLock />} className='mt-2' visibilityToggle={false} value={passwordConfirmation} onChange={e => {setPasswordConfirmation(e.target.value)}}/>
           <Input size="large" placeholder="Name" prefix={<AiOutlineUser />} className='mt-2' value={name} onChange={e => {setName(e.target.value)}}/>
@@ -65,14 +91,12 @@ const Register = () => {
             </Button>
           </Dropdown>
 
-          <Button type="primary" size='large' style={{ background: "black", borderColor: "black" }} className='mt-2 w-100'>Register</Button>
+          <Button type="primary" size='large' style={{ background: "black", borderColor: "black" }} className='mt-2 w-100' onClick={e => {registerClick(e)}}>Register</Button>
           
           <p className='mt-2'>Already have account <a href="/login">Login</a></p>
         </div>
       </div>
-      <div style={{position: 'absolute', bottom: '0', width: '100%'}}>
-        <Footer />
-      </div>
+      
       
     </>
   );
