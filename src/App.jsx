@@ -4,6 +4,7 @@ import Home from "./pages/home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Categories from "./pages/Categories";
+import DetailInstructor from "./pages/DetailInstructor";
 import Agung from "./pages/agung";
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/agung" element={<Agung />} />
+          <Route path="/detailInstructor" element={<DetailInstructor />} />
         </Routes>
       </BrowserRouter>
     </>

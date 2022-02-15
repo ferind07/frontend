@@ -20,7 +20,7 @@ const CategoriesCard = (props) => {
             <p className="text-muted mb-0">Indonesian language</p>
             <Rate disabled value={5} />
             <div className="mt-2 d-flex justify-content-start">
-              <a href="#">Explore</a>
+              <a href="/detailInstructor">Explore</a>
             </div>
           </div>
         </div>
