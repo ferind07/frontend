@@ -30,25 +30,11 @@
 }
 
 .mentor-container {
-  width: 85%;
-  margin-top: 30px;
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  justify-content: space-around;
   padding-bottom: 40px;
 }
 
-.mentor-container img {
-  width: 35vw;
-}
-
-.mentor-container h2 {
+.mentor-container h1 {
   font-family: "Domine", serif;
-}
-
-.mentor-container-text {
-  width: 25vw;
 }
 
 .mentor-container-text button {
@@ -58,5 +44,13 @@
 @media screen and (max-width: 555px) {
   .banner{
     padding: 10px 15px 10px 15px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .mentor-container{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
   }
 }

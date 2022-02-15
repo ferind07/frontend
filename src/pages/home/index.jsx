@@ -30,16 +30,21 @@ const Home = () => {
         <hr />
       </div>
       
-      <div className='mentor-container'>
-        <img src="/asset/home/mentor.jpeg"/>
-        <div className='mentor-container-text center'>
-          <div>
-            <h2>Become an instructor</h2>
-            <p>Many instructor teach millions of students on Odrey. We provide platform for you to be an insturctor in here</p>
-            <button className='btn btn-dark'>Register here</button>
+      
+      <div className='container mentor-container'>
+        <div className='row justify-content-md-center'>
+          <div className='col-lg-5 col-md-6 col-sm-6 col-8 mentor-container'>
+            <img src="/asset/home/mentor.jpeg" className='w-100'/>
+          </div>
+          <div className='col-lg-3 col-md-4 col-sm-4 col-8 center mentor-container'>
+            <div>
+              <h1>Become an instructor</h1>
+              <p>Many instructor teach millions of students on Odrey. We provide platform for you to be an insturctor in here</p>
+              <button className='btn btn-dark'>Register here</button>
+            </div>
+            
           </div>
         </div>
-        
       </div>
       <Footer/>
     </>
