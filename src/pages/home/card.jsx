@@ -3,7 +3,7 @@ import './card.css';
 
 const Card = (props) => {
   return (
-    <div className='col-4'>
+    <div className="col-md-4 col-sm-6 col-lg-4 col-12 mt-3">
       <div className='card' style={{backgroundColor : '#efefef'}}>
         <img className='card-img' src={props.url} width='100%'/>
       </div>

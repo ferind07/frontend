@@ -96,7 +96,7 @@ const Register = () => {
           <p className='mt-2'>Already have account <a href="/login">Login</a></p>
         </div>
       </div>
-      
+      <Footer/>
       
     </>
   );
