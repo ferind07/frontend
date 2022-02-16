@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { Rate } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const CategoriesCard = (props) => {
+  const navigate = Navigate();
   return (
     <>
       <div className="col-md-4 col-sm-6 col-lg-3 col-12 mt-3">
@@ -20,7 +22,13 @@ const CategoriesCard = (props) => {
             <p className="text-muted mb-0">Indonesian language</p>
             <Rate disabled value={5} />
             <div className="mt-2 d-flex justify-content-start">
-              <a href="/detailInstructor">Explore</a>
+              <a
+                onClick={(e) => {
+                  navigate("/detailInstructor");
+                }}
+              >
+                Explore
+              </a>
             </div>
           </div>
         </div>

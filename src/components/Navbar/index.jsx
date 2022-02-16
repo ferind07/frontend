@@ -70,9 +70,9 @@ const Navbarr = () => {
             </MediaQuery>
             <MediaQuery maxWidth={768}>
               <Nav className="me-auto">
-                <Nav.Link href="#features">Become teacher</Nav.Link>
-                <Nav.Link href="/login">Log in</Nav.Link>
-                <Nav.Link href="/register">Register</Nav.Link>
+                <Nav.Link onClick={(e) => {navigate("/register")}}>Become teacher</Nav.Link>
+                <Nav.Link onClick={(e) => {navigate("/login")}}>Log in</Nav.Link>
+                <Nav.Link onClick={(e) => {navigate("/register")}}>Register</Nav.Link>
               </Nav>
             </MediaQuery>
           </Navbar.Collapse>
