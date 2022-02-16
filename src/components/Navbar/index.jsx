@@ -27,7 +27,7 @@ const Navbarr = () => {
               </Link>
               <MediaQuery minWidth={555}>
                 <NavDropdown title="Categories" className="center">
-                  <NavDropdown.Item href="/categories">
+                  <NavDropdown.Item onClick={(e) => {navigate("/categories")}}>
                     Language
                   </NavDropdown.Item>
                   <NavDropdown.Item href="#action/3.2">
