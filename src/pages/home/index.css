@@ -29,8 +29,12 @@
   margin-right: auto;
 }
 
+.container {
+  min-height: 0px;
+}
+
 .mentor-container {
-  padding-bottom: 40px;
+  padding-bottom: 40px !important;
 }
 
 .mentor-container h1 {
@@ -42,13 +46,13 @@
 }
 
 @media screen and (max-width: 555px) {
-  .banner{
+  .banner {
     padding: 10px 15px 10px 15px;
   }
 }
 
 @media screen and (max-width: 576px) {
-  .mentor-container{
+  .mentor-container {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
