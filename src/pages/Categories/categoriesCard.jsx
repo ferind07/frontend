@@ -3,7 +3,7 @@ import { Rate } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const CategoriesCard = (props) => {
-  const navigate = Navigate();
+  const navigate = useNavigate();
   return (
     <>
       <div className="col-md-4 col-sm-6 col-lg-3 col-12 mt-3">
