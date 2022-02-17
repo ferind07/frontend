@@ -25,12 +25,15 @@ const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
 
   function handleMenuClick(e) {
+    //e.preventDefault();
     if (e.key == 1) {
       message.info("Role user selected");
       setRole(e.key);
+      console.log(e.key);
     } else {
       message.info("Role instructor selected");
       setRole(e.key);
+      console.log(e.key);
     }
   }
 
@@ -105,38 +108,42 @@ const Register = () => {
     return valid;
   }
 
+  function register() {
+    axios({
+      method: "post",
+      url: BackendUrl + "/user/register",
+      data: {
+        email: email,
+        password: password,
+        phoneNumber: phoneNumber,
+        role: role,
+        name: name,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        alert(response.data.msg);
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.log(err);
+        notification.error({
+          message: "Register Fail",
+          description: "Email already registered",
+        });
+      });
+  }
+
   const registerClick = (e) => {
     e.preventDefault();
-
+    //alert(role);
     if (validateInput()) {
-      axios({
-        method: "post",
-        url: BackendUrl + "/user/register",
-        data: {
-          email: email,
-          password: password,
-          phoneNumber: phoneNumber,
-          role: role,
-          name: name,
-        },
-      })
-        .then((response) => {
-          console.log(response);
-          alert(response.data.msg);
-          navigate("/login");
-        })
-        .catch((err) => {
-          console.log(err);
-          notification.error({
-            message: "Register Fail",
-            description: "Email already registered",
-          });
-        });
+      register();
     }
   };
 
   const menu = (
-    <Menu onClick={handleMenuClick}>
+    <Menu onClick={(e) => handleMenuClick(e)}>
       <Menu.Item key="1">User</Menu.Item>
       <Menu.Item key="2">Instructor</Menu.Item>
     </Menu>

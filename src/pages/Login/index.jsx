@@ -31,8 +31,14 @@ const Login = () => {
             description: response.data.msg,
           });
           window.localStorage.setItem("token", response.data.token);
-          //console.log(response.data.token);
-          navigate("/");
+          console.log(response.data.role);
+          if (response.data.role == 2) {
+            console.log("instuctor");
+            navigate("/instructorPage");
+          } else if (response.data.role == 1) {
+            //user login
+            navigate("/");
+          }
         } else {
           notification.error({
             message: "Login error",

@@ -81,8 +81,9 @@ const Navbarr = () => {
         <>
           <MediaQuery minWidth={768}>
             <div className="nav-right">
+              <button className="btn btn-outline-dark">My Account</button>
               <button
-                className="btn btn-outline-dark"
+                className="btn btn-danger"
                 onClick={(e) => onClickLogout(e)}
               >
                 Log out
@@ -91,9 +92,8 @@ const Navbarr = () => {
           </MediaQuery>
           <MediaQuery maxWidth={768}>
             <Nav className="me-auto">
+              <Nav.Link>My account</Nav.Link>
               <Nav.Link onClick={(e) => onClickLogout(e)}>Log out</Nav.Link>
-
-              <Nav.Link onClick={(e) => onClickLogout(e)}>{token}</Nav.Link>
             </Nav>
           </MediaQuery>
         </>
