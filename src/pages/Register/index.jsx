@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import { useNavigate } from "react-router-dom";
 import {
   AiFillLock,
   AiOutlineMail,
@@ -8,12 +9,14 @@ import {
   AiOutlineUserAdd,
   AiOutlineMobile,
 } from "react-icons/ai";
-import { Input, Button, Menu, Dropdown, InputNumber, message } from "antd";
+import { Input, Button, Menu, Dropdown, notification, message } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import axios from "axios";
 import "./index.css";
+import BackendUrl from "../../components/BackendUrl";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [role, setRole] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -65,10 +68,70 @@ const Register = () => {
     }
   }
 
-  const registerClick = (e) => {
-    e.preventDefault();
+  function validateInput() {
+    let valid = true;
     if (!validateEmail(email)) {
       setEmailError({ borderColor: "red" });
+      valid = false;
+    }
+    if (
+      password == "" ||
+      email == "" ||
+      passwordConfirmation == "" ||
+      phoneNumber == "" ||
+      name == ""
+    ) {
+      if (password == "") setPasswordError({ borderColor: "red" });
+      if (passwordConfirmation == "")
+        setPasswordConfirmationError({ borderColor: "red" });
+      if (phoneNumber == "") setPhoneNumberError({ borderColor: "red" });
+      if (name == "") setNameError({ borderColor: "red" });
+      valid = false;
+    }
+    if (password != passwordConfirmation) {
+      setPasswordConfirmationError({ borderColor: "red" });
+      message.error("Password confirmation error");
+      valid = false;
+    }
+    if (phoneNumber.length < 12) {
+      setPhoneNumberError({ borderColor: "red" });
+      message.error("Invalid phone number");
+      valid = false;
+    }
+    if (role == 0) {
+      message.error("Please select role");
+      valid = false;
+    }
+    return valid;
+  }
+
+  const registerClick = (e) => {
+    e.preventDefault();
+
+    if (validateInput()) {
+      axios({
+        method: "post",
+        url: BackendUrl + "/user/register",
+        data: {
+          email: email,
+          password: password,
+          phoneNumber: phoneNumber,
+          role: role,
+          name: name,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          alert(response.data.msg);
+          navigate("/login");
+        })
+        .catch((err) => {
+          console.log(err);
+          notification.error({
+            message: "Register Fail",
+            description: "Email already registered",
+          });
+        });
     }
   };
 
@@ -109,6 +172,7 @@ const Register = () => {
             prefix={<AiFillLock />}
             className="mt-2"
             value={password}
+            style={passwordError}
             onChange={(e) => {
               setPassword(e.target.value);
             }}
@@ -120,6 +184,7 @@ const Register = () => {
             className="mt-2"
             visibilityToggle={false}
             value={passwordConfirmation}
+            style={passwordConfirmationError}
             onChange={(e) => {
               setPasswordConfirmation(e.target.value);
             }}
@@ -130,6 +195,7 @@ const Register = () => {
             prefix={<AiOutlineUser />}
             className="mt-2"
             value={name}
+            style={nameError}
             onChange={(e) => {
               setName(e.target.value);
             }}
@@ -141,6 +207,7 @@ const Register = () => {
             type="number"
             prefix={<AiOutlineMobile />}
             value={phoneNumber}
+            style={phoneNumberError}
             onChange={(e) => {
               setPhoneNumber(e.target.value);
             }}

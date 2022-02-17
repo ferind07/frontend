@@ -30,7 +30,7 @@
 }
 
 .container {
-  min-height: 0px;
+  min-height: 0px !important;
 }
 
 .mentor-container {

@@ -8,10 +8,15 @@ nav {
   background-color: #ffffff;
   display: flex;
   padding: 0.5rem;
-  z-index: 1000;
+  z-index: 99;
   box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
   justify-content: space-between;
   position: relative;
+}
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 1000 !important;
 }
 
 .nav-logo {

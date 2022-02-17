@@ -1,11 +1,66 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { AiFillLock, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
+import axios from "axios";
+import BackendUrl from "../../components/BackendUrl";
+import { useNavigate } from "react-router-dom";
 import "./index.css";
-import { Input, Button } from "antd";
+import { Input, Button, message, notification } from "antd";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  function login() {
+    axios({
+      method: "post",
+      url: BackendUrl + "/user/login",
+      data: {
+        email: email,
+        password: password,
+      },
+    })
+      .then((response) => {
+        //console.log(response);
+        //alert(response.data.msg);
+        if (response.status == 200) {
+          //alert("success login");
+          notification.success({
+            message: "Success Login",
+            description: response.data.msg,
+          });
+          window.localStorage.setItem("token", response.data.token);
+          //console.log(response.data.token);
+          navigate("/");
+        } else {
+          notification.error({
+            message: "Login error",
+            description: response.data.msg,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        notification.error({
+          message: "Register Fail",
+          description: "Email already registered",
+        });
+      });
+  }
+  const onClickLogin = (e) => {
+    e.preventDefault();
+
+    if (email !== "") {
+      if (password !== "") {
+        login();
+      } else {
+        message.error("please input password");
+      }
+    } else {
+      message.error("please input email");
+    }
+  };
   return (
     <>
       <Navbar />
@@ -21,18 +76,33 @@ const Login = () => {
             marginRight: "auto",
           }}
         >
-          <Input size="large" placeholder="Email" prefix={<AiOutlineMail />} />
+          <Input
+            size="large"
+            placeholder="Email"
+            prefix={<AiOutlineMail />}
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+          />
           <Input.Password
             size="large"
             placeholder="Password"
             prefix={<AiFillLock />}
             className="mt-2"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
           />
           <Button
             type="primary"
             size="large"
             style={{ background: "black", borderColor: "black" }}
             className="mt-2 w-100"
+            onClick={(e) => {
+              onClickLogin(e);
+            }}
           >
             Log In
           </Button>

@@ -1,13 +1,105 @@
-import React, { Component, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavDropdown, Container, Nav, Navbar } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import MediaQuery from "react-responsive";
+import { notification } from "antd";
 
 //css
 import "./navbar.css";
 
 const Navbarr = () => {
   const navigate = useNavigate();
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+  }, []);
+
+  const onClickLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("token");
+    setToken("");
+    notification.info({
+      message: "Success logout",
+    });
+  };
+
+  const compLogin = () => {
+    if (token == "" || token == null) {
+      return (
+        <>
+          <MediaQuery minWidth={768}>
+            <div className="nav-right">
+              <p className="center">Become teacher</p>
+              <button
+                className="btn btn-outline-dark"
+                onClick={(e) => {
+                  navigate("/login");
+                }}
+              >
+                Log in
+              </button>
+              <button
+                className="btn btn-dark"
+                onClick={(e) => {
+                  navigate("/register");
+                }}
+              >
+                Register
+              </button>
+            </div>
+          </MediaQuery>
+          <MediaQuery maxWidth={768}>
+            <Nav className="me-auto">
+              <Nav.Link
+                onClick={(e) => {
+                  navigate("/register");
+                }}
+              >
+                Become teacher
+              </Nav.Link>
+              <Nav.Link
+                onClick={(e) => {
+                  navigate("/login");
+                }}
+              >
+                Log in
+              </Nav.Link>
+              <Nav.Link
+                onClick={(e) => {
+                  navigate("/register");
+                }}
+              >
+                Register
+              </Nav.Link>
+            </Nav>
+          </MediaQuery>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <MediaQuery minWidth={768}>
+            <div className="nav-right">
+              <button
+                className="btn btn-outline-dark"
+                onClick={(e) => onClickLogout(e)}
+              >
+                Log out
+              </button>
+            </div>
+          </MediaQuery>
+          <MediaQuery maxWidth={768}>
+            <Nav className="me-auto">
+              <Nav.Link onClick={(e) => onClickLogout(e)}>Log out</Nav.Link>
+
+              <Nav.Link onClick={(e) => onClickLogout(e)}>{token}</Nav.Link>
+            </Nav>
+          </MediaQuery>
+        </>
+      );
+    }
+  };
 
   return (
     <>
@@ -27,7 +119,11 @@ const Navbarr = () => {
               </Link>
               <MediaQuery minWidth={555}>
                 <NavDropdown title="Categories" className="center">
-                  <NavDropdown.Item onClick={(e) => {navigate("/categories")}}>
+                  <NavDropdown.Item
+                    onClick={(e) => {
+                      navigate("/categories");
+                    }}
+                  >
                     Language
                   </NavDropdown.Item>
                   <NavDropdown.Item href="#action/3.2">
@@ -47,34 +143,7 @@ const Navbarr = () => {
             id="responsive-navbar-nav"
             className="justify-content-end"
           >
-            <MediaQuery minWidth={768}>
-              <div className="nav-right">
-                <p className="center">Become Teacher</p>
-                <button
-                  className="btn btn-outline-dark"
-                  onClick={(e) => {
-                    navigate("/login");
-                  }}
-                >
-                  Log in
-                </button>
-                <button
-                  className="btn btn-dark"
-                  onClick={(e) => {
-                    navigate("/register");
-                  }}
-                >
-                  Register
-                </button>
-              </div>
-            </MediaQuery>
-            <MediaQuery maxWidth={768}>
-              <Nav className="me-auto">
-                <Nav.Link onClick={(e) => {navigate("/register")}}>Become teacher</Nav.Link>
-                <Nav.Link onClick={(e) => {navigate("/login")}}>Log in</Nav.Link>
-                <Nav.Link onClick={(e) => {navigate("/register")}}>Register</Nav.Link>
-              </Nav>
-            </MediaQuery>
+            {compLogin()}
           </Navbar.Collapse>
         </Container>
       </Navbar>
