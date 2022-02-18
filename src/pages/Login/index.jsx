@@ -38,6 +38,8 @@ const Login = () => {
           } else if (response.data.role == 1) {
             //user login
             navigate("/");
+          } else {
+            navigate("/admin");
           }
         } else {
           notification.error({

@@ -115,7 +115,7 @@ const Navbarr = () => {
             <div className="nav-logo">
               <Link to="/" style={{ display: "flex" }}>
                 <img src="/asset/image/logo.png" />
-                <p className="nav-title">ODREY</p>
+                <p className="nav-title">DREY</p>
               </Link>
               <MediaQuery minWidth={555}>
                 <NavDropdown title="Categories" className="center">

@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Categories from "./pages/Categories";
 import DetailInstructor from "./pages/DetailInstructor";
 import InstructorPage from "./pages/instuctorPage";
+import AdminPage from "./pages/AdminPage";
 import Agung from "./pages/agung";
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/agung" element={<Agung />} />
           <Route path="/detailInstructor" element={<DetailInstructor />} />
           <Route path="/instructorPage" element={<InstructorPage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </BrowserRouter>
     </>
