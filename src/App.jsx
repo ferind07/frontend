@@ -8,7 +8,7 @@ import DetailInstructor from "./pages/DetailInstructor";
 import AdminPage from "./pages/AdminPage";
 import InstructorRoutes from "./pages/InstructorRutes";
 import InstructorPage from "./pages/instuctorPage";
-import Agung from "./pages/agung";
+import MyAccount from "./pages/myAccount";
 
 const App = () => {
   return (
@@ -19,11 +19,11 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/categories" element={<Categories />} />
-          <Route path="/agung" element={<Agung />} />
           <Route path="/detailInstructor" element={<DetailInstructor />} />
-          <Route path="/instructor/*" element={<InstructorRoutes />} />
+          <Route path="/myAccount" element={<MyAccount />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/instructorPage" element={<InstructorPage />} />
+          <Route path="/instructor/*" element={<InstructorRoutes />} />
         </Routes>
       </BrowserRouter>
     </>

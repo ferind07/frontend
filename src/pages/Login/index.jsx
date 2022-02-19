@@ -30,15 +30,27 @@ const Login = () => {
             message: "Success Login",
             description: response.data.msg,
           });
-          window.localStorage.setItem("token", response.data.token);
-          console.log(response.data);
-          console.log(response.data.role);
+
           if (response.data.role == 2) {
             //instructor login
-            navigate("/instructor");
+            if (response.data.status == 0) {
+              notification.error({
+                message: "User banned",
+              });
+            } else {
+              window.localStorage.setItem("token", response.data.token);
+              navigate("/instructor");
+            }
           } else if (response.data.role == 1) {
             //user login
-            navigate("/");
+            if (response.data.status == 0) {
+              notification.error({
+                message: "User banned",
+              });
+            } else {
+              window.localStorage.setItem("token", response.data.token);
+              navigate("/");
+            }
           } else {
             //admin login
             navigate("/admin");
