@@ -31,14 +31,16 @@ const Login = () => {
             description: response.data.msg,
           });
           window.localStorage.setItem("token", response.data.token);
+          console.log(response.data);
           console.log(response.data.role);
           if (response.data.role == 2) {
-            console.log("instuctor");
-            navigate("/instructorPage");
+            //instructor login
+            navigate("/instructor");
           } else if (response.data.role == 1) {
             //user login
             navigate("/");
           } else {
+            //admin login
             navigate("/admin");
           }
         } else {
