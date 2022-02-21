@@ -1,7 +1,11 @@
 import React from "react";
 
 const AdminPage = () => {
-  return <div>AdminPage</div>;
+  return (
+    <>
+      <h1>admin page</h1>
+    </>
+  );
 };
 
 export default AdminPage;

@@ -3,7 +3,8 @@ import "./index.css";
 import axios from "axios";
 import Navbarr from "../../components/Navbar";
 import BackendUrl from "../../components/BackendUrl";
-import { Form, Input } from "antd";
+import { AiFillSave } from "react-icons/ai";
+import { Input } from "antd";
 
 function MyAccount() {
   let [userData, setUserData] = useState({});
@@ -54,7 +55,55 @@ function MyAccount() {
           <div className="col-lg-9 col-md-8">
             <div className="card">
               <div className="card-body">
-                <Form></Form>
+                <div className="form-group row">
+                  <label for="email" className="col-sm-2 col-form-label">
+                    Email
+                  </label>
+                  <div class="col-sm-10">
+                    <Input
+                      type="text"
+                      id="email"
+                      readOnly
+                      value={userData.email}
+                    />
+                  </div>
+                </div>
+                <div class="form-group row mt-2">
+                  <label for="name" className="col-sm-2 col-form-label">
+                    Name
+                  </label>
+                  <div class="col-sm-10">
+                    <Input
+                      type="text"
+                      id="name"
+                      readOnly
+                      value={userData.name}
+                    />
+                  </div>
+                </div>
+                <div class="form-group row mt-2">
+                  <label for="phoneNumber" className="col-sm-2 col-form-label">
+                    Phone
+                  </label>
+                  <div class="col-sm-10">
+                    <Input
+                      type="number"
+                      id="phoneNumber"
+                      readOnly
+                      value={userData.phoneNumber}
+                    />
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <h5>
+                    Register as {userData.role == 1 ? "User" : "Instructor"}
+                  </h5>
+                </div>
+                <div className="d-flex justify-content-end">
+                  <button className="btn btn-success">
+                    Save <AiFillSave />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
