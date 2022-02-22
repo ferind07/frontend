@@ -34,7 +34,7 @@ function MyAccount() {
   };
   return (
     <>
-      <Navbarr />
+      <Navbarr instructor />
       <div className="container myaccount">
         <div className="row">
           <div className="col-lg-3 col-md-4">

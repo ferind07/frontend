@@ -7,7 +7,7 @@ import { notification } from "antd";
 //css
 import "./navbar.css";
 
-const Navbarr = () => {
+const Navbarr = (props) => {
   const navigate = useNavigate();
   const [token, setToken] = useState("");
 
@@ -109,6 +109,24 @@ const Navbarr = () => {
     }
   };
 
+  const dropdownItem = () => {
+    return (
+      <NavDropdown title="Categories" className="center">
+        <NavDropdown.Item
+          onClick={(e) => {
+            navigate("/categories");
+          }}
+        >
+          Language
+        </NavDropdown.Item>
+        <NavDropdown.Item href="#action/3.2">Cooking</NavDropdown.Item>
+        <NavDropdown.Item href="#action/3.3">Sports</NavDropdown.Item>
+        <NavDropdown.Item href="#action/3.4">Design</NavDropdown.Item>
+        <NavDropdown.Item href="#action/3.5">Programming</NavDropdown.Item>
+      </NavDropdown>
+    );
+  };
+
   return (
     <>
       <Navbar
@@ -126,23 +144,7 @@ const Navbarr = () => {
                 <p className="nav-title">DREY</p>
               </Link>
               <MediaQuery minWidth={555}>
-                <NavDropdown title="Categories" className="center">
-                  <NavDropdown.Item
-                    onClick={(e) => {
-                      navigate("/categories");
-                    }}
-                  >
-                    Language
-                  </NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.2">
-                    Cooking
-                  </NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.3">Sports</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.4">Design</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.5">
-                    Programming
-                  </NavDropdown.Item>
-                </NavDropdown>
+                {props.instructor == true ? "" : dropdownItem()}
               </MediaQuery>
             </div>
           </Navbar.Brand>
