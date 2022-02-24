@@ -5,9 +5,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Categories from "./pages/Categories";
 import DetailInstructor from "./pages/DetailInstructor";
-import AdminPage from "./pages/AdminPage";
 import InstructorRoutes from "./pages/InstructorRutes";
-import InstructorPage from "./pages/instuctorPage";
+import AdminRoute from "./pages/AdminRoute";
 import MyAccount from "./pages/myAccount";
 
 const App = () => {
@@ -21,8 +20,7 @@ const App = () => {
           <Route path="/categories" element={<Categories />} />
           <Route path="/detailInstructor" element={<DetailInstructor />} />
           <Route path="/myAccount" element={<MyAccount />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/instructorPage" element={<InstructorPage />} />
+          <Route path="/admin/*" element={<AdminRoute />} />
           <Route path="/instructor/*" element={<InstructorRoutes />} />
         </Routes>
       </BrowserRouter>

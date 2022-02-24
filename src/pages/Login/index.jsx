@@ -53,6 +53,7 @@ const Login = () => {
             }
           } else {
             //admin login
+            window.localStorage.setItem("token", response.data.token);
             navigate("/admin");
           }
         } else {
