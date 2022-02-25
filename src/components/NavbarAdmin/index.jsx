@@ -27,7 +27,7 @@ const NavbarAdmin = () => {
   return (
     <>
       <IconContext.Provider value={{ color: "#fff" }}>
-        <div className="navbar justify-content-between">
+        <div className="navbar-admin justify-content-between">
           <div className="d-flex">
             <Link to="#" className="menu-bars center">
               <FaIcons.FaBars onClick={showSidebar} />

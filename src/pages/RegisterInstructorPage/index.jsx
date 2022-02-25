@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Select } from "antd";
 import { Viewer } from "@react-pdf-viewer/core";
 import { Worker } from "@react-pdf-viewer/core";
@@ -10,6 +11,33 @@ const RegisterInstructorPage = () => {
   const [url, setUrl] = useState("");
   const [fileBerkas, setFileBerkas] = useState();
   const [katagori, setKatagori] = useState(1);
+
+  const navigate = useNavigate();
+
+  function getInstructorInfo() {
+    axios
+      .get(
+        BackendUrl +
+          "/user/getInstructorInfo?token=" +
+          localStorage.getItem("token")
+      )
+      .then((response) => {
+        console.log(response.data);
+        if (response.data == 0) {
+          console.log("kosong");
+        } else {
+          console.log("isi");
+          navigate("/instructor/home");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  useEffect(() => {
+    getInstructorInfo();
+  }, []);
 
   function handleChangeKatagori(value) {
     console.log(`selected ${value}`);

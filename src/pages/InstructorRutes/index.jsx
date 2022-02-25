@@ -1,42 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
-import Navbarr from "../../components/Navbar";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import NavbarInstructor from "../../components/NavbarInstructor";
 import RegisterInstructorPage from "../RegisterInstructorPage";
-import axios from "axios";
-import BackendUrl from "../../components/BackendUrl";
+import InstructorPage from "../InstuctorPage";
+import InstructorClass from "../InstructorClass";
 
 const InstructorRoutes = () => {
-  const [instructorInfo, setInstructorInfo] = useState([]);
-
-  function getInstructorInfo() {
-    axios
-      .get(
-        BackendUrl +
-          "/user/getInstructorInfo?token=" +
-          localStorage.getItem("token")
-      )
-      .then((response) => {
-        console.log(response.data);
-        if (response.data == 0) {
-          console.log("kosong");
-        } else {
-          console.log("isi");
-        }
-        setInstructorInfo(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  useEffect(() => {
-    getInstructorInfo();
-  }, []);
   return (
     <React.Fragment>
-      <Navbarr instructor />
+      <NavbarInstructor />
       <Routes>
         <Route path="/" element={<RegisterInstructorPage />} />
+        <Route path="/home" element={<InstructorPage />} />
+        <Route path="/class" element={<InstructorClass />} />
       </Routes>
     </React.Fragment>
   );

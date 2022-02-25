@@ -4,7 +4,6 @@ import Navbarr from "../../components/Navbar";
 const InstructorPage = () => {
   return (
     <>
-      <Navbarr />
       <h1>Instructor Page</h1>
     </>
   );
