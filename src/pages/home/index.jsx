@@ -1,10 +1,35 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import BackendUrl from "../../components/BackendUrl";
+import axios from "axios";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import Card from "./card";
 import "./index.css";
 
 const Home = () => {
+  const navigate = useNavigate();
+  function getInfo() {
+    if (localStorage.getItem("token") !== null) {
+      axios
+        .get(
+          BackendUrl + "/user/getInfo?token=" + localStorage.getItem("token")
+        )
+        .then((success) => {
+          console.log(success.data);
+          if (success.data.role == 3) navigate("/admin");
+          if (success.data.role == 2) navigate("/instructor");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }
+
+  useEffect(() => {
+    console.log("useEffect");
+    getInfo();
+  }, []);
   return (
     <>
       <Navbar />

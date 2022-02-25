@@ -5,11 +5,24 @@ import { Link } from "react-router-dom";
 import { SidebarData } from "./SidebarData";
 import "./Navbar.css";
 import { IconContext } from "react-icons";
+import { notification } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const NavbarAdmin = () => {
   const [sidebar, setSidebar] = useState(false);
 
   const showSidebar = () => setSidebar(!sidebar);
+
+  const navigate = useNavigate();
+
+  const onClickLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("token");
+    notification.info({
+      message: "Success logout",
+    });
+    navigate("/");
+  };
 
   return (
     <>
@@ -32,7 +45,12 @@ const NavbarAdmin = () => {
           </div>
 
           <div style={{ paddingRight: "1rem" }}>
-            <button className="btn btn-danger">Logout</button>
+            <button
+              className="btn btn-danger"
+              onClick={(e) => onClickLogout(e)}
+            >
+              Logout
+            </button>
           </div>
         </div>
         <nav className={sidebar ? "nav-menu active" : "nav-menu"}>

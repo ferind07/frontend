@@ -143,6 +143,7 @@ const Navbarr = (props) => {
                 <img src="/asset/image/logo.png" />
                 <p className="nav-title">DREY</p>
               </Link>
+
               <MediaQuery minWidth={555}>
                 {props.instructor == true ? "" : dropdownItem()}
               </MediaQuery>
