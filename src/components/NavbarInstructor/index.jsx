@@ -112,7 +112,13 @@ const NavbarInstructor = (props) => {
         >
           My Class
         </NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.2">Schedule</NavDropdown.Item>
+        <NavDropdown.Item
+          onClick={(e) => {
+            navigate("/instructor/schedule");
+          }}
+        >
+          Schedule
+        </NavDropdown.Item>
         <NavDropdown.Item href="#action/3.3">Student</NavDropdown.Item>
         <NavDropdown.Item href="#action/3.3">About Me</NavDropdown.Item>
       </NavDropdown>

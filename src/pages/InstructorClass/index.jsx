@@ -1,12 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { Tabs } from "antd";
+import axios from "axios";
+import BackendUrl from "../../components/BackendUrl";
 import AddClassContent from "./AddClassContent";
+import MyClassContent from "./MyClassContent";
+import { notification } from "antd";
 
 const InstructorClass = () => {
   const { TabPane } = Tabs;
+  const [classList, setClassList] = useState([]);
+
   function callback(key) {
     console.log(key);
   }
+
+  function getClass() {
+    console.log("getClass");
+    axios
+      .get(
+        BackendUrl + "/user/getClassList?token=" + localStorage.getItem("token")
+      )
+      .then((success) => {
+        if (success.data.status == true) {
+          setClassList(success.data.rows);
+        } else {
+          notification.error({
+            message: "Error",
+            description: success.data.msg,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <div className="container-fluid mt-3">
       <div className="row">
@@ -15,10 +43,10 @@ const InstructorClass = () => {
             <div className="card-body">
               <Tabs defaultActiveKey="1" onChange={callback}>
                 <TabPane tab="My Class" key="1">
-                  Content of Tab Pane 1
+                  <MyClassContent />
                 </TabPane>
                 <TabPane tab="Add Class" key="2">
-                  <AddClassContent />
+                  <AddClassContent functionGetClass={getClass} />
                 </TabPane>
               </Tabs>
             </div>

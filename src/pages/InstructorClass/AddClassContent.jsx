@@ -6,10 +6,11 @@ import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 
-const AddClassContent = () => {
+const AddClassContent = (props) => {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState("");
+  const [price, setPrice] = useState("");
   const [image, setImage] = useState();
 
   const onSubmit = (e) => {
@@ -19,6 +20,7 @@ const AddClassContent = () => {
     bodyFormData.append("title", title);
     bodyFormData.append("detail", value);
     bodyFormData.append("duration", duration);
+    bodyFormData.append("price", price);
     bodyFormData.append("classImage", image);
 
     axios({
@@ -36,7 +38,8 @@ const AddClassContent = () => {
           });
           setValue("");
           setTitle("");
-          setDuration(0);
+          setDuration("");
+          setPrice("");
           setImage();
         }
       })
@@ -67,9 +70,16 @@ const AddClassContent = () => {
           <Input
             type="number"
             placeholder="Duration"
-            className="mt-2 mb-2"
+            className="mt-2"
             value={duration}
             onChange={(e) => setDuration(e.target.value)}
+          />
+          <Input
+            type="number"
+            placeholder="Price"
+            className="mt-2 mb-2"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
           />
           <ReactQuill theme="snow" value={value} onChange={setValue} />
           <input
@@ -92,6 +102,14 @@ const AddClassContent = () => {
           )}
           <br />
           <button onClick={(e) => onSubmit(e)}>Submit</button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              props.functionGetClass();
+            }}
+          >
+            load class
+          </button>
         </form>
       </div>
     </>

@@ -4,6 +4,7 @@ import NavbarInstructor from "../../components/NavbarInstructor";
 import RegisterInstructorPage from "../RegisterInstructorPage";
 import InstructorPage from "../InstuctorPage";
 import InstructorClass from "../InstructorClass";
+import InstructorSchedule from "../InstructorSchedule";
 
 const InstructorRoutes = () => {
   return (
@@ -13,6 +14,7 @@ const InstructorRoutes = () => {
         <Route path="/" element={<RegisterInstructorPage />} />
         <Route path="/home" element={<InstructorPage />} />
         <Route path="/class" element={<InstructorClass />} />
+        <Route path="/schedule" element={<InstructorSchedule />} />
       </Routes>
     </React.Fragment>
   );

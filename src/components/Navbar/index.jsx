@@ -114,15 +114,39 @@ const Navbarr = (props) => {
       <NavDropdown title="Categories" className="center">
         <NavDropdown.Item
           onClick={(e) => {
-            navigate("/categories");
+            navigate("/categories/1");
           }}
         >
           Language
         </NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.2">Cooking</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.3">Sports</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.4">Design</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.5">Programming</NavDropdown.Item>
+        <NavDropdown.Item
+          onClick={(e) => {
+            navigate("/categories/2");
+          }}
+        >
+          Cooking
+        </NavDropdown.Item>
+        <NavDropdown.Item
+          onClick={(e) => {
+            navigate("/categories/3");
+          }}
+        >
+          Sports
+        </NavDropdown.Item>
+        <NavDropdown.Item
+          onClick={(e) => {
+            navigate("/categories/4");
+          }}
+        >
+          Design
+        </NavDropdown.Item>
+        <NavDropdown.Item
+          onClick={(e) => {
+            navigate("/categories/5");
+          }}
+        >
+          Programming
+        </NavDropdown.Item>
       </NavDropdown>
     );
   };
