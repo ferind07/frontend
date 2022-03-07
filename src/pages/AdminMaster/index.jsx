@@ -1,7 +1,135 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import BackendUrl from "../../components/BackendUrl";
+import { Table, Tag, Button, notification } from "antd";
 
 const AdminMaster = () => {
-  return <div>AdminMaster</div>;
+  const [listUser, setListUser] = useState([]);
+
+  function getUser() {
+    axios
+      .get(BackendUrl + "/admin/allUser")
+      .then((success) => {
+        setListUser(success.data);
+        console.log(success.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function onClickBanUser(e, id, status) {
+    e.preventDefault();
+    axios
+      .post(BackendUrl + "/admin/banUser", {
+        id: id,
+        status: status,
+      })
+      .then((success) => {
+        notification.success({
+          description: "success",
+          message: "action success",
+        });
+        getUser();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      render: (text) => {
+        if (text == 1) {
+          return <Tag color="cyan">User</Tag>;
+        } else {
+          return <Tag color="blue">Instructor</Tag>;
+        }
+      },
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      render: (text) => {
+        if (text == 1) {
+          return <Tag color="green">active</Tag>;
+        } else {
+          return <Tag color="red">Banned</Tag>;
+        }
+      },
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      render: (text, record) => {
+        if (text == 1) {
+          return (
+            <Button
+              danger
+              onClick={(e) => onClickBanUser(e, record.id, record.status)}
+            >
+              Ban
+            </Button>
+          );
+        } else {
+          return (
+            <Button
+              onClick={(e) => onClickBanUser(e, record.id, record.status)}
+            >
+              Un Ban
+            </Button>
+          );
+        }
+      },
+    },
+  ];
+
+  useEffect(() => {
+    getUser();
+  }, []);
+  return (
+    <>
+      <div className="container mt-3">
+        <div className="row">
+          <div className="col-12">
+            <div className="card card-shadow">
+              <div className="card-body">
+                <h2 className="text-center">Master User</h2>
+                <div className="d-flex justify-content-between">
+                  <p>{listUser.length} User</p>
+                  <input type="text" placeholder="Search" />
+                </div>
+                <hr />
+                <Table dataSource={listUser} columns={columns} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default AdminMaster;
