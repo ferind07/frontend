@@ -14,8 +14,6 @@ const ExploreClass = () => {
 
   const htmlToReactParser = new HtmlToReactParser();
 
-  const [jadwal, setJadwal] = useState("");
-
   function laodClass() {
     axios
       .get(BackendUrl + "/user/getClassDetail?id=" + id)
@@ -27,6 +25,22 @@ const ExploreClass = () => {
         console.log(error);
       });
   }
+
+  const renderJumlahClass = () => {
+    const element = [];
+    if (classDetail.classCount) {
+      for (let index = 0; index < classDetail.classCount; index++) {
+        element.push(
+          <>
+            <h5 className="mt-2 mb-0">Select time {index + 1}</h5>
+            <input type="datetime-local" id={"time" + (index + 1)} />
+          </>
+        );
+      }
+    }
+    return element;
+  };
+
   useEffect(() => {
     //console.log("explore class");
     laodClass();
@@ -43,9 +57,22 @@ const ExploreClass = () => {
       const token = localStorage.getItem("token");
       const idClass = id;
       const idInstructor = classDetail.idInstructor;
-      const dateStart = moment(jadwal).format("YYYY-MM-DD HH:mm:ss");
-      let dateEnd = moment(jadwal).add(classDetail.duration, "m").toDate();
-      dateEnd = moment(dateEnd).format("YYYY-MM-DD HH:mm:ss");
+      let dateStart = [];
+      let dateEnd = [];
+      //dateEnd = moment(dateEnd).format("YYYY-MM-DD HH:mm:ss");
+      for (let index = 0; index < classDetail.classCount; index++) {
+        dateStart.push(
+          moment(document.getElementById("time" + (index + 1)).value).format(
+            "YYYY-MM-DD HH:mm:ss"
+          )
+        );
+        const tdateEnd = moment(
+          document.getElementById("time" + (index + 1)).value
+        )
+          .add(classDetail.duration, "m")
+          .toDate();
+        dateEnd.push(moment(tdateEnd).format("YYYY-MM-DD HH:mm:ss"));
+      }
 
       axios
         .post(BackendUrl + "/user/submissionClass", {
@@ -79,6 +106,8 @@ const ExploreClass = () => {
                   <div className="col-md-6">
                     <h5 className="mb-0">Duration</h5>
                     <p>{classDetail.duration} minute</p>
+                    <h5 className="mb-0">Class count</h5>
+                    <p>{classDetail.classCount} Class</p>
                     <h5 className="mb-0">Price</h5>
                     <NumberFormat
                       value={classDetail.price}
@@ -86,14 +115,8 @@ const ExploreClass = () => {
                       thousandSeparator
                       prefix="Rp. "
                     />
-                    <h5 className="mt-2 mb-0">Select time</h5>
-                    <input
-                      type="datetime-local"
-                      value={jadwal}
-                      onChange={(e) => {
-                        setJadwal(e.target.value);
-                      }}
-                    />
+
+                    {renderJumlahClass()}
                     <br />
                     <button
                       className="btn btn-success mt-2"

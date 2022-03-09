@@ -61,7 +61,13 @@ function MyAccount() {
         return <img src={URL.createObjectURL(image)} width="100%" />;
       }
     } else {
-      return <img src={BackendUrl + userData.image} width="100%" />;
+      return (
+        <img
+          src={BackendUrl + userData.image}
+          width="100%"
+          style={{ aspectRatio: "4/3" }}
+        />
+      );
     }
   };
 

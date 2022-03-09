@@ -22,7 +22,7 @@ const Categories = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [id]);
   return (
     <>
       <Navbar />

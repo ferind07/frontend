@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs } from "antd";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
@@ -13,6 +13,10 @@ const InstructorClass = () => {
   function callback(key) {
     console.log(key);
   }
+
+  useEffect(() => {
+    getClass();
+  }, []);
 
   function getClass() {
     console.log("getClass");
@@ -43,7 +47,7 @@ const InstructorClass = () => {
             <div className="card-body">
               <Tabs defaultActiveKey="1" onChange={callback}>
                 <TabPane tab="My Class" key="1">
-                  <MyClassContent />
+                  <MyClassContent classList={classList} />
                 </TabPane>
                 <TabPane tab="Add Class" key="2">
                   <AddClassContent functionGetClass={getClass} />

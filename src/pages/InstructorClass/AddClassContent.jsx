@@ -11,16 +11,19 @@ const AddClassContent = (props) => {
   const [title, setTitle] = useState("");
   const [duration, setDuration] = useState("");
   const [price, setPrice] = useState("");
+  const [classCount, setClassCount] = useState(1);
   const [image, setImage] = useState();
 
   const onSubmit = (e) => {
     e.preventDefault();
+
     let bodyFormData = new FormData();
     bodyFormData.append("token", localStorage.getItem("token"));
     bodyFormData.append("title", title);
     bodyFormData.append("detail", value);
     bodyFormData.append("duration", duration);
     bodyFormData.append("price", price);
+    bodyFormData.append("classCount", classCount);
     bodyFormData.append("classImage", image);
 
     axios({
@@ -81,7 +84,17 @@ const AddClassContent = (props) => {
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
+
           <ReactQuill theme="snow" value={value} onChange={setValue} />
+          <p className="mb-0 mt-2">Class Count</p>
+          <Input
+            type="number"
+            placeholder="Price"
+            className="mt-1 mb-2"
+            value={classCount}
+            onChange={(e) => setClassCount(e.target.value)}
+            min={1}
+          />
           <input
             type="file"
             name="classImage"

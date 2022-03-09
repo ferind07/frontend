@@ -54,6 +54,14 @@ const DetailInstructor = () => {
     sidebarTabs: (defaultTabs) => [],
   });
 
+  const renderImage = () => {
+    if (dInstructor.image == "") {
+      return <img src="/asset/image/noPic.jpg" width="100%" />;
+    } else {
+      return <img src={BackendUrl + dInstructor.image} width="100%" />;
+    }
+  };
+
   return (
     <>
       <Navbarr />
@@ -65,9 +73,7 @@ const DetailInstructor = () => {
         </div>
         <hr className="mt-1" />
         <div className="row">
-          <div className="col-md-3 mt-2">
-            <img src="./asset/home/mentor.jpeg" className="w-100" />
-          </div>
+          <div className="col-md-3 mt-2">{renderImage()}</div>
           <div className="col-md-9 mt-2">
             <div className="card">
               <div className="card-body">
