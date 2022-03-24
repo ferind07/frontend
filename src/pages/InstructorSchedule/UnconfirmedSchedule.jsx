@@ -1,50 +1,63 @@
 import React from "react";
+import moment from "moment";
+import BackendUrl from "../../components/BackendUrl";
+import { useNavigate } from "react-router-dom";
 
 const UnconfirmedSchedule = (props) => {
-  const listSubmission = props.subMission;
+  const listSchedule = props.scheduleList;
+  const navigate = useNavigate();
   return (
     <>
       <div className="row">
         <div className="col-12" style={{ height: "100vh", overflowY: "auto" }}>
-          {listSubmission.length}
-          {listSubmission.map((subMissionItem) => {
-            const dateStart = new Date(subMissionItem.dateStart);
-            const dateStartString =
-              dateStart.getDate() +
-              "/" +
-              (dateStart.getMonth() + 1) +
-              "/" +
-              dateStart.getFullYear() +
-              " " +
-              dateStart.getHours() +
-              ":" +
-              dateStart.getMinutes();
-            const dateEnd = new Date(subMissionItem.dateEnd);
-            const dateEndString =
-              dateEnd.getDate() +
-              "/" +
-              (dateEnd.getMonth() + 1) +
-              "/" +
-              dateEnd.getFullYear() +
-              " " +
-              dateEnd.getHours() +
-              ":" +
-              dateEnd.getMinutes();
+          {listSchedule.length}
+          {listSchedule.map((detailSchedule) => {
+            const today = new Date(detailSchedule.timeInsert);
+            const yyyy = today.getFullYear();
+            let mm = today.getMonth() + 1; // Months start at 0!
+            let dd = today.getDate();
+
+            if (dd < 10) dd = "0" + dd;
+            if (mm < 10) mm = "0" + mm;
+
+            var formatteddatestr = moment(detailSchedule.timeInsert).format(
+              "hh:mm a"
+            );
+            const dateStr = dd + "/" + mm + "/" + yyyy + " " + formatteddatestr;
+
             return (
               <>
-                <div className="card">
+                <div className="card mt-2">
                   <div className="card-body">
-                    <p>Submission id : {subMissionItem.id}</p>
-                    <h6>{subMissionItem.title} Class</h6>
-                    <p>
-                      Apply by <a href="">{subMissionItem.name}</a>
-                    </p>
-                    <h6>
-                      {dateStartString} to {dateEndString}
-                    </h6>
-                    <button className="btn btn-primary" onClick={(e) => {}}>
-                      Accept class
-                    </button>
+                    <div className="row">
+                      <div className="col-12 col-md-4">
+                        <img
+                          src={BackendUrl + detailSchedule.image}
+                          style={{ width: "100%", aspectRatio: "4/3" }}
+                        />
+                      </div>
+                      <div className="col-8">
+                        <h5>{detailSchedule.title} Class</h5>
+                        <p>With {detailSchedule.iName}</p>
+                        <p>Applied at {dateStr}</p>
+                        <p>
+                          Status{" "}
+                          {detailSchedule.status == 4
+                            ? "Expired"
+                            : detailSchedule.status}
+                        </p>
+                        <button
+                          className="btn btn-primary"
+                          onClick={(e) => {
+                            navigate(
+                              "/instructor/detailSchdule/" + detailSchedule.id
+                            );
+                          }}
+                        >
+                          Detail
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </>

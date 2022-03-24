@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import "./index.css";
 import { Input, Button, message, notification } from "antd";
 
-const Login = () => {
+const Login = (props) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,6 +24,7 @@ const Login = () => {
       .then((response) => {
         //console.log(response);
         //alert(response.data.msg);
+        props.loginSocket(response.data.token);
         if (response.status == 200) {
           //alert("success login");
           notification.success({

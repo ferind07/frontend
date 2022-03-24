@@ -82,6 +82,7 @@ const Navbarr = (props) => {
         <>
           <MediaQuery minWidth={768}>
             <div className="nav-right">
+              {dropdownItemMenu()}
               <button
                 className="btn btn-outline-dark"
                 onClick={(e) => {
@@ -100,6 +101,8 @@ const Navbarr = (props) => {
           </MediaQuery>
           <MediaQuery maxWidth={768}>
             <Nav className="me-auto">
+              <Nav.Link>My Class</Nav.Link>
+              <Nav.Link>Schedule</Nav.Link>
               <Nav.Link>My account</Nav.Link>
               <Nav.Link onClick={(e) => onClickLogout(e)}>Log out</Nav.Link>
             </Nav>
@@ -146,6 +149,27 @@ const Navbarr = (props) => {
           }}
         >
           Programming
+        </NavDropdown.Item>
+      </NavDropdown>
+    );
+  };
+
+  const dropdownItemMenu = () => {
+    return (
+      <NavDropdown title="Menu" className="center">
+        <NavDropdown.Item
+          onClick={(e) => {
+            navigate("/class");
+          }}
+        >
+          My Class
+        </NavDropdown.Item>
+        <NavDropdown.Item
+          onClick={(e) => {
+            navigate("/schedule");
+          }}
+        >
+          Schedule
         </NavDropdown.Item>
       </NavDropdown>
     );

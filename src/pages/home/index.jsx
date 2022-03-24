@@ -27,7 +27,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    console.log("useEffect");
+    //console.log("useEffect");
     getInfo();
   }, []);
   return (
