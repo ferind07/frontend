@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import NavbarInstructor from "../../components/NavbarInstructor";
 import RegisterInstructorPage from "../RegisterInstructorPage";
-import InstructorPage from "../InstuctorPage";
+import InstructorPage from "../instuctorPage";
 import InstructorClass from "../InstructorClass";
 import InstructorSchedule from "../InstructorSchedule";
 import InstructorDetailSchedule from "../InstructorDetailSchedule";

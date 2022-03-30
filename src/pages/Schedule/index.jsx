@@ -35,11 +35,15 @@ const Schedule = () => {
                 <h2>Your Schedule</h2>
                 <hr />
                 <p>{hSubmission.length}</p>
+                <p></p>
                 <div className="row">
                   <div className="col-12">
-                    {hSubmission.map((submissionDetail) => {
+                    {hSubmission.map((submissionDetail, i) => {
                       return (
-                        <ScheduleCard submissionDetail={submissionDetail} />
+                        <ScheduleCard
+                          submissionDetail={submissionDetail}
+                          key={i}
+                        />
                       );
                     })}
                   </div>

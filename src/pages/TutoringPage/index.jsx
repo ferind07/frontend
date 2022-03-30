@@ -6,7 +6,7 @@ import {
   FaMicrophoneSlash,
 } from "react-icons/fa";
 import { MdScreenShare, MdStopScreenShare, MdChat } from "react-icons/md";
-import io from "socket.io-client";
+import { useParams } from "react-router-dom";
 import Peer from "simple-peer";
 import "./index.css";
 
@@ -14,54 +14,246 @@ const Video = (props) => {
   const ref = useRef();
 
   useEffect(() => {
+    console.log(props.peer);
     props.peer.on("stream", (stream) => {
       ref.current.srcObject = stream;
+      console.log(stream);
     });
   }, []);
 
-  return <video playsInline autoPlay ref={ref} />;
+  return (
+    <>
+      <video playsInline autoPlay ref={ref} style={{ height: "70%" }} />
+    </>
+  );
 };
 
-const TutoringPage = () => {
-  const [stream, setStream] = useState();
+const TutoringPage = (props) => {
   //const userVideo = useRef();
   const [peers, setPeers] = useState([]);
-  const socketRef = useRef();
+  const socketRef = props.socket;
   const userVideo = useRef();
   const peersRef = useRef([]);
+  //const myStream = useRef();
+
+  const [video, setVideo] = useState(true);
+  const [mute, setMute] = useState(false);
+  const [shareScreen, setShareScreen] = useState(false);
   //const roomID = props.match.params.roomID;
 
+  const { id } = useParams();
+
+  function onClickVideo(e) {
+    e.preventDefault();
+    //console.log(myStream.current.srcObject.getVideoTracks());
+    userVideo.current.srcObject.getVideoTracks()[0].enabled =
+      !userVideo.current.srcObject.getVideoTracks()[0].enabled;
+    setVideo(!video);
+  }
+
+  function onClickMute(e) {
+    e.preventDefault();
+    userVideo.current.srcObject.getAudioTracks()[0].enabled =
+      !userVideo.current.srcObject.getAudioTracks()[0].enabled;
+    setMute(!mute);
+  }
+
+  function onClickShareScreen(e) {
+    e.preventDefault();
+    setShareScreen(!shareScreen);
+  }
+
+  const videoComp = () => {
+    if (video) {
+      //video true aktif
+      return (
+        <div
+          onClick={(e) => {
+            onClickVideo(e);
+          }}
+        >
+          <FaVideo size={45} />
+          <p>Video</p>
+        </div>
+      );
+    } else {
+      return (
+        <div
+          onClick={(e) => {
+            onClickVideo(e);
+          }}
+        >
+          <FaVideoSlash size={45} />
+          <p style={{ color: "red" }}>Video</p>
+        </div>
+      );
+    }
+  };
+
+  const muteComp = () => {
+    if (mute) {
+      //mute true aktif
+      return (
+        <div
+          onClick={(e) => {
+            onClickMute(e);
+          }}
+        >
+          <FaMicrophoneSlash size={45} />
+          <p style={{ color: "red" }}>Mic</p>
+        </div>
+      );
+    } else {
+      return (
+        <div
+          onClick={(e) => {
+            onClickMute(e);
+          }}
+        >
+          <FaMicrophone size={45} />
+          <p>Mic</p>
+        </div>
+      );
+    }
+  };
+
+  const shareScreenComp = () => {
+    if (shareScreen) {
+      return (
+        <div
+          onClick={(e) => {
+            onClickShareScreen(e);
+          }}
+        >
+          <MdStopScreenShare size={45} />
+          <p style={{ color: "red" }}>Share screen</p>
+        </div>
+      );
+    } else {
+      return (
+        <div
+          onClick={(e) => {
+            onClickShareScreen(e);
+          }}
+        >
+          <MdScreenShare size={45} />
+          <p>Share screen</p>
+        </div>
+      );
+    }
+  };
+
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-      setStream(stream);
-    });
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        userVideo.current.srcObject = stream;
+        //myStream.current = stream;
+        socketRef.current.emit("join room", id);
+        socketRef.current.on("all users", (users) => {
+          console.log(users);
+          const mySocketID = socketRef.current.id;
+          const peers = [];
+          console.log("my socket id : " + mySocketID);
+          users.forEach((userID, i) => {
+            const peer = createPeer(
+              userID,
+              socketRef.current.id,
+              userVideo.current.srcObject
+            );
+            peersRef.current.push({
+              peerID: userID,
+              peer,
+            });
+            peers.push(peer);
+          });
+          setPeers(peers);
+        });
+
+        socketRef.current.on("user joined", (payload) => {
+          console.log("user join = " + payload.callerID);
+          const peer = addPeer(
+            payload.signal,
+            payload.callerID,
+            userVideo.current.srcObject
+          );
+          peersRef.current.push({
+            peerID: payload.callerID,
+            peer,
+          });
+          setPeers((users) => [...users, peer]);
+        });
+
+        socketRef.current.on("receiving returned signal", (payload) => {
+          const item = peersRef.current.find((p) => p.peerID === payload.id);
+          item.peer.signal(payload.signal);
+        });
+      });
   }, []);
 
-  function addPeer(incomingSignal, callerID, stream) {}
-  //<video ref={userVideo} autoPlay className="video-user"></video>
+  function createPeer(userToSignal, callerID, stream) {
+    //initiator true
+    const peer = new Peer({
+      initiator: true,
+      trickle: false,
+      stream,
+    });
+
+    peer.on("signal", (signal) => {
+      console.log(
+        "sending signal to : " + userToSignal + " from : " + callerID
+      );
+      socketRef.current.emit("sending signal", {
+        userToSignal,
+        callerID,
+        signal,
+      });
+    });
+
+    return peer;
+  }
+
+  function addPeer(incomingSignal, callerID, stream) {
+    //initiator false
+    const peer = new Peer({
+      initiator: false,
+      trickle: false,
+      stream,
+    });
+
+    peer.on("signal", (signal) => {
+      socketRef.current.emit("returning signal", { signal, callerID });
+    });
+
+    peer.signal(incomingSignal);
+
+    return peer;
+  }
+
   return (
     <>
       <div className="container-tutor">
         <div className="content-atas">
-          <video ref={userVideo} autoPlay style={{ height: "100%" }}></video>
+          {peers.map((peer, index) => {
+            console.log(peersRef.current[index]);
+            return (
+              <Video
+                key={index}
+                peer={peersRef.current[index].peer}
+                index={index}
+              />
+            );
+          })}
+
           <video ref={userVideo} autoPlay style={{ height: "20%" }}></video>
         </div>
         <div className="content-bawah">
           <div className="content-kiri">
-            <div className="content-ikon">
-              <MdScreenShare size={45} />
-              <p>Share screen</p>
-            </div>
+            <div className="content-ikon">{shareScreenComp()}</div>
           </div>
           <div className="content-tengah">
-            <div className="content-ikon float-left">
-              <FaVideo size={45} />
-              <p>Video</p>
-            </div>
-            <div className="content-ikon float-left">
-              <FaMicrophone size={45} />
-              <p>Video</p>
-            </div>
+            <div className="content-ikon float-left">{videoComp()}</div>
+            <div className="content-ikon float-left">{muteComp()}</div>
           </div>
           <div className="content-kanan">
             <div className="content-ikon float-left">
@@ -82,7 +274,7 @@ const TutoringPage = () => {
                   marginBottom: "0px",
                 }}
               >
-                asdasd
+                {peers.length}
               </h6>
             </div>
           </div>

@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
+import { notification } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const InstructorDetailSchedule = () => {
   let { id } = useParams();
 
+  const navigate = useNavigate();
   const [hSubmission, setHSubmission] = useState({});
   const [listSubmission, setListSubmission] = useState([]);
 
@@ -78,6 +81,29 @@ const InstructorDetailSchedule = () => {
       });
   }
 
+  function createClass(e, idUser, idSubmission) {
+    e.preventDefault();
+    axios
+      .post(BackendUrl + "/createRoom", {
+        token: localStorage.getItem("token"),
+        idUser: idUser,
+        idSubmission: idSubmission,
+      })
+      .then((success) => {
+        console.log(success);
+        if (success.data.status) {
+          notification.success({
+            description: success.data.msg,
+            message: "Success",
+          });
+          navigate("/tutoring/" + idSubmission);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <>
       <div className="container mt-3">
@@ -90,11 +116,13 @@ const InstructorDetailSchedule = () => {
                 <p>Applied At {timeString(hSubmission.timeInsert)}</p>
                 <button onClick={(e) => actionClass(1)}>Accept</button>
                 <button onClick={(e) => actionClass(2)}>Decline</button>
+
                 <hr />
                 <h5>Detail Class</h5>
                 <div className="row">
                   <div className="col-6">
-                    {listSubmission.map((subMissionItem) => {
+                    {listSubmission.map((subMissionItem, i) => {
+                      console.log(subMissionItem);
                       const dateStart = new Date(subMissionItem.dateStart);
                       const dateStartString =
                         dateStart.getDate() +
@@ -127,13 +155,25 @@ const InstructorDetailSchedule = () => {
                           : dateEnd.getMinutes());
                       return (
                         <>
-                          <div className="mt-2">
+                          <div className="mt-2" key={i}>
                             <div className="card">
                               <div className="card-body">
                                 <h6>Date start</h6>
                                 <p>{dateStartString}</p>
                                 <h6>Date end</h6>
                                 <p>{dateEndString}</p>
+                                <button
+                                  className="btn btn-primary"
+                                  onClick={(e) => {
+                                    createClass(
+                                      e,
+                                      subMissionItem.idUser,
+                                      subMissionItem.id
+                                    );
+                                  }}
+                                >
+                                  Create Class
+                                </button>
                               </div>
                             </div>
                           </div>

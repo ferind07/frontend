@@ -17,10 +17,12 @@ import TutoringPage from "./pages/TutoringPage";
 
 const App = () => {
   const socket = useRef();
+
   useEffect(() => {
     socket.current = io(BackendUrl, {
       transports: ["websocket"],
     });
+
     socket.current.on("notif", (data) => {
       notification.success({
         description: "ada notif",
@@ -56,8 +58,11 @@ const App = () => {
         <Route path="/detailInstructor/:id" element={<DetailInstructor />} />
         <Route path="/exploreClass/:id" element={<ExploreClass />} />
         <Route path="/myAccount" element={<MyAccount />} />
-        <Route path="/tutoring" element={<TutoringPage />} />
-        <Route path="/schedule" element={<Schedule />} />
+        <Route
+          path="/tutoring/:id"
+          element={<TutoringPage socket={socket} />}
+        />
+        <Route path="/schedule" element={<Schedule socket={socket} />} />
         <Route path="/admin/*" element={<AdminRoute />} />
         <Route path="/instructor/*" element={<InstructorRoutes />} />
       </Routes>
