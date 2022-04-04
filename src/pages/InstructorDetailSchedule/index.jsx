@@ -22,7 +22,7 @@ const InstructorDetailSchedule = () => {
           id
       )
       .then((success) => {
-        console.log(success.data);
+        //console.log(success.data);
         setListSubmission(success.data);
       })
       .catch((error) => {
@@ -34,7 +34,7 @@ const InstructorDetailSchedule = () => {
     axios
       .get(BackendUrl + "/user/getHSubmissionbyID?id=" + id)
       .then((success) => {
-        console.log(success.data[0]);
+        //console.log(success.data[0]);
         setHSubmission(success.data[0]);
       })
       .catch((error) => {
@@ -104,6 +104,19 @@ const InstructorDetailSchedule = () => {
       });
   }
 
+  const btnAction = () => {
+    if (hSubmission.status == 0) {
+      return (
+        <>
+          <button onClick={(e) => actionClass(1)}>Accept</button>
+          <button onClick={(e) => actionClass(2)}>Decline</button>
+        </>
+      );
+    } else if (hSubmission.status == 1) {
+      return <h6>Status accepted</h6>;
+    }
+  };
+
   return (
     <>
       <div className="container mt-3">
@@ -114,15 +127,13 @@ const InstructorDetailSchedule = () => {
                 <h3>{hSubmission.title} Class</h3>
                 <h6>Applied by {hSubmission.name}</h6>
                 <p>Applied At {timeString(hSubmission.timeInsert)}</p>
-                <button onClick={(e) => actionClass(1)}>Accept</button>
-                <button onClick={(e) => actionClass(2)}>Decline</button>
-
+                {btnAction()}
                 <hr />
                 <h5>Detail Class</h5>
                 <div className="row">
-                  <div className="col-6">
+                  <div className="col-12">
                     {listSubmission.map((subMissionItem, i) => {
-                      console.log(subMissionItem);
+                      //console.log(subMissionItem);
                       const dateStart = new Date(subMissionItem.dateStart);
                       const dateStartString =
                         dateStart.getDate() +

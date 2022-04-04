@@ -1,12 +1,14 @@
+import { Input } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import {
   FaVideo,
   FaVideoSlash,
   FaMicrophone,
   FaMicrophoneSlash,
+  FaPhoneSlash,
 } from "react-icons/fa";
 import { MdScreenShare, MdStopScreenShare, MdChat } from "react-icons/md";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Peer from "simple-peer";
 import "./index.css";
 
@@ -36,12 +38,19 @@ const TutoringPage = (props) => {
   const peersRef = useRef([]);
   //const myStream = useRef();
 
+  const chatPeer = useRef([]);
+
   const [video, setVideo] = useState(true);
   const [mute, setMute] = useState(false);
   const [shareScreen, setShareScreen] = useState(false);
+  const [chatView, setChatView] = useState(false);
+  const [chatValue, setChatValue] = useState("");
+  const [chat, setChat] = useState([]);
+  const [connectionEstablished, setConnection] = useState(false);
   //const roomID = props.match.params.roomID;
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   function onClickVideo(e) {
     e.preventDefault();
@@ -60,6 +69,59 @@ const TutoringPage = (props) => {
 
   function onClickShareScreen(e) {
     e.preventDefault();
+    if (shareScreen) {
+      console.log("stop share screen");
+      // navigator.mediaDevices
+      //   .getUserMedia({ video: true, audio: true })
+      //   .then((stream) => {
+      //     peersRef.current.forEach((element) => {
+      //       //console.log(element);
+      //       //console.log(element.streams[0]);
+      //       //console.log(element.streams[0].getVideoTracks()[0]);
+      //       element.replaceTrack(
+      //         element.streams[0].getVideoTracks()[0],
+      //         stream.getVideoTracks()[0],
+      //         element.streams[0]
+      //       );
+      //     });
+      //     //userVideo.current.srcObject = stream;
+      //   });
+      peersRef.current.forEach((element) => {
+        //console.log(element);
+        //console.log(element.streams[0]);
+        //console.log(element.streams[0].getVideoTracks()[0]);
+        element.peer.replaceTrack(
+          element.peer.streams[0].getVideoTracks()[0],
+          userVideo.current.srcObject.getVideoTracks()[0],
+          element.peer.streams[0]
+        );
+        //console.log(stream.getVideoTracks()[0]);
+        //console.log(userVideo.current.srcObject.getVideoTracks()[0]);
+      });
+    } else {
+      console.log("start share screen");
+
+      navigator.mediaDevices
+        .getDisplayMedia({ video: true, audio: true })
+        .then((stream) => {
+          //console.log(stream.getVideoTracks()[0]);
+          peersRef.current.forEach((element) => {
+            //console.log(element);
+            //console.log(element.streams[0]);
+            //console.log(element.streams[0].getVideoTracks()[0]);
+            element.peer.replaceTrack(
+              element.peer.streams[0].getVideoTracks()[0],
+              stream.getVideoTracks()[0],
+              element.peer.streams[0]
+            );
+            console.log(stream.getVideoTracks()[0]);
+            console.log(userVideo.current.srcObject.getVideoTracks()[0]);
+          });
+
+          //userVideo.current.srcObject = stream;
+        });
+    }
+
     setShareScreen(!shareScreen);
   }
 
@@ -143,6 +205,91 @@ const TutoringPage = (props) => {
     }
   };
 
+  function onClickChatView(e) {
+    e.preventDefault();
+    setChatView(!chatView);
+  }
+
+  function onClickSend(e) {
+    e.preventDefault();
+    if (chatValue != "") {
+      const newChat = {
+        from: socketRef.current.id,
+        text: chatValue,
+      };
+      // console.log(chatPeer.current);
+      // if (chatPeer.current.length > 0) {
+      //   console.log(chatPeer.current);
+      //   chatPeer.current[0].peer.send(newChat.text);
+      // }
+
+      //peersRef.current[0].peer.send(Buffer.from("test"));
+
+      setChat((chats) => [...chats, newChat]);
+      setChatValue("");
+    }
+  }
+
+  function onClickEnd(e) {
+    e.preventDefault();
+    socketRef.current.emit("leave", { id: id });
+    peersRef.current.forEach((peer) => {
+      peer.peer.destroy();
+    });
+    //console.log(userVideo.current);
+    userVideo.current.srcObject.getTracks().forEach((track) => {
+      if (track.readyState == "live") {
+        track.stop();
+        navigate(-1);
+      }
+    });
+
+    //navigate(-1);
+  }
+
+  const chatComp = () => {
+    let displayValue;
+    if (chatView) {
+      displayValue = "none";
+    } else {
+      displayValue = "block";
+    }
+    return (
+      <div className="chat-container" style={{ display: displayValue }}>
+        <div className="chat-body">
+          {chat.map((chatDetail) => {
+            return (
+              <>
+                <div className="d-flex justify-content-end">
+                  <div className="chat-bubble">{chatDetail.text}</div>
+                </div>
+              </>
+            );
+          })}
+        </div>
+        <div
+          className="chat-footer d-flex"
+          style={{ margin: "0 5px", gap: "5px" }}
+        >
+          <Input
+            value={chatValue}
+            onChange={(e) => {
+              setChatValue(e.target.value);
+            }}
+          />
+
+          <button
+            onClick={(e) => {
+              onClickSend(e);
+            }}
+          >
+            Send
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
@@ -151,6 +298,7 @@ const TutoringPage = (props) => {
         //myStream.current = stream;
         socketRef.current.emit("join room", id);
         socketRef.current.on("all users", (users) => {
+          //buatPeerChat(users);
           console.log(users);
           const mySocketID = socketRef.current.id;
           const peers = [];
@@ -161,6 +309,7 @@ const TutoringPage = (props) => {
               socketRef.current.id,
               userVideo.current.srcObject
             );
+
             peersRef.current.push({
               peerID: userID,
               peer,
@@ -177,10 +326,12 @@ const TutoringPage = (props) => {
             payload.callerID,
             userVideo.current.srcObject
           );
+
           peersRef.current.push({
             peerID: payload.callerID,
             peer,
           });
+
           setPeers((users) => [...users, peer]);
         });
 
@@ -210,6 +361,14 @@ const TutoringPage = (props) => {
       });
     });
 
+    peer.on("connect", () => {
+      peer.send("test");
+    });
+
+    peer.on("data", (data) => {
+      console.log(data);
+    });
+
     return peer;
   }
 
@@ -225,7 +384,12 @@ const TutoringPage = (props) => {
       socketRef.current.emit("returning signal", { signal, callerID });
     });
 
+    //setConnection(true);
     peer.signal(incomingSignal);
+
+    // peer.on("data", (data) => {
+    //   console.log(data);
+    // });
 
     return peer;
   }
@@ -235,7 +399,8 @@ const TutoringPage = (props) => {
       <div className="container-tutor">
         <div className="content-atas">
           {peers.map((peer, index) => {
-            console.log(peersRef.current[index]);
+            //console.log(peersRef.current[index]);
+
             return (
               <Video
                 key={index}
@@ -245,7 +410,13 @@ const TutoringPage = (props) => {
             );
           })}
 
-          <video ref={userVideo} autoPlay style={{ height: "20%" }}></video>
+          <video
+            ref={userVideo}
+            autoPlay
+            playsInline
+            muted
+            style={{ height: "20%" }}
+          ></video>
         </div>
         <div className="content-bawah">
           <div className="content-kiri">
@@ -254,11 +425,26 @@ const TutoringPage = (props) => {
           <div className="content-tengah">
             <div className="content-ikon float-left">{videoComp()}</div>
             <div className="content-ikon float-left">{muteComp()}</div>
+            <div
+              className="content-ikon float-left"
+              onClick={(e) => {
+                onClickEnd(e);
+              }}
+            >
+              <FaPhoneSlash size={45} />
+              <p>End</p>
+            </div>
           </div>
           <div className="content-kanan">
-            <div className="content-ikon float-left">
+            {chatComp()}
+            <div
+              className="content-ikon float-left"
+              onClick={(e) => {
+                onClickChatView(e);
+              }}
+            >
               <MdChat size={45} />
-              <p>Chat</p>
+              <p style={{ pointerEvents: "none" }}>Chat</p>
             </div>
             <div
               className="float-left"

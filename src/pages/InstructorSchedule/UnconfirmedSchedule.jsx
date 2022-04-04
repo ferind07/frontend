@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import BackendUrl from "../../components/BackendUrl";
 import { useNavigate } from "react-router-dom";
@@ -6,12 +6,36 @@ import { useNavigate } from "react-router-dom";
 const UnconfirmedSchedule = (props) => {
   const listSchedule = props.scheduleList;
   const navigate = useNavigate();
+  const [status, setStatus] = useState(0);
+  const [tempListSchedule, setTempListSchedule] = useState(props.scheduleList);
+
+  function onStatusChange(e) {
+    e.preventDefault();
+    const temp = listSchedule.filter((element) => {
+      return element.status == e.target.value;
+    });
+    console.log(temp);
+    setTempListSchedule(temp);
+  }
+
   return (
     <>
       <div className="row">
         <div className="col-12" style={{ height: "100vh", overflowY: "auto" }}>
-          {listSchedule.length}
-          {listSchedule.map((detailSchedule) => {
+          Status :{" "}
+          <select
+            name="status"
+            id="status"
+            onChange={(e) => {
+              onStatusChange(e);
+            }}
+          >
+            <option value="0">Unconfirmed</option>
+            <option value="1">Confirmed</option>
+            <option value="2">Cancelled</option>
+          </select>
+          {/* {listSchedule.length} */}
+          {tempListSchedule.map((detailSchedule) => {
             const today = new Date(detailSchedule.timeInsert);
             const yyyy = today.getFullYear();
             let mm = today.getMonth() + 1; // Months start at 0!

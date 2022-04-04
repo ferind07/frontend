@@ -40,3 +40,35 @@
 .content-ikon p {
   text-align: center;
 }
+.chat-container {
+  width: 350px;
+  height: 500px;
+  background-color: white;
+  position: fixed;
+  bottom: 86px;
+  right: 0px;
+  z-index: 40;
+  box-shadow: -3px -3px 8px rgba(0, 0, 0, 0.24);
+  border-top-left-radius: 10px;
+}
+.chat-body {
+  height: 90%;
+  background-color: white;
+  border-top-left-radius: 10px;
+  border-bottom: 1px solid black;
+  padding: 1rem;
+  overflow-y: auto;
+}
+.chat-footer {
+  height: 10%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.chat-bubble {
+  background-color: #5f90ff;
+  padding: 10px;
+  display: inline-block;
+  border-radius: 5px;
+  color: white;
+  margin-bottom: 5px;
+}

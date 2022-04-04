@@ -1,9 +1,11 @@
 import React from "react";
 import { Tabs } from "antd";
 import BackendUrl from "../../components/BackendUrl";
+import { useNavigate } from "react-router-dom";
 
 const MyClassContent = (props) => {
   const classList = props.classList;
+  const navigate = useNavigate();
   return (
     <>
       <div className="row">
@@ -20,7 +22,14 @@ const MyClassContent = (props) => {
                   <h5>{classItem.title}</h5>
                   <p>{classItem.duration} minutes</p>
                   <p>{classItem.classCount} Class</p>
-                  <button className="btn btn-primary">Detail</button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={(e) => {
+                      navigate("/instructor/detailClass/" + classItem.id);
+                    }}
+                  >
+                    Detail
+                  </button>
                 </div>
               </div>
             </div>

@@ -4,7 +4,7 @@ import axios from "axios";
 import Navbarr from "../../components/Navbar";
 import BackendUrl from "../../components/BackendUrl";
 import { AiFillSave } from "react-icons/ai";
-import { Input } from "antd";
+import { Input, notification } from "antd";
 
 function MyAccount() {
   let [userData, setUserData] = useState({});
@@ -41,7 +41,13 @@ function MyAccount() {
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
       .then((success) => {
-        console.log(success);
+        if (success.data.status) {
+          notification.success({
+            message: "success",
+            description: success.data.msg,
+          });
+        } else {
+        }
       })
       .catch((error) => {
         console.log(error);

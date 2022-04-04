@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 import Navbarr from "../../components/Navbar";
@@ -6,6 +6,7 @@ import ScheduleCard from "./ScheduleCard";
 
 const Schedule = () => {
   const [hSubmission, setHSubmission] = useState([]);
+  var tempHsubmission = useRef([]);
 
   function getHsubmission() {
     axios
@@ -14,11 +15,22 @@ const Schedule = () => {
       )
       .then((success) => {
         setHSubmission(success.data);
-        console.log(success.data);
+        tempHsubmission.current = success.data;
       })
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  function onChangeOption(e) {
+    e.preventDefault();
+    alert(e.target.value);
+
+    const temp = tempHsubmission.current.filter((item) => {
+      return item.status == e.target.value;
+    });
+    console.log(temp);
+    setHSubmission(temp);
   }
 
   useEffect(() => {
@@ -33,6 +45,16 @@ const Schedule = () => {
             <div className="card">
               <div className="card-body">
                 <h2>Your Schedule</h2>
+                status :{" "}
+                <select
+                  name="filter"
+                  id="filter"
+                  onChange={(e) => onChangeOption(e)}
+                >
+                  <option value="0">Unconfirmed</option>
+                  <option value="1">Accepted</option>
+                  <option value="2">Rejected</option>
+                </select>
                 <hr />
                 <p>{hSubmission.length}</p>
                 <p></p>

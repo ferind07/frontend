@@ -79,14 +79,14 @@ const DetailInstructor = () => {
               <div className="card-body">
                 <Tabs defaultActiveKey="1" onChange={callback}>
                   <TabPane tab="About Me" key="1">
-                    {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.min.js">
+                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.min.js">
                       <div style={{ height: "100vh" }}>
                         <Viewer
                           fileUrl={BackendUrl + dInstructor.berkas}
                           plugins={[defaultLayoutPluginInstance]}
                         />
                       </div>
-                    </Worker> */}
+                    </Worker>
                   </TabPane>
                   <TabPane tab="Class" key="2">
                     <ClassListContent classList={classList} />
