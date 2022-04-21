@@ -64,7 +64,7 @@ const Home = () => {
             <div>
               <h1>Become an instructor</h1>
               <p>
-                Many instructor teach millions of students on Odrey. We provide
+                Many instructor teach millions of students on T-DEMY. We provide
                 platform for you to be an insturctor in here
               </p>
               <button className="btn btn-dark">Register here</button>

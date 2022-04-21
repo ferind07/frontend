@@ -158,7 +158,7 @@ const Register = () => {
         <div
           style={{
             marginTop: "1vw",
-            width: "70%",
+            width: "60%",
             marginLeft: "auto",
             marginRight: "auto",
           }}

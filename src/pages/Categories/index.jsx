@@ -55,7 +55,6 @@ const Categories = () => {
           )}
         </div>
       </div>
-      <Footer />
     </>
   );
 };

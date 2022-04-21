@@ -5,12 +5,17 @@ import { Viewer } from "@react-pdf-viewer/core";
 import { Worker } from "@react-pdf-viewer/core";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
+import { Input, TimePicker } from "antd";
 
 const RegisterInstructorPage = () => {
   const { Option } = Select;
   const [url, setUrl] = useState("");
   const [fileBerkas, setFileBerkas] = useState();
+  const [time, setTime] = useState();
   const [katagori, setKatagori] = useState(1);
+  const [aboutMe, setAboutMe] = useState("");
+  const format = "HH:mm";
+  const { TextArea } = Input;
 
   const navigate = useNavigate();
 
@@ -27,7 +32,11 @@ const RegisterInstructorPage = () => {
           console.log("kosong");
         } else {
           console.log("isi");
-          navigate("/instructor/home");
+          if (response.data.valid == 0) {
+            navigate("/instructor/waiting");
+          } else {
+            navigate("/instructor/home");
+          }
         }
       })
       .catch((err) => {
@@ -52,10 +61,14 @@ const RegisterInstructorPage = () => {
   const onClickSubmit = (e) => {
     e.preventDefault();
     //console.log(localStorage.getItem("token"));
+    console.log(time);
     console.log("btn submit clicked");
     let bodyFormData = new FormData();
     bodyFormData.append("katagori", katagori);
     bodyFormData.append("berkas", fileBerkas);
+    bodyFormData.append("detail", aboutMe);
+    bodyFormData.append("timeStart", time[0]);
+    bodyFormData.append("timeEnd", time[1]);
     bodyFormData.append("token", localStorage.getItem("token"));
     axios({
       method: "post",
@@ -65,6 +78,10 @@ const RegisterInstructorPage = () => {
     })
       .then((success) => {
         console.log(success);
+        if (success.data.status) {
+          navigate("/instructor/home");
+        } else {
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -100,6 +117,33 @@ const RegisterInstructorPage = () => {
                     </div>
                   </div>
                   <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">About Me</label>
+                    <div class="col-sm-10">
+                      <TextArea
+                        rows={5}
+                        value={aboutMe}
+                        onChange={(e) => {
+                          setAboutMe(e.target.value);
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group row mt-2">
+                    <label class="col-sm-2 col-form-label">
+                      Available Time
+                    </label>
+                    <div class="col-sm-10">
+                      <TimePicker.RangePicker
+                        format={format}
+                        value={time}
+                        onChange={(time) => {
+                          console.log(time);
+                          setTime(time);
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group row mt-2">
                     <label for="inputPassword" class="col-sm-2 col-form-label">
                       Upload CV
                     </label>

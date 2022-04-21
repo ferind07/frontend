@@ -42,7 +42,7 @@ const Schedule = () => {
       <div className="container mt-3">
         <div className="row">
           <div className="col-12">
-            <div className="card">
+            <div className="card card-shadow">
               <div className="card-body">
                 <h2>Your Schedule</h2>
                 status :{" "}

@@ -60,7 +60,6 @@ const NavbarAdmin = () => {
                 <div className="center">
                   <AiIcons.AiOutlineClose color="#29affcf3" />
                 </div>
-                <p>Close</p>
               </Link>
             </li>
             {SidebarData.map((item, index) => {

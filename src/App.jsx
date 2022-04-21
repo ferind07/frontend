@@ -14,6 +14,8 @@ import io from "socket.io-client";
 import BackendUrl from "./components/BackendUrl";
 import { notification } from "antd";
 import TutoringPage from "./pages/TutoringPage";
+import UserDashboard from "./pages/UserDashboard";
+import Payment from "./pages/Payment";
 
 const App = () => {
   const socket = useRef();
@@ -58,6 +60,8 @@ const App = () => {
         <Route path="/detailInstructor/:id" element={<DetailInstructor />} />
         <Route path="/exploreClass/:id" element={<ExploreClass />} />
         <Route path="/myAccount" element={<MyAccount />} />
+        <Route path="/userDashboard" element={<UserDashboard />} />
+        <Route path="/payment" element={<Payment />} />
         <Route
           path="/tutoring/:id"
           element={<TutoringPage socket={socket} />}

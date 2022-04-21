@@ -101,7 +101,7 @@ const Navbarr = (props) => {
           </MediaQuery>
           <MediaQuery maxWidth={768}>
             <Nav className="me-auto">
-              <Nav.Link>My Class</Nav.Link>
+              <Nav.Link>Dashboard</Nav.Link>
               <Nav.Link>Schedule</Nav.Link>
               <Nav.Link>My account</Nav.Link>
               <Nav.Link onClick={(e) => onClickLogout(e)}>Log out</Nav.Link>
@@ -159,10 +159,10 @@ const Navbarr = (props) => {
       <NavDropdown title="Menu" className="center">
         <NavDropdown.Item
           onClick={(e) => {
-            navigate("/class");
+            navigate("/userDashboard");
           }}
         >
-          My Class
+          Dashboard
         </NavDropdown.Item>
         <NavDropdown.Item
           onClick={(e) => {
@@ -189,7 +189,7 @@ const Navbarr = (props) => {
             <div className="nav-logo">
               <Link to="/" style={{ display: "flex" }}>
                 <img src="/asset/image/logo.png" />
-                <p className="nav-title">DREY</p>
+                <p className="nav-title">DEMY</p>
               </Link>
 
               <MediaQuery minWidth={555}>

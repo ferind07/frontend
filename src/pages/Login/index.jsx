@@ -95,7 +95,7 @@ const Login = (props) => {
         <div
           style={{
             marginTop: "1vw",
-            width: "70%",
+            width: "50%",
             marginLeft: "auto",
             marginRight: "auto",
           }}

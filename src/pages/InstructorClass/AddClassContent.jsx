@@ -4,6 +4,7 @@ import ReactQuill from "react-quill";
 import "./index.css";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
+import { Empty } from "antd";
 import BackendUrl from "../../components/BackendUrl";
 
 const AddClassContent = (props) => {
@@ -57,64 +58,104 @@ const AddClassContent = (props) => {
     }
   };
 
+  const renderImage = () => {
+    if (image) {
+      return (
+        <div>
+          <img
+            src={URL.createObjectURL(image)}
+            alt="Thumb"
+            style={{ width: "30vw", aspectRatio: "4 / 3" }}
+            className=""
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <div
+            style={{
+              width: "30vw",
+              aspectRatio: "4 / 3",
+              border: "2px dashed black",
+            }}
+            className="d-flex center"
+          >
+            <Empty description="No image" />
+          </div>
+        </div>
+      );
+    }
+  };
+
   return (
     <>
-      <div style={{ height: "100%", minHeight: "75vh" }}>
-        <h3 className="mb-0">Add Class</h3>
-        <p className="text-muted">Create new class</p>
-        <hr className="mt-0" />
-        <form encType="multipart/form-data">
-          <Input
-            type="text"
-            placeholder="Class title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <Input
-            type="number"
-            placeholder="Duration"
-            className="mt-2"
-            value={duration}
-            onChange={(e) => setDuration(e.target.value)}
-          />
-          <Input
-            type="number"
-            placeholder="Price"
-            className="mt-2 mb-2"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
-
-          <ReactQuill theme="snow" value={value} onChange={setValue} />
-          <p className="mb-0 mt-2">Class Count</p>
-          <Input
-            type="number"
-            placeholder="Price"
-            className="mt-1 mb-2"
-            value={classCount}
-            onChange={(e) => setClassCount(e.target.value)}
-            min={1}
-          />
-          <input
-            type="file"
-            name="classImage"
-            className="mt-2"
-            onChange={(e) => handleImageChange(e)}
-          />
-          <br />
-          {image && (
-            <div>
-              <p className="mb-0 mt-2">Image Preview</p>
-              <img
-                src={URL.createObjectURL(image)}
-                alt="Thumb"
-                style={{ width: "30vw", aspectRatio: "16 / 9" }}
+      <form encType="multipart/form-data">
+        <div style={{ height: "100%", minHeight: "75vh" }}>
+          <h3 className="mb-0">Add Class</h3>
+          <p className="text-muted">Create new class</p>
+          <hr className="mt-0" />
+          <div className="row">
+            <div className="col-6">
+              <Input
+                type="text"
+                placeholder="Class title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <Input
+                type="number"
+                placeholder="Duration"
                 className="mt-2"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+              />
+              <Input
+                type="number"
+                placeholder="Price"
+                className="mt-2 mb-2"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+
+              <ReactQuill theme="snow" value={value} onChange={setValue} />
+              <p className="mb-0 mt-2">Class Count</p>
+              <Input
+                type="number"
+                placeholder="Price"
+                className="mt-1 mb-2"
+                value={classCount}
+                onChange={(e) => setClassCount(e.target.value)}
+                min={1}
+              />
+              <p className="mb-0 mt-2">Class Image</p>
+              <input
+                type="file"
+                name="classImage"
+                className="mt-2"
+                onChange={(e) => handleImageChange(e)}
               />
             </div>
-          )}
-          <br />
-          <button onClick={(e) => onSubmit(e)}>Submit</button>
+            <div className="col-6">
+              <div className="d-flex justify-content-center">
+                {renderImage()}
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-12">
+              <hr />
+              <div className="d-flex justify-content-end">
+                <button
+                  className="btn btn-primary"
+                  onClick={(e) => onSubmit(e)}
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
+
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -123,8 +164,8 @@ const AddClassContent = (props) => {
           >
             load class
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
     </>
   );
 };

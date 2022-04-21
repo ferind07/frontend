@@ -90,7 +90,7 @@ function MyAccount() {
         <div className="row">
           <form encType="multipart/form-data" className="row">
             <div className="col-lg-3 col-md-4">
-              <div className="card">
+              <div className="card card-shadow">
                 <div className="card-body">
                   {userImage()}
                   <div className="mt-2">
@@ -110,7 +110,7 @@ function MyAccount() {
               </div>
             </div>
             <div className="col-lg-9 col-md-8">
-              <div className="card">
+              <div className="card card-shadow">
                 <div className="card-body">
                   <div className="form-group row">
                     <label for="email" className="col-sm-2 col-form-label">

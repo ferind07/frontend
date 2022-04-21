@@ -1,14 +1,35 @@
 import React from "react";
 import BackendUrl from "../../components/BackendUrl";
 import NumberFormat from "react-number-format";
+import { Empty } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const ClassListContent = (props) => {
+  const renderClass = () => {
+    if (props.classList.length == 0) {
+      return <Empty description="No class yet" className="mt-5" />;
+    } else {
+      const component = [];
+      props.classList.forEach((classList) => {
+        component.push(
+          <ComponentCard
+            title={classList.title}
+            duration={classList.duration}
+            image={classList.image}
+            price={classList.price}
+            id={classList.id}
+          />
+        );
+      });
+      return component;
+    }
+  };
+
   return (
     <>
       <div style={{ height: "100vh" }}>
         <div className="row" style={{ overFlow: "auto" }}>
-          {props.classList.map((classList) => {
+          {/* {props.classList.map((classList) => {
             return (
               <ComponentCard
                 title={classList.title}
@@ -18,7 +39,8 @@ const ClassListContent = (props) => {
                 id={classList.id}
               />
             );
-          })}
+          })} */}
+          {renderClass()}
         </div>
       </div>
     </>

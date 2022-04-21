@@ -225,7 +225,12 @@ const TutoringPage = (props) => {
 
       //peersRef.current[0].peer.send(Buffer.from("test"));
 
-      setChat((chats) => [...chats, newChat]);
+      socketRef.current.emit("sendChat", { text: chatValue, room: id });
+      const dataChat = {
+        sender: true,
+        text: chatValue,
+      };
+      setChat((chats) => [...chats, dataChat]);
       setChatValue("");
     }
   }
@@ -258,13 +263,23 @@ const TutoringPage = (props) => {
       <div className="chat-container" style={{ display: displayValue }}>
         <div className="chat-body">
           {chat.map((chatDetail) => {
-            return (
-              <>
-                <div className="d-flex justify-content-end">
-                  <div className="chat-bubble">{chatDetail.text}</div>
-                </div>
-              </>
-            );
+            if (chatDetail.sender) {
+              return (
+                <>
+                  <div className="d-flex justify-content-end">
+                    <div className="chat-bubble">{chatDetail.text}</div>
+                  </div>
+                </>
+              );
+            } else {
+              return (
+                <>
+                  <div className="d-flex justify-content-start">
+                    <div className="chat-bubble">{chatDetail.text}</div>
+                  </div>
+                </>
+              );
+            }
           })}
         </div>
         <div
@@ -340,6 +355,11 @@ const TutoringPage = (props) => {
           item.peer.signal(payload.signal);
         });
       });
+
+    socketRef.current.on("newChat", (data) => {
+      console.log(data);
+      setChat((chats) => [...chats, data]);
+    });
   }, []);
 
   function createPeer(userToSignal, callerID, stream) {
@@ -361,13 +381,13 @@ const TutoringPage = (props) => {
       });
     });
 
-    peer.on("connect", () => {
-      peer.send("test");
-    });
+    // peer.on("connect", () => {
+    //   peer.send("test");
+    // });
 
-    peer.on("data", (data) => {
-      console.log(data);
-    });
+    // peer.on("data", (data) => {
+    //   console.log(data);
+    // });
 
     return peer;
   }

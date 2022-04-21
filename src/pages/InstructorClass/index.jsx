@@ -40,7 +40,7 @@ const InstructorClass = () => {
   }
 
   return (
-    <div className="container-fluid mt-3">
+    <div className="container mt-3">
       <div className="row">
         <div className="col-12">
           <div className="card card-shadow">

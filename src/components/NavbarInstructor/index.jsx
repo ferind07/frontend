@@ -75,6 +75,21 @@ const NavbarInstructor = (props) => {
         </>
       );
     } else {
+      const menu = () => {
+        if (!props.register) {
+          return (
+            <MediaQuery maxWidth={768}>
+              <Nav className="me-auto">
+                <Nav.Link href="/instructor/class">My Class</Nav.Link>
+                <Nav.Link>Schedule</Nav.Link>
+                <Nav.Link>Student</Nav.Link>
+                <Nav.Link>About Me</Nav.Link>
+                <Nav.Link onClick={(e) => onClickLogout(e)}>Log out</Nav.Link>
+              </Nav>
+            </MediaQuery>
+          );
+        }
+      };
       return (
         <>
           <MediaQuery minWidth={768}>
@@ -88,41 +103,41 @@ const NavbarInstructor = (props) => {
               </button>
             </div>
           </MediaQuery>
-          <MediaQuery maxWidth={768}>
-            <Nav className="me-auto">
-              <Nav.Link href="/instructor/class">My Class</Nav.Link>
-              <Nav.Link>Schedule</Nav.Link>
-              <Nav.Link>Student</Nav.Link>
-              <Nav.Link>About Me</Nav.Link>
-              <Nav.Link onClick={(e) => onClickLogout(e)}>Log out</Nav.Link>
-            </Nav>
-          </MediaQuery>
+          {menu()}
         </>
       );
     }
   };
 
   const dropdownItem = () => {
-    return (
-      <NavDropdown title="Menu" className="center">
-        <NavDropdown.Item
-          onClick={(e) => {
-            navigate("/instructor/class");
-          }}
-        >
-          My Class
-        </NavDropdown.Item>
-        <NavDropdown.Item
-          onClick={(e) => {
-            navigate("/instructor/schedule");
-          }}
-        >
-          Schedule
-        </NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.3">Student</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.3">About Me</NavDropdown.Item>
-      </NavDropdown>
-    );
+    if (!props.register) {
+      return (
+        <NavDropdown title="Menu" className="center">
+          <NavDropdown.Item
+            onClick={(e) => {
+              navigate("/instructor/class");
+            }}
+          >
+            My Class
+          </NavDropdown.Item>
+          <NavDropdown.Item
+            onClick={(e) => {
+              navigate("/instructor/schedule");
+            }}
+          >
+            Schedule
+          </NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.3">Student</NavDropdown.Item>
+          <NavDropdown.Item
+            onClick={(e) => {
+              navigate("/instructor/aboutMe");
+            }}
+          >
+            About Me
+          </NavDropdown.Item>
+        </NavDropdown>
+      );
+    }
   };
 
   return (
@@ -139,7 +154,7 @@ const NavbarInstructor = (props) => {
             <div className="nav-logo">
               <Link to="/instructor" style={{ display: "flex" }}>
                 <img src="/asset/image/logo.png" />
-                <p className="nav-title">DREY</p>
+                <p className="nav-title">DEMY</p>
               </Link>
             </div>
           </Navbar.Brand>
