@@ -75,6 +75,24 @@ const ScheduleCard = (props) => {
       });
   }
 
+  const renderStatus = () => {
+    var text = "";
+
+    if (props.submissionDetail.status == 0) {
+      text = "Unconfirmed";
+    } else if (props.submissionDetail.status == 1) {
+      text = "Confirmed";
+    } else if (props.submissionDetail.status == 2) {
+      text = "Declined";
+    } else if (props.submissionDetail.status == 3) {
+      text = "Complete";
+    } else if (props.submissionDetail.status == 4) {
+      text = "Expired";
+    }
+
+    return text;
+  };
+
   return (
     <>
       <div className="card mt-2">
@@ -90,12 +108,7 @@ const ScheduleCard = (props) => {
               <h5>{props.submissionDetail.title} Class</h5>
               <p>With {props.submissionDetail.iName}</p>
               <p>Applied at {dateStr}</p>
-              <p>
-                Status{" "}
-                {props.submissionDetail.status == 4
-                  ? "Expired"
-                  : props.submissionDetail.status}
-              </p>
+              <p>Status : {renderStatus()}</p>
               <button className="btn btn-primary" onClick={showDrawer}>
                 Detail
               </button>
@@ -104,7 +117,7 @@ const ScheduleCard = (props) => {
         </div>
       </div>
       <Drawer
-        title="Basic Drawer"
+        title="Detail class"
         placement="right"
         onClose={onClose}
         visible={visible}
@@ -145,7 +158,7 @@ const ScheduleCard = (props) => {
                   : dateEnd.getMinutes());
               return (
                 <>
-                  <div className="card">
+                  <div className="card card-shadow mt-2">
                     <div className="card-body">
                       <h5>Class - {i + 1}</h5>
                       <h6>

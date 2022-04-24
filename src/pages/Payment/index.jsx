@@ -1,38 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 
 const Payment = () => {
   const [transactionToken, setTrasactionToken] = useState("");
+  const [orderID, setOrderID] = useState("");
+  const [grossAmount, setGrossAmount] = useState("");
+
+  useEffect(() => {}, []);
 
   function pay(e) {
     e.preventDefault();
-
     axios
       .post(BackendUrl + "/user/userPay", {
-        token: localStorage.getItem("token"),
+        order_id: orderID,
+        gross_amount: grossAmount,
       })
       .then((success) => {
         const token = success.data;
         window.snap.pay(token, {
           onSuccess: function (result) {
-            /* You may add your own implementation here */
-            alert("payment success!");
+            console.log("success");
             console.log(result);
           },
           onPending: function (result) {
-            /* You may add your own implementation here */
-            alert("wating your payment!");
+            console.log("pending");
             console.log(result);
           },
           onError: function (result) {
-            /* You may add your own implementation here */
-            alert("payment failed!");
+            console.log("error");
             console.log(result);
           },
           onClose: function () {
-            /* You may add your own implementation here */
-            alert("you closed the popup without finishing the payment");
+            console.log(
+              "customer closed the popup without finishing the payment"
+            );
           },
         });
       })
@@ -40,21 +42,37 @@ const Payment = () => {
         console.log(error);
       });
   }
+
   return (
     <div>
-      <script
-        type="text/javascript"
-        src="https://app.sandbox.midtrans.com/snap/snap.js"
-        data-client-key="SB-Mid-client-bAR36cuy3BSC-wV9"
-      ></script>
-      <button
-        className="btn btn-success"
-        onClick={(e) => {
-          pay(e);
-        }}
-      >
-        PAY
-      </button>
+      <div className="container mt-5">
+        <input
+          type="text"
+          placeholder="oder_id"
+          value={orderID}
+          onChange={(e) => {
+            setOrderID(e.target.value);
+          }}
+        />
+        <br />
+        <input
+          type="number"
+          placeholder="gross_amount"
+          value={grossAmount}
+          onChange={(e) => {
+            setGrossAmount(e.target.value);
+          }}
+        />
+        <br />
+        <button
+          className="btn btn-success"
+          onClick={(e) => {
+            pay(e);
+          }}
+        >
+          PAY
+        </button>
+      </div>
     </div>
   );
 };
