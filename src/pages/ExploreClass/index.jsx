@@ -5,7 +5,7 @@ import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 import NumberFormat from "react-number-format";
 import moment from "moment";
-import { notification } from "antd";
+import { notification, Descriptions } from "antd";
 const HtmlToReactParser = require("html-to-react").Parser;
 
 const ExploreClass = () => {
@@ -90,6 +90,21 @@ const ExploreClass = () => {
         });
     }
   }
+  function renderCatagories() {
+    var katText = "";
+    if (classDetail.katagori == 1) {
+      katText = "Language";
+    } else if (classDetail.katagori == 2) {
+      katText = "Cooking";
+    } else if (classDetail.katagori == 3) {
+      katText = "Sports";
+    } else if (classDetail.katagori == 4) {
+      katText = "Design";
+    } else if (classDetail.katagori == 5) {
+      katText = "Programming";
+    }
+    return katText;
+  }
   return (
     <>
       <Navbarr />
@@ -100,21 +115,41 @@ const ExploreClass = () => {
               <div className="card-body">
                 <h1>{classDetail.title} Course</h1>
                 <div className="row">
-                  <div className="col-md-6">
-                    <img src={BackendUrl + classDetail.image} width="100%" />
-                  </div>
-                  <div className="col-md-6">
-                    <h5 className="mb-0">Duration</h5>
-                    <p>{classDetail.duration} minute</p>
-                    <h5 className="mb-0">Class count</h5>
-                    <p>{classDetail.classCount} Class</p>
-                    <h5 className="mb-0">Price</h5>
-                    <NumberFormat
-                      value={classDetail.price}
-                      displayType="text"
-                      thousandSeparator
-                      prefix="Rp. "
+                  <div className="col-md-5">
+                    <img
+                      src={BackendUrl + classDetail.image}
+                      width="100%"
+                      style={{ aspectRatio: "4/3" }}
                     />
+                  </div>
+                  <div className="col-md-7">
+                    <Descriptions
+                      bordered
+                      title="Class description"
+                      size="middle"
+                    >
+                      <Descriptions.Item label="Instructor" span={3}>
+                        {classDetail.name}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Category" span={2}>
+                        {renderCatagories()}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Duration">
+                        {classDetail.duration} minutes
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Price" span={2}>
+                        <NumberFormat
+                          value={classDetail.price}
+                          displayType="text"
+                          thousandSeparator
+                          prefix="Rp. "
+                        />
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Total class">
+                        {classDetail.classCount} class
+                      </Descriptions.Item>
+                    </Descriptions>
+                    <hr />
 
                     {renderJumlahClass()}
                     <br />
@@ -128,11 +163,13 @@ const ExploreClass = () => {
                     </button>
                   </div>
                 </div>
+                <hr />
                 <h5 className="mt-2">Detail Course</h5>
                 {htmlToReactParser.parse(classDetail.detail)}
               </div>
             </div>
           </div>
+          <div className="col-12"></div>
         </div>
       </div>
     </>
