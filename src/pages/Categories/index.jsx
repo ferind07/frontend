@@ -12,6 +12,7 @@ import { Empty } from "antd";
 const Categories = () => {
   let { id } = useParams();
   const [listInstrucor, setListInstructor] = useState([]);
+
   useEffect(() => {
     axios
       .get(BackendUrl + "/user/getInstructorList?katagori=" + id)
@@ -23,11 +24,30 @@ const Categories = () => {
         console.log(error);
       });
   }, [id]);
+
+  const katagoriText = () => {
+    var katText = "";
+
+    if (id == 1) {
+      katText = "Language";
+    } else if (id == 2) {
+      katText = "Cooking";
+    } else if (id == 3) {
+      katText = "Sports";
+    } else if (id == 4) {
+      katText = "Design";
+    } else if (id == 5) {
+      katText = "Programming";
+    }
+
+    return katText;
+  };
+
   return (
     <>
       <Navbar />
       <div className="container" style={{ paddingBottom: "30px" }}>
-        <h2 className="mt-5 mb-0">Language</h2>
+        <h2 className="mt-5 mb-0">{katagoriText()}</h2>
         <h5 className="mt-2 text-muted">Another ways to learn language</h5>
         <div className="d-flex justify-content-between">
           <p style={{ fontSize: "0.8rem" }}>

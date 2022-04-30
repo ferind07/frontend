@@ -74,7 +74,10 @@ const Schedule = () => {
                 </select>
                 <hr />
                 <div className="row">
-                  <div className="col-12" style={{ height: "75vh" }}>
+                  <div
+                    className="col-12"
+                    style={{ height: "75vh", overflowY: "auto" }}
+                  >
                     {renderSchedule()}
                   </div>
                 </div>

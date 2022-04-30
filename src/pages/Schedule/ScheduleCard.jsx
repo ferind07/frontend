@@ -93,6 +93,16 @@ const ScheduleCard = (props) => {
     return text;
   };
 
+  const btnStatus = () => {
+    if (props.submissionDetail.status == 1) {
+      return (
+        <button className="btn btn-primary btn-sm" onClick={showDrawer}>
+          Detail
+        </button>
+      );
+    }
+  };
+
   return (
     <>
       <div className="card mt-2">
@@ -105,13 +115,11 @@ const ScheduleCard = (props) => {
               />
             </div>
             <div className="col-8">
-              <h5>{props.submissionDetail.title} Class</h5>
-              <p>With {props.submissionDetail.iName}</p>
-              <p>Applied at {dateStr}</p>
-              <p>Status : {renderStatus()}</p>
-              <button className="btn btn-primary" onClick={showDrawer}>
-                Detail
-              </button>
+              <h5 className="mb-1">{props.submissionDetail.title} Class</h5>
+              <p className="mb-1">With {props.submissionDetail.iName}</p>
+              <p className="mb-1">Applied at {dateStr}</p>
+              <p className="mb-1">Status : {renderStatus()}</p>
+              {btnStatus()}
             </div>
           </div>
         </div>

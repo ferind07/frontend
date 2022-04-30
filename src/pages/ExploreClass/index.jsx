@@ -5,14 +5,22 @@ import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 import NumberFormat from "react-number-format";
 import moment from "moment";
-import { notification, Descriptions } from "antd";
+import { notification, Descriptions, Drawer, Button } from "antd";
 const HtmlToReactParser = require("html-to-react").Parser;
 
 const ExploreClass = () => {
   let { id } = useParams();
   const [classDetail, setClassDetail] = useState({});
+  const [visible, setVisible] = useState(false);
 
   const htmlToReactParser = new HtmlToReactParser();
+
+  const showDrawer = () => {
+    setVisible(true);
+  };
+  const onClose = () => {
+    setVisible(false);
+  };
 
   function laodClass() {
     axios
@@ -45,6 +53,41 @@ const ExploreClass = () => {
     //console.log("explore class");
     laodClass();
   }, []);
+
+  function payCourse(insertId) {
+    const insertID = insertId;
+    axios
+      .post(BackendUrl + "/user/userPay", {
+        order_id: "T-" + insertID,
+        gross_amount: classDetail.price,
+        token: localStorage.getItem("token"),
+      })
+      .then((success) => {
+        const token = success.data;
+        window.snap.pay(token, {
+          onSuccess: function (result) {
+            console.log("success");
+            console.log(result);
+          },
+          onPending: function (result) {
+            console.log("pending");
+            console.log(result);
+          },
+          onError: function (result) {
+            console.log("error");
+            console.log(result);
+          },
+          onClose: function () {
+            console.log(
+              "customer closed the popup without finishing the payment"
+            );
+          },
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   function submitClass(e) {
     e.preventDefault();
@@ -84,6 +127,8 @@ const ExploreClass = () => {
         })
         .then((success) => {
           console.log(success);
+          //if payment success
+          //console.log(success.data.data.insertId);
         })
         .catch((error) => {
           console.log(error);
@@ -113,7 +158,8 @@ const ExploreClass = () => {
           <div className="col-12">
             <div className="card card-shadow">
               <div className="card-body">
-                <h1>{classDetail.title} Course</h1>
+                <h1 className="mb-0">{classDetail.title} Course</h1>
+                <hr />
                 <div className="row">
                   <div className="col-md-5">
                     <img
@@ -126,7 +172,7 @@ const ExploreClass = () => {
                     <Descriptions
                       bordered
                       title="Class description"
-                      size="middle"
+                      size="small"
                     >
                       <Descriptions.Item label="Instructor" span={3}>
                         {classDetail.name}
@@ -147,6 +193,24 @@ const ExploreClass = () => {
                       </Descriptions.Item>
                       <Descriptions.Item label="Total class">
                         {classDetail.classCount} class
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Available time">
+                        <div className="d-flex justify-content-between">
+                          <div className="center">
+                            {classDetail.timeStart} to {classDetail.timeEnd}
+                          </div>
+                          <div>
+                            <Button
+                              type="primary"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                showDrawer();
+                              }}
+                            >
+                              Schedule
+                            </Button>
+                          </div>
+                        </div>
                       </Descriptions.Item>
                     </Descriptions>
                     <hr />
@@ -172,6 +236,17 @@ const ExploreClass = () => {
           <div className="col-12"></div>
         </div>
       </div>
+      <Drawer
+        title="Schedule"
+        placement="right"
+        onClose={onClose}
+        visible={visible}
+        size="large"
+      >
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Drawer>
     </>
   );
 };
