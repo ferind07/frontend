@@ -81,6 +81,21 @@ const ExploreClass = () => {
             console.log(
               "customer closed the popup without finishing the payment"
             );
+            axios
+              .post(BackendUrl + "/user/unFinishedPayment", {
+                insertId: insertID,
+              })
+              .then((success) => {
+                if (success.data.status) {
+                  notification.info({
+                    description: "User not finished the payment",
+                    message: "Info",
+                  });
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           },
         });
       })
@@ -127,6 +142,15 @@ const ExploreClass = () => {
         })
         .then((success) => {
           console.log(success);
+          if (success.data.status) {
+            //if no intersec schedule
+            payCourse(success.data.data.insertId);
+          } else {
+            notification.error({
+              description: "Error",
+              message: success.data.msg,
+            });
+          }
           //if payment success
           //console.log(success.data.data.insertId);
         })
