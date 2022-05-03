@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
-import { notification } from "antd";
+import { notification, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const InstructorDetailSchedule = () => {
@@ -108,8 +108,16 @@ const InstructorDetailSchedule = () => {
     if (hSubmission.status == 0) {
       return (
         <>
-          <button onClick={(e) => actionClass(1)}>Accept</button>
-          <button onClick={(e) => actionClass(2)}>Decline</button>
+          <Button
+            type="primary"
+            onClick={(e) => actionClass(1)}
+            style={{ marginRight: "10px" }}
+          >
+            Accept
+          </Button>
+          <Button danger type="primary" onClick={(e) => actionClass(2)}>
+            Decline
+          </Button>
         </>
       );
     } else if (hSubmission.status == 1) {

@@ -2,12 +2,32 @@ import React, { useState, useEffect } from "react";
 import moment from "moment";
 import BackendUrl from "../../components/BackendUrl";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const UnconfirmedSchedule = (props) => {
   const listSchedule = props.scheduleList;
   const navigate = useNavigate();
-  const [status, setStatus] = useState(0);
-  const [tempListSchedule, setTempListSchedule] = useState(props.scheduleList);
+
+  const [tempListSchedule, setTempListSchedule] = useState([]);
+  //var tempListSchedule = props.scheduleList;
+
+  function loadSubmission() {
+    axios
+      .get(
+        BackendUrl + "/user/getSchedule?token=" + localStorage.getItem("token")
+      )
+      .then((success) => {
+        setTempListSchedule(success.data);
+        console.log(success.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {
+    loadSubmission();
+  }, []);
 
   const compRenderSchedule = (detailSchedule, dateStr) => {
     return (
@@ -48,37 +68,35 @@ const UnconfirmedSchedule = (props) => {
   };
 
   const renderSchedule = () => {
-    if (tempListSchedule.length == 0) {
-      setTempListSchedule(listSchedule);
-    } else {
-      const componentList = [];
-      tempListSchedule.map((detailSchedule) => {
-        const today = new Date(detailSchedule.timeInsert);
-        const yyyy = today.getFullYear();
-        let mm = today.getMonth() + 1; // Months start at 0!
-        let dd = today.getDate();
+    const componentList = [];
+    tempListSchedule.map((detailSchedule) => {
+      const today = new Date(detailSchedule.timeInsert);
+      const yyyy = today.getFullYear();
+      let mm = today.getMonth() + 1; // Months start at 0!
+      let dd = today.getDate();
 
-        if (dd < 10) dd = "0" + dd;
-        if (mm < 10) mm = "0" + mm;
+      if (dd < 10) dd = "0" + dd;
+      if (mm < 10) mm = "0" + mm;
 
-        var formatteddatestr = moment(detailSchedule.timeInsert).format(
-          "hh:mm a"
-        );
-        const dateStr = dd + "/" + mm + "/" + yyyy + " " + formatteddatestr;
+      var formatteddatestr = moment(detailSchedule.timeInsert).format(
+        "hh:mm a"
+      );
+      const dateStr = dd + "/" + mm + "/" + yyyy + " " + formatteddatestr;
 
-        componentList.push(compRenderSchedule(detailSchedule, dateStr));
-      });
-      return componentList;
-    }
+      componentList.push(compRenderSchedule(detailSchedule, dateStr));
+    });
+    return componentList;
   };
 
   function onStatusChange(e) {
     e.preventDefault();
+
     const temp = listSchedule.filter((element) => {
       return element.status == e.target.value;
     });
     console.log(temp);
     setTempListSchedule(temp);
+    //tempListSchedule = temp;
   }
 
   return (
@@ -98,7 +116,6 @@ const UnconfirmedSchedule = (props) => {
             <option value="2">Cancelled</option>
             <option value="">All</option>
           </select>
-          {tempListSchedule.length}
           {renderSchedule()}
         </div>
       </div>

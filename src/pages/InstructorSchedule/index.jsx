@@ -74,7 +74,7 @@ const InstructorSchedule = () => {
       <div className="container mt-3">
         <div className="row">
           <div className="col-12">
-            <div className="card card-shadow">
+            <div className="card card-shadow mb-5">
               <div className="card-body">
                 <Tabs defaultActiveKey="1">
                   <TabPane tab="Unconfirmed schedule" key="1">
