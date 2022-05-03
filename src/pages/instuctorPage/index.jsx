@@ -78,6 +78,7 @@ const InstructorPage = () => {
   }
 
   function getHSubmission() {
+    console.log("get submission");
     axios
       .get(
         BackendUrl +

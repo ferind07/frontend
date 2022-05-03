@@ -24,7 +24,7 @@ const InstructorSchedule = () => {
       )
       .then((success) => {
         setScheduleList(success.data);
-        //console.log(success.data);
+        console.log(success.data);
       })
       .catch((error) => {
         console.log(error);

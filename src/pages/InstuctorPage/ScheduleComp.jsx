@@ -20,7 +20,7 @@ const ScheduleComp = (props) => {
   ];
   return (
     <>
-      <div className="card">
+      <div className="card mt-2">
         <div className="card-body">
           <div className="d-flex justify-content-between">
             <h6 style={{ marginBottom: "0px" }}>
