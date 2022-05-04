@@ -16,6 +16,7 @@ import { notification } from "antd";
 import TutoringPage from "./pages/TutoringPage";
 import UserDashboard from "./pages/UserDashboard";
 import Payment from "./pages/Payment";
+import ReviewPage from "./pages/ReviewPage";
 
 const App = () => {
   const socket = useRef();
@@ -69,6 +70,7 @@ const App = () => {
         <Route path="/schedule" element={<Schedule socket={socket} />} />
         <Route path="/admin/*" element={<AdminRoute />} />
         <Route path="/instructor/*" element={<InstructorRoutes />} />
+        <Route path="/review" element={<ReviewPage />} />
       </Routes>
     </>
   );
