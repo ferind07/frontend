@@ -17,6 +17,7 @@ import TutoringPage from "./pages/TutoringPage";
 import UserDashboard from "./pages/UserDashboard";
 import Payment from "./pages/Payment";
 import ReviewPage from "./pages/ReviewPage";
+import ForgetPassword from "./pages/ForgetPassword";
 
 const App = () => {
   const socket = useRef();
@@ -71,6 +72,7 @@ const App = () => {
         <Route path="/admin/*" element={<AdminRoute />} />
         <Route path="/instructor/*" element={<InstructorRoutes />} />
         <Route path="/review" element={<ReviewPage />} />
+        <Route path="/forgetPassword" element={<ForgetPassword />} />
       </Routes>
     </>
   );

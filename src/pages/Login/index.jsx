@@ -133,6 +133,8 @@ const Login = (props) => {
           <p className="mt-2">
             Don't have account <a href="/register">Sign Up</a>
           </p>
+
+          <a href="/forgetPassword">Forget password</a>
         </div>
       </div>
       <Footer />
