@@ -171,6 +171,13 @@ const Navbarr = (props) => {
         >
           Schedule
         </NavDropdown.Item>
+        <NavDropdown.Item
+          onClick={(e) => {
+            navigate("/review");
+          }}
+        >
+          History
+        </NavDropdown.Item>
       </NavDropdown>
     );
   };
