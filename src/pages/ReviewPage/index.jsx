@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Navbarr from "../../components/Navbar";
-import { Input, Select, DatePicker, Button } from "antd";
+import { Input, Select, DatePicker, Button, Empty } from "antd";
 import HistoryComp from "./HistoryComp";
 import moment from "moment";
+import axios from "axios";
+import BackendUrl from "../../components/BackendUrl";
 
 const ReviewPage = () => {
   const { Search } = Input;
@@ -11,9 +13,56 @@ const ReviewPage = () => {
 
   const dateFormat = "DD/MM/YYYY";
 
+  const [historyList, setHistoryList] = useState([]);
+  const [tempHistoryList, setTempHistoryList] = useState([]);
+
   function handleChange(value) {
     console.log(`selected ${value}`);
   }
+
+  function getHistoryCourse() {
+    axios
+      .get(
+        BackendUrl +
+          "/user/getHSubmissionDone?token=" +
+          localStorage.getItem("token")
+      )
+      .then((success) => {
+        setHistoryList(success.data);
+        setTempHistoryList(success.data);
+        console.log(success.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function renderData() {
+    if (historyList.length != 0) {
+      const compList = [];
+      historyList.map((detailHistory) => {
+        console.log(detailHistory.image);
+        compList.push(
+          <HistoryComp
+            time={detailHistory.timeInsert}
+            orderId={detailHistory.id}
+            instructorName={detailHistory.name}
+            idInstructor={detailHistory.idUser}
+            picture={detailHistory.image}
+            courseName={detailHistory.title}
+            price={detailHistory.price}
+          />
+        );
+      });
+      return compList;
+    } else {
+      return <Empty />;
+    }
+  }
+
+  useEffect(() => {
+    getHistoryCourse();
+  }, []);
 
   return (
     <>
@@ -55,9 +104,7 @@ const ReviewPage = () => {
             </div>
             <div className="col-9">
               <div className="card" style={{ height: "80vh" }}>
-                <div className="card-body">
-                  <HistoryComp />
-                </div>
+                <div className="card-body">{renderData()}</div>
               </div>
             </div>
           </div>
