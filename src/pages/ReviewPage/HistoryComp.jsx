@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { LaptopOutlined, TeamOutlined } from "@ant-design/icons";
-import { Tag, Button } from "antd";
+import { Tag, Button, Drawer, Rate, Input } from "antd";
 
 const HistoryComp = () => {
+  const [visible, setVisible] = useState(false);
+  const { TextArea } = Input;
+
+  const showLargeDrawer = () => {
+    setVisible(true);
+  };
+  const onClose = () => {
+    setVisible(false);
+  };
   return (
     <>
       <div className="w-100">
@@ -51,11 +60,40 @@ const HistoryComp = () => {
               style={{ gap: "10px" }}
             >
               <Button>Detail transaction</Button>
-              <Button type="primary">Give review</Button>
+              <Button type="primary" onClick={(e) => showLargeDrawer()}>
+                Give review
+              </Button>
             </div>
           </div>
         </div>
       </div>
+      <Drawer
+        title="Review"
+        placement="right"
+        size="large"
+        onClose={onClose}
+        visible={visible}
+      >
+        <div className="d-flex" style={{ gap: "10px" }}>
+          <div>
+            <img
+              src="/asset/image/noPic.jpg"
+              width="150px"
+              style={{ aspectRatio: "4/3" }}
+            />
+          </div>
+
+          <div>
+            <h6>Course name</h6>
+            <p className="text-muted mb-0">How about your course</p>
+            <Rate />
+            <TextArea className="mt-2" placeholder="Place your review here" />
+            <div className="mt-2">
+              <Button type="primary">Send</Button>
+            </div>
+          </div>
+        </div>
+      </Drawer>
     </>
   );
 };
