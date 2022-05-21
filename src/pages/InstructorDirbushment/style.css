@@ -1,0 +1,7 @@
+.box-option {
+  cursor: pointer;
+}
+.box-option:hover {
+  background-color: #87ceeb;
+  transition: 0.25s;
+}

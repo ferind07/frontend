@@ -82,7 +82,7 @@ const NavbarInstructor = (props) => {
               <Nav className="me-auto">
                 <Nav.Link href="/instructor/class">My Class</Nav.Link>
                 <Nav.Link>Schedule</Nav.Link>
-                <Nav.Link>Student</Nav.Link>
+                <Nav.Link>Dirbushment</Nav.Link>
                 <Nav.Link>About Me</Nav.Link>
                 <Nav.Link onClick={(e) => onClickLogout(e)}>Log out</Nav.Link>
               </Nav>
@@ -127,7 +127,13 @@ const NavbarInstructor = (props) => {
           >
             Schedule
           </NavDropdown.Item>
-          <NavDropdown.Item href="#action/3.3">Student</NavDropdown.Item>
+          <NavDropdown.Item
+            onClick={(e) => {
+              navigate("/instructor/dirbushment");
+            }}
+          >
+            Dirbushment
+          </NavDropdown.Item>
           <NavDropdown.Item
             onClick={(e) => {
               navigate("/instructor/aboutMe");

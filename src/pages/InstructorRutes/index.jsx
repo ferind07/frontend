@@ -9,6 +9,7 @@ import InstructorDetailSchedule from "../InstructorDetailSchedule/index.jsx";
 import InstructorDetailClass from "../InstructorDetailClass";
 import InstructorAboutMe from "../InstructorAboutMe";
 import InstructorWaiting from "../InstructorWaiting";
+import InstructorDirbushment from "../InstructorDirbushment";
 
 const InstructorRoutes = () => {
   const location = useLocation().pathname;
@@ -29,6 +30,7 @@ const InstructorRoutes = () => {
         <Route path="/class" element={<InstructorClass />} />
         <Route path="/schedule" element={<InstructorSchedule />} />
         <Route path="/aboutMe" element={<InstructorAboutMe />} />
+        <Route path="/dirbushment" element={<InstructorDirbushment />} />
         <Route path="/detailClass/:id" element={<InstructorDetailClass />} />
         <Route
           path="/detailSchdule/:id"
