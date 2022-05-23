@@ -5,10 +5,18 @@ import NumberFormat from "react-number-format";
 import BackendUrl from "../../components/BackendUrl";
 import moment from "moment";
 import Calendar from "react-awesome-calendar";
+import { useNavigate } from "react-router-dom";
+import {
+  DollarCircleTwoTone,
+  ContainerTwoTone,
+  UpCircleTwoTone,
+} from "@ant-design/icons";
 
 const UserDashboard = () => {
   const [detailUser, setDetailUser] = useState({});
   const [listEvent, setListEvent] = useState([]);
+
+  let navigate = useNavigate();
 
   function getDetail() {
     axios
@@ -68,8 +76,11 @@ const UserDashboard = () => {
                   <div className="col-4">
                     <div className="card">
                       <div className="card-body">
-                        <h4>Your balance</h4>
-                        <div className="d-flex" style={{ gap: "10px" }}>
+                        <div className="d-flex" style={{ gap: "15px" }}>
+                          <DollarCircleTwoTone style={{ fontSize: "40px" }} />
+                          <h4 className="mb-0">Balance</h4>
+                        </div>
+                        <div className="d-flex mt-2" style={{ gap: "10px" }}>
                           <NumberFormat
                             value={detailUser.saldo}
                             className="foo"
@@ -80,14 +91,37 @@ const UserDashboard = () => {
                             )}
                           />
                         </div>
+                        {/* <a href="">Cash out</a> */}
                       </div>
                     </div>
                   </div>
                   <div className="col-4">
                     <div className="card">
                       <div className="card-body">
-                        <h4>Upcoming class</h4>
-                        <h5 className="text-muted">{listEvent.length} class</h5>
+                        <div className="d-flex" style={{ gap: "15px" }}>
+                          <ContainerTwoTone style={{ fontSize: "40px" }} />
+                          <h4 className="mb-0">Upcoming class</h4>
+                        </div>
+
+                        <h5 className="text-muted mt-2">
+                          {listEvent.length} class
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-4">
+                    <div
+                      className="card h-100"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        navigate("/userCashOut");
+                      }}
+                    >
+                      <div className="card-body center">
+                        <div className="d-flex" style={{ gap: "15px" }}>
+                          <UpCircleTwoTone style={{ fontSize: "40px" }} />
+                          <h4 className="mb-0">Cash out</h4>
+                        </div>
                       </div>
                     </div>
                   </div>

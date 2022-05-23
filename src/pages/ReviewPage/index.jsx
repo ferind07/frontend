@@ -104,7 +104,9 @@ const ReviewPage = () => {
             </div>
             <div className="col-9">
               <div className="card" style={{ height: "80vh" }}>
-                <div className="card-body">{renderData()}</div>
+                <div className="card-body" style={{ overflowY: "auto" }}>
+                  {renderData()}
+                </div>
               </div>
             </div>
           </div>

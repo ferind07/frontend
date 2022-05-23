@@ -23,6 +23,7 @@ const ExploreClass = () => {
   };
 
   function laodClass() {
+    console.log(id);
     axios
       .get(BackendUrl + "/user/getClassDetail?id=" + id)
       .then((success) => {
@@ -104,6 +105,23 @@ const ExploreClass = () => {
       });
   }
 
+  function xenditPay(id, amount) {
+    console.log("xenditPay");
+    axios
+      .post(BackendUrl + "/user/xenditPay", {
+        token: localStorage.getItem("token"),
+        amount: amount,
+        id: id,
+      })
+      .then((success) => {
+        console.log(success);
+        window.open(success.data.invoice_url, "_blank");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   function submitClass(e) {
     e.preventDefault();
     if (localStorage.getItem("token") == null) {
@@ -144,7 +162,8 @@ const ExploreClass = () => {
           console.log(success);
           if (success.data.status) {
             //if no intersec schedule
-            payCourse(success.data.data.insertId);
+            //payCourse(success.data.data.insertId);
+            xenditPay(success.data.data.insertId, classDetail.price);
           } else {
             notification.error({
               description: "Error",

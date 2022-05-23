@@ -4,6 +4,7 @@ import { Tag, Button, Drawer, Rate, Input, notification } from "antd";
 import BackendUrl from "../../components/BackendUrl";
 import moment from "moment";
 import axios from "axios";
+import NumberFormat from "react-number-format";
 
 const HistoryComp = (props) => {
   const [visible, setVisible] = useState(false);
@@ -151,7 +152,7 @@ const HistoryComp = (props) => {
 
   return (
     <>
-      <div className="w-100">
+      <div className="w-100 mt-2">
         <div className="card card-shadow">
           <div className="card-body">
             <div className="d-flex" style={{ gap: "10px" }}>
@@ -189,7 +190,17 @@ const HistoryComp = (props) => {
               />
               <div>
                 <h5>{courseName}</h5>
-                <p className="text-muted">{price}</p>
+                <p className="text-muted">
+                  {
+                    <NumberFormat
+                      value={price}
+                      className="foo"
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"Rp. "}
+                    />
+                  }
+                </p>
               </div>
             </div>
             <div
