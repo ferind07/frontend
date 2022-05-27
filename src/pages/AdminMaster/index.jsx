@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
-import { Table, Tag, Button, notification } from "antd";
+import { Table, Tag, Button, notification, Input } from "antd";
 
 const AdminMaster = () => {
   const [listUser, setListUser] = useState([]);
+  const [tempListUser, setTempListUser] = useState([]);
 
   function getUser() {
     axios
       .get(BackendUrl + "/admin/allUser")
       .then((success) => {
         setListUser(success.data);
+        setTempListUser(success.data);
         console.log(success.data);
       })
       .catch((error) => {
@@ -106,6 +108,17 @@ const AdminMaster = () => {
     },
   ];
 
+  function search(e) {
+    const keyword = e.target.value;
+
+    const temp = tempListUser.filter((detailUser) => {
+      const name = detailUser.name;
+      return name.toLowerCase().includes(keyword.toLowerCase());
+    });
+
+    setListUser(temp);
+  }
+
   useEffect(() => {
     getUser();
   }, []);
@@ -118,8 +131,16 @@ const AdminMaster = () => {
               <div className="card-body">
                 <h2 className="text-center">Master User</h2>
                 <div className="d-flex justify-content-between">
-                  <p>{listUser.length} User</p>
-                  <input type="text" placeholder="Search" />
+                  <div className="center">
+                    <p className="mb-0">{listUser.length} User</p>
+                  </div>
+                  <Input
+                    placeholder="Search"
+                    style={{ width: "200px" }}
+                    onChange={(e) => {
+                      search(e);
+                    }}
+                  />
                 </div>
                 <hr />
                 <Table dataSource={listUser} columns={columns} />
