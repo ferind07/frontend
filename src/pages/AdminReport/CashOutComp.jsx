@@ -7,7 +7,6 @@ import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 
 const CashOutComp = () => {
-  const [time, setTime] = useState([]);
   const [cashOutHistoryList, setCashOutHistoryList] = useState([]);
   const [tempCashOutHistoryList, setTempCashOutHistoryList] = useState([]);
 
@@ -19,6 +18,7 @@ const CashOutComp = () => {
       .then((success) => {
         console.log(success.data);
         setCashOutHistoryList(success.data);
+        setTempCashOutHistoryList(success.data);
       })
       .catch((error) => {
         console.log(error);
@@ -31,10 +31,42 @@ const CashOutComp = () => {
 
   const renderComponent = () => {
     const comp = [];
+    cashOutHistoryList.map((cashOutHistory) => {
+      comp.push(
+        compHistory(
+          2,
+          cashOutHistory.amount,
+          cashOutHistory.time,
+          cashOutHistory.name,
+          cashOutHistory.dirbushmentId,
+          cashOutHistory.bankCode
+        )
+      );
+    });
     return comp;
   };
 
-  const compHistory = (type, amount, date) => {
+  const [valRangePicker, setValRangePicker] = useState([]);
+
+  function onClickFilter() {
+    console.log(valRangePicker);
+    var filtered = tempCashOutHistoryList.filter((dirbushmentHistory) => {
+      const date = new Date(dirbushmentHistory.time);
+      const dateStart = valRangePicker[0].set({ hour: 0 }).toDate();
+      const dateEnd = valRangePicker[1].set({ hour: 23 }).toDate();
+
+      // console.log(date);
+      // console.log(dateStart);
+      // console.log(dateEnd);
+      // console.log(date >= dateStart && date <= dateEnd);
+
+      return date >= dateStart && date <= dateEnd;
+    });
+    console.log(filtered);
+    setCashOutHistoryList(filtered);
+  }
+
+  const compHistory = (type, amount, date, name, dirbushmentId, bankCode) => {
     var comp;
 
     if (type == 1) {
@@ -73,15 +105,19 @@ const CashOutComp = () => {
 
               <div className="d-flex justify-content-between w-100">
                 <div>
-                  <h5 className="mb-0">Dirbushment</h5>
-                  <h6 className="mb-0 text-muted">
+                  <h6 className="mb-0">Dirbushment</h6>
+                  <p className="mb-0 text-muted">{dirbushmentId}</p>
+                  <p className="mb-0 text-muted">{bankCode}</p>
+                  <p className="mb-0 text-muted">
                     <NumberFormat
                       value={amount}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={"Rp. "}
                     />
-                  </h6>
+                  </p>
+
+                  <p className="mb-0">{name}</p>
                 </div>
                 <div className="center">
                   <div>
@@ -113,13 +149,26 @@ const CashOutComp = () => {
           </div>
 
           <RangePicker
-            value={time}
+            value={valRangePicker}
             onChange={(value) => {
-              setTime(value);
+              setValRangePicker(value);
             }}
           />
-
-          <Button type="primary">Filter</Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              onClickFilter();
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            onClick={() => {
+              setCashOutHistoryList(tempCashOutHistoryList);
+            }}
+          >
+            Reset
+          </Button>
         </div>
         <div style={{ height: "65vh" }}>
           <div className="card mt-3 h-100">
