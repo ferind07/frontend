@@ -13,6 +13,34 @@ const TopUserComp = () => {
 
   function getTopInstructor() {}
 
+  const renderTopUser = () => {
+    if (topUser.length != 0) {
+      return (
+        <>
+          <div className="w-100">
+            <h5 className="text-muted">{topUser[0].name}</h5>
+            <h6>{topUser[0].total} class</h6>
+          </div>
+        </>
+      );
+    } else {
+    }
+  };
+
+  const renderTopInstructor = () => {
+    if (topInstructor.length != 0) {
+      return (
+        <>
+          <div className="w-100">
+            <h5 className="text-muted">{topInstructor[0].name}</h5>
+            <h6>{topInstructor[0].total} class</h6>
+          </div>
+        </>
+      );
+    } else {
+    }
+  };
+
   function onClickFilter() {
     const dateStart = time[0].format("YYYY-MM-DD");
     const dateEnd = time[1].format("YYYY-MM-DD");
@@ -27,6 +55,7 @@ const TopUserComp = () => {
       )
       .then((success) => {
         console.log(success.data);
+        setTopUser(success.data);
       })
       .catch((error) => {
         console.log(error);
@@ -42,6 +71,7 @@ const TopUserComp = () => {
       )
       .then((success) => {
         console.log(success.data);
+        setTopInstructor(success.data);
       })
       .catch((error) => {
         console.log(error);
@@ -82,6 +112,7 @@ const TopUserComp = () => {
             <div className="card">
               <div className="card-body">
                 <h3>Top User</h3>
+                {renderTopUser()}
               </div>
             </div>
           </div>
@@ -89,6 +120,7 @@ const TopUserComp = () => {
             <div className="card">
               <div className="card-body">
                 <h3>Top Instructor</h3>
+                {renderTopInstructor()}
               </div>
             </div>
           </div>
