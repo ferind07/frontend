@@ -1,0 +1,12 @@
+.container-result {
+  width: 100%;
+  height: 100vh;
+  outline: dashed 1px black;
+  /* Center vertically */
+  display: flex;
+  align-items: center;
+}
+
+.child-result {
+  width: 100%;
+}

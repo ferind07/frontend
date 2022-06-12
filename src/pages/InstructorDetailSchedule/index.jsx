@@ -22,7 +22,7 @@ const InstructorDetailSchedule = () => {
           id
       )
       .then((success) => {
-        //console.log(success.data);
+        console.log(success.data);
         setListSubmission(success.data);
       })
       .catch((error) => {
@@ -120,6 +120,7 @@ const InstructorDetailSchedule = () => {
     const temp = hSubmission;
     temp.status = action;
     setHSubmission(temp);
+    window.location.reload();
   }
 
   function createClass(e, idUser, idSubmission) {
@@ -169,28 +170,37 @@ const InstructorDetailSchedule = () => {
   };
 
   const renderButton = (subMissionItem) => {
-    if (hSubmission.status == 0 || hSubmission.status == 2) {
+    console.log(subMissionItem);
+    if (
+      hSubmission.status == 0 ||
+      hSubmission.status == 2 ||
+      subMissionItem.status == 2
+    ) {
       return (
-        <button
-          className="btn btn-primary"
-          onClick={(e) => {
-            createClass(e, subMissionItem.idUser, subMissionItem.id);
-          }}
-          disabled
-        >
-          Create Class
-        </button>
+        <>
+          <button
+            className="btn btn-primary"
+            onClick={(e) => {
+              createClass(e, subMissionItem.idUser, subMissionItem.id);
+            }}
+            disabled
+          >
+            Create Class
+          </button>
+        </>
       );
     } else {
       return (
-        <button
-          className="btn btn-primary"
-          onClick={(e) => {
-            createClass(e, subMissionItem.idUser, subMissionItem.id);
-          }}
-        >
-          Create Class
-        </button>
+        <>
+          <button
+            className="btn btn-primary"
+            onClick={(e) => {
+              createClass(e, subMissionItem.idUser, subMissionItem.id);
+            }}
+          >
+            Create Class
+          </button>
+        </>
       );
     }
   };

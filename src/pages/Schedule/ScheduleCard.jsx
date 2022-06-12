@@ -103,6 +103,29 @@ const ScheduleCard = (props) => {
     }
   };
 
+  const renderButton = (subMissionItem) => {
+    if (subMissionItem.status == 1) {
+      return (
+        <button
+          className="btn btn-dark"
+          onClick={(e) => onClickJoin(e, subMissionItem.id)}
+        >
+          Join Class
+        </button>
+      );
+    } else if (subMissionItem.status == 2) {
+      return (
+        <button
+          className="btn btn-dark"
+          onClick={(e) => onClickJoin(e, subMissionItem.id)}
+          disabled
+        >
+          Join Class
+        </button>
+      );
+    }
+  };
+
   return (
     <>
       <div className="card mt-2">
@@ -134,6 +157,7 @@ const ScheduleCard = (props) => {
         <div className="row">
           <div className="col-12">
             {submissionList.map((subMissionItem, i) => {
+              //console.log(subMissionItem);
               const dateStart = new Date(subMissionItem.dateStart);
               const dateStartString =
                 dateStart.getDate() +
@@ -172,12 +196,7 @@ const ScheduleCard = (props) => {
                       <h6>
                         {dateStartString} to {dateEndString}
                       </h6>
-                      <button
-                        className="btn btn-dark"
-                        onClick={(e) => onClickJoin(e, subMissionItem.id)}
-                      >
-                        Join Class
-                      </button>
+                      {renderButton(subMissionItem)}
                     </div>
                   </div>
                 </>

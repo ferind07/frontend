@@ -207,7 +207,6 @@ const HistoryComp = (props) => {
               className="d-flex mt-2 justify-content-end"
               style={{ gap: "10px" }}
             >
-              <Button>Detail transaction</Button>
               <Button type="primary" onClick={(e) => showLargeDrawer()}>
                 Give review
               </Button>

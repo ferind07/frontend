@@ -11,6 +11,8 @@ import { MdScreenShare, MdStopScreenShare, MdChat } from "react-icons/md";
 import { useParams, useNavigate } from "react-router-dom";
 import Peer from "simple-peer";
 import "./index.css";
+import axios from "axios";
+import BackendUrl from "../../components/BackendUrl";
 
 const Video = (props) => {
   const ref = useRef();
@@ -40,6 +42,9 @@ const TutoringPage = (props) => {
 
   const chatPeer = useRef([]);
 
+  const [userInfo, setUserInfo] = useState({});
+  const partnerSocketId = useRef();
+
   const [video, setVideo] = useState(true);
   const [mute, setMute] = useState(false);
   const [shareScreen, setShareScreen] = useState(false);
@@ -60,6 +65,17 @@ const TutoringPage = (props) => {
     setVideo(!video);
   }
 
+  function getUserInfo() {
+    axios
+      .get(BackendUrl + "/user/getInfo?token=" + localStorage.getItem("token"))
+      .then((success) => {
+        setUserInfo(success.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   function onClickMute(e) {
     e.preventDefault();
     userVideo.current.srcObject.getAudioTracks()[0].enabled =
@@ -71,32 +87,13 @@ const TutoringPage = (props) => {
     e.preventDefault();
     if (shareScreen) {
       console.log("stop share screen");
-      // navigator.mediaDevices
-      //   .getUserMedia({ video: true, audio: true })
-      //   .then((stream) => {
-      //     peersRef.current.forEach((element) => {
-      //       //console.log(element);
-      //       //console.log(element.streams[0]);
-      //       //console.log(element.streams[0].getVideoTracks()[0]);
-      //       element.replaceTrack(
-      //         element.streams[0].getVideoTracks()[0],
-      //         stream.getVideoTracks()[0],
-      //         element.streams[0]
-      //       );
-      //     });
-      //     //userVideo.current.srcObject = stream;
-      //   });
+
       peersRef.current.forEach((element) => {
-        //console.log(element);
-        //console.log(element.streams[0]);
-        //console.log(element.streams[0].getVideoTracks()[0]);
         element.peer.replaceTrack(
           element.peer.streams[0].getVideoTracks()[0],
           userVideo.current.srcObject.getVideoTracks()[0],
           element.peer.streams[0]
         );
-        //console.log(stream.getVideoTracks()[0]);
-        //console.log(userVideo.current.srcObject.getVideoTracks()[0]);
       });
     } else {
       console.log("start share screen");
@@ -104,11 +101,7 @@ const TutoringPage = (props) => {
       navigator.mediaDevices
         .getDisplayMedia({ video: true, audio: true })
         .then((stream) => {
-          //console.log(stream.getVideoTracks()[0]);
           peersRef.current.forEach((element) => {
-            //console.log(element);
-            //console.log(element.streams[0]);
-            //console.log(element.streams[0].getVideoTracks()[0]);
             element.peer.replaceTrack(
               element.peer.streams[0].getVideoTracks()[0],
               stream.getVideoTracks()[0],
@@ -117,8 +110,6 @@ const TutoringPage = (props) => {
             console.log(stream.getVideoTracks()[0]);
             console.log(userVideo.current.srcObject.getVideoTracks()[0]);
           });
-
-          //userVideo.current.srcObject = stream;
         });
     }
 
@@ -217,13 +208,6 @@ const TutoringPage = (props) => {
         from: socketRef.current.id,
         text: chatValue,
       };
-      // console.log(chatPeer.current);
-      // if (chatPeer.current.length > 0) {
-      //   console.log(chatPeer.current);
-      //   chatPeer.current[0].peer.send(newChat.text);
-      // }
-
-      //peersRef.current[0].peer.send(Buffer.from("test"));
 
       socketRef.current.emit("sendChat", { text: chatValue, room: id });
       const dataChat = {
@@ -235,9 +219,7 @@ const TutoringPage = (props) => {
     }
   }
 
-  function onClickEnd(e) {
-    e.preventDefault();
-    socketRef.current.emit("leave", { id: id });
+  function endMeet() {
     peersRef.current.forEach((peer) => {
       peer.peer.destroy();
     });
@@ -245,9 +227,15 @@ const TutoringPage = (props) => {
     userVideo.current.srcObject.getTracks().forEach((track) => {
       if (track.readyState == "live") {
         track.stop();
-        navigate(-1);
+        navigate("/resultPage/" + id);
       }
     });
+  }
+
+  function onClickEnd(e) {
+    e.preventDefault();
+    socketRef.current.emit("leave", { id: id, to: partnerSocketId.current });
+    endMeet();
 
     //navigate(-1);
   }
@@ -306,6 +294,7 @@ const TutoringPage = (props) => {
   };
 
   useEffect(() => {
+    getUserInfo();
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
@@ -336,6 +325,7 @@ const TutoringPage = (props) => {
 
         socketRef.current.on("user joined", (payload) => {
           console.log("user join = " + payload.callerID);
+          partnerSocketId.current = payload.callerID;
           const peer = addPeer(
             payload.signal,
             payload.callerID,
@@ -353,6 +343,11 @@ const TutoringPage = (props) => {
         socketRef.current.on("receiving returned signal", (payload) => {
           const item = peersRef.current.find((p) => p.peerID === payload.id);
           item.peer.signal(payload.signal);
+        });
+
+        socketRef.current.on("goToResultPage", () => {
+          endMeet();
+          navigate("/resultPage/" + id);
         });
       });
 
@@ -381,14 +376,6 @@ const TutoringPage = (props) => {
       });
     });
 
-    // peer.on("connect", () => {
-    //   peer.send("test");
-    // });
-
-    // peer.on("data", (data) => {
-    //   console.log(data);
-    // });
-
     return peer;
   }
 
@@ -404,23 +391,32 @@ const TutoringPage = (props) => {
       socketRef.current.emit("returning signal", { signal, callerID });
     });
 
-    //setConnection(true);
     peer.signal(incomingSignal);
-
-    // peer.on("data", (data) => {
-    //   console.log(data);
-    // });
 
     return peer;
   }
+
+  const renderEnd = () => {
+    if (userInfo.role == 2) {
+      return (
+        <div
+          className="content-ikon float-left"
+          onClick={(e) => {
+            onClickEnd(e);
+          }}
+        >
+          <FaPhoneSlash size={45} />
+          <p>End</p>
+        </div>
+      );
+    }
+  };
 
   return (
     <>
       <div className="container-tutor">
         <div className="content-atas">
           {peers.map((peer, index) => {
-            //console.log(peersRef.current[index]);
-
             return (
               <Video
                 key={index}
@@ -445,15 +441,8 @@ const TutoringPage = (props) => {
           <div className="content-tengah">
             <div className="content-ikon float-left">{videoComp()}</div>
             <div className="content-ikon float-left">{muteComp()}</div>
-            <div
-              className="content-ikon float-left"
-              onClick={(e) => {
-                onClickEnd(e);
-              }}
-            >
-              <FaPhoneSlash size={45} />
-              <p>End</p>
-            </div>
+
+            {renderEnd()}
           </div>
           <div className="content-kanan">
             {chatComp()}

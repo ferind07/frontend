@@ -26,4 +26,10 @@ export const SidebarData = [
     icon: <AiIcons.AiOutlineControl color="black" />,
     cName: "nav-text",
   },
+  {
+    title: "Dirbushment",
+    path: "/admin/dirbushment",
+    icon: <AiIcons.AiFillBank color="black" />,
+    cName: "nav-text",
+  },
 ];

@@ -4,10 +4,15 @@ import BackendUrl from "../../components/BackendUrl";
 import Navbarr from "../../components/Navbar";
 import ScheduleCard from "./ScheduleCard";
 import { Empty } from "antd";
+import {
+  ExclamationCircleTwoTone,
+  CloseCircleTwoTone,
+  CheckCircleTwoTone,
+} from "@ant-design/icons";
 
 const Schedule = () => {
   const [hSubmission, setHSubmission] = useState([]);
-  var tempHsubmission = useRef([]);
+  const [tempHSubmission, setTempHSubmission] = useState([]);
 
   function getHsubmission() {
     axios
@@ -16,7 +21,7 @@ const Schedule = () => {
       )
       .then((success) => {
         setHSubmission(success.data);
-        tempHsubmission.current = success.data;
+        setTempHSubmission(success.data);
       })
       .catch((error) => {
         console.log(error);
@@ -27,8 +32,16 @@ const Schedule = () => {
     e.preventDefault();
     //alert(e.target.value);
 
-    const temp = tempHsubmission.current.filter((item) => {
-      return item.status == e.target.value;
+    // // const temp = tempHsubmission.current.filter((item) => {
+    // //   return item.status == e.target.value;
+    // // });
+    // console.log(temp);
+    // setHSubmission(temp);
+  }
+
+  function optionSelected(option) {
+    const temp = tempHSubmission.filter((item) => {
+      return item.status == option;
     });
     console.log(temp);
     setHSubmission(temp);
@@ -56,31 +69,75 @@ const Schedule = () => {
   return (
     <>
       <Navbarr />
+
       <div className="container mt-3">
-        <div className="row">
-          <div className="col-12">
-            <div className="card card-shadow">
+        <div className="row ">
+          <h2>Your schedule</h2>
+          <div className="col-3">
+            <div className="card mb-5 card-shadow">
               <div className="card-body">
-                <h2>Your Schedule</h2>
-                status :{" "}
-                <select
-                  name="filter"
-                  id="filter"
-                  onChange={(e) => onChangeOption(e)}
-                >
-                  <option value="0">Unconfirmed</option>
-                  <option value="1">Accepted</option>
-                  <option value="2">Rejected</option>
-                </select>
-                <hr />
-                <div className="row">
+                <h5>Status</h5>
+                <hr className="mt-0 mb-2" />
+                <div className="w-100 d-flex">
                   <div
-                    className="col-12"
-                    style={{ height: "75vh", overflowY: "auto" }}
+                    className="d-flex w-100 p-1 box-option"
+                    style={{ gap: "15px" }}
+                    onClick={(e) => {
+                      optionSelected(0);
+                    }}
                   >
-                    {renderSchedule()}
+                    <div className="center">
+                      <ExclamationCircleTwoTone
+                        style={{ fontSize: "35px", color: "#08c" }}
+                      />
+                    </div>
+                    <h5 className="mb-0">Unconfirmed</h5>
                   </div>
                 </div>
+
+                <div className="w-100 d-flex">
+                  <div
+                    className="d-flex w-100 p-1 box-option"
+                    style={{ gap: "15px" }}
+                    onClick={(e) => {
+                      optionSelected(1);
+                    }}
+                  >
+                    <div className="center">
+                      <CheckCircleTwoTone
+                        style={{ fontSize: "35px", color: "#08c" }}
+                      />
+                    </div>
+                    <h5 className="mb-0">Accepted</h5>
+                  </div>
+                </div>
+
+                <div className="w-100 d-flex">
+                  <div
+                    className="d-flex w-100 p-1 box-option"
+                    style={{ gap: "15px" }}
+                    onClick={(e) => {
+                      optionSelected(2);
+                    }}
+                  >
+                    <div className="center">
+                      <CloseCircleTwoTone
+                        style={{ fontSize: "35px", color: "#08c" }}
+                      />
+                    </div>
+                    <h5 className="mb-0">Rejected</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-9">
+            <div className="card mb-5 card-shadow">
+              <div
+                className="card-body"
+                style={{ height: "75vh", overflowY: "auto" }}
+              >
+                {renderSchedule()}
               </div>
             </div>
           </div>

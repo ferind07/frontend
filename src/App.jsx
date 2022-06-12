@@ -19,6 +19,7 @@ import Payment from "./pages/Payment";
 import ReviewPage from "./pages/ReviewPage";
 import ForgetPassword from "./pages/ForgetPassword";
 import UserCashOut from "./pages/UserCashOut";
+import ResultPage from "./pages/ResultPage";
 
 const App = () => {
   const socket = useRef();
@@ -35,6 +36,7 @@ const App = () => {
         duration: 0,
       });
     });
+
     checkLogin();
   }, []);
 
@@ -75,6 +77,7 @@ const App = () => {
         <Route path="/review" element={<ReviewPage />} />
         <Route path="/forgetPassword" element={<ForgetPassword />} />
         <Route path="/userCashOut" element={<UserCashOut />} />
+        <Route path="/resultPage/:id" element={<ResultPage />} />
       </Routes>
     </>
   );

@@ -11,13 +11,18 @@ import { Empty } from "antd";
 
 const Categories = () => {
   let { id } = useParams();
+
   const [listInstrucor, setListInstructor] = useState([]);
+  const [tempListInstructor, setTempListInstructor] = useState([]);
+  const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
     axios
       .get(BackendUrl + "/user/getInstructorList?katagori=" + id)
       .then((success) => {
         setListInstructor(success.data);
+        setTempListInstructor(success.data);
+
         console.log(success);
       })
       .catch((error) => {
@@ -43,6 +48,17 @@ const Categories = () => {
     return katText;
   };
 
+  function onChangeKeyword(e) {
+    const keyword = e.target.value;
+
+    const data = tempListInstructor.filter((detailInstructor) => {
+      return detailInstructor.name
+        .toLowerCase()
+        .includes(keyword.toLowerCase());
+    });
+    setListInstructor(data);
+  }
+
   return (
     <>
       <Navbar />
@@ -55,7 +71,13 @@ const Categories = () => {
             {listInstrucor.length} instructors
           </p>
           <div className="col-md-5 col-6">
-            <Input.Search allowClear style={{ width: "100%" }} />
+            <Input.Search
+              allowClear
+              style={{ width: "100%" }}
+              onChange={(e) => {
+                onChangeKeyword(e);
+              }}
+            />
           </div>
         </div>
         <hr />

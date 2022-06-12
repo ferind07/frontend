@@ -114,20 +114,15 @@ const HistoryCashOutComp = () => {
   const [valRangePicker, setValRangePicker] = useState([]);
 
   function onClickFilter() {
-    console.log(valRangePicker);
+    //console.log(valRangePicker);
     var filtered = tempDirbushmentHistory.filter((dirbushmentHistory) => {
       const date = new Date(dirbushmentHistory.time);
       const dateStart = valRangePicker[0].set({ hour: 0 }).toDate();
       const dateEnd = valRangePicker[1].set({ hour: 23 }).toDate();
 
-      // console.log(date);
-      // console.log(dateStart);
-      // console.log(dateEnd);
-      // console.log(date >= dateStart && date <= dateEnd);
-
       return date >= dateStart && date <= dateEnd;
     });
-    console.log(filtered);
+    //console.log(filtered);
     setDirbushmentHistory(filtered);
   }
 

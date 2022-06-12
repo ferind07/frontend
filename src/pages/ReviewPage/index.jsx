@@ -13,11 +13,15 @@ const ReviewPage = () => {
 
   const dateFormat = "DD/MM/YYYY";
 
+  const [keyword, setKeyword] = useState("");
+  const [valRangePicker, setValRangePicker] = useState([]);
+  const [sort, setSort] = useState(0);
+
   const [historyList, setHistoryList] = useState([]);
   const [tempHistoryList, setTempHistoryList] = useState([]);
 
   function handleChange(value) {
-    console.log(`selected ${value}`);
+    setSort(value);
   }
 
   function getHistoryCourse() {
@@ -41,7 +45,7 @@ const ReviewPage = () => {
     if (historyList.length != 0) {
       const compList = [];
       historyList.map((detailHistory) => {
-        console.log(detailHistory.image);
+        //console.log(detailHistory.image);
         compList.push(
           <HistoryComp
             time={detailHistory.timeInsert}
@@ -58,6 +62,51 @@ const ReviewPage = () => {
     } else {
       return <Empty />;
     }
+  }
+
+  function onClickReset() {
+    setHistoryList(tempHistoryList);
+  }
+
+  function filterKeyword(keyword) {
+    const arr = tempHistoryList.filter((detailHistory) => {
+      return detailHistory.title.toLowerCase().includes(keyword.toLowerCase());
+    });
+    return arr;
+  }
+
+  function filterDate(arrHistory) {
+    //console.log(valRangePicker);
+    var filtered = arrHistory.filter((detailHistory) => {
+      const date = new Date(detailHistory.timeInsert);
+      const dateStart = valRangePicker[0].set({ hour: 0 }).toDate();
+      const dateEnd = valRangePicker[1].set({ hour: 23 }).toDate();
+
+      return date >= dateStart && date <= dateEnd;
+    });
+    //console.log(filtered);
+    return filtered;
+  }
+
+  function dateSort(arrHistory) {
+    if (sort == 2) {
+      var filtered = arrHistory.sort((a, b) => a.timeInsert - b.timeInsert);
+
+      return filtered;
+    } else {
+      var filtered = arrHistory.sort((a, b) => b.timeInsert - a.timeInsert);
+
+      return filtered;
+    }
+  }
+
+  function onClickFilter() {
+    //console.log(filterKeyword(keyword));
+    var data = filterKeyword(keyword);
+    data = filterDate(data);
+    data = dateSort(data);
+
+    setHistoryList(data);
   }
 
   useEffect(() => {
@@ -81,6 +130,9 @@ const ReviewPage = () => {
                     <Search
                       placeholder="Search your course"
                       style={{ width: "100%" }}
+                      onChange={(e) => {
+                        setKeyword(e.target.value);
+                      }}
                     />
                   </div>
                   <p className="mb-0 mt-3">Sort from</p>
@@ -95,10 +147,33 @@ const ReviewPage = () => {
                     </Select>
                   </div>
                   <p className="mb-0 mt-3">Date course</p>
-                  <RangePicker format={dateFormat} className="mt-1" />
-                  <Button type="primary" className="mt-2">
-                    Reset
-                  </Button>
+                  <RangePicker
+                    format={dateFormat}
+                    className="mt-1"
+                    value={valRangePicker}
+                    onChange={(value) => {
+                      setValRangePicker(value);
+                    }}
+                  />
+                  <div className="d-flex" style={{ gap: "15px" }}>
+                    <Button
+                      type="primary"
+                      className="mt-2"
+                      onClick={() => {
+                        onClickFilter();
+                      }}
+                    >
+                      Filter
+                    </Button>
+                    <Button
+                      className="mt-2"
+                      onClick={() => {
+                        onClickReset();
+                      }}
+                    >
+                      Reset
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

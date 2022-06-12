@@ -6,6 +6,8 @@ import BackendUrl from "../../components/BackendUrl";
 import NumberFormat from "react-number-format";
 import moment from "moment";
 import { notification, Descriptions, Drawer, Button } from "antd";
+import { useNavigate } from "react-router-dom";
+
 const HtmlToReactParser = require("html-to-react").Parser;
 
 const ExploreClass = () => {
@@ -14,6 +16,8 @@ const ExploreClass = () => {
   const [visible, setVisible] = useState(false);
 
   const htmlToReactParser = new HtmlToReactParser();
+
+  let navigate = useNavigate();
 
   const showDrawer = () => {
     setVisible(true);
@@ -164,6 +168,7 @@ const ExploreClass = () => {
             //if no intersec schedule
             //payCourse(success.data.data.insertId);
             xenditPay(success.data.data.insertId, classDetail.price);
+            navigate("/schedule");
           } else {
             notification.error({
               description: "Error",
