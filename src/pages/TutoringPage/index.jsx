@@ -362,6 +362,20 @@ const TutoringPage = (props) => {
     const peer = new Peer({
       initiator: true,
       trickle: false,
+      config: {
+        iceServers: [
+          {
+            urls: "stun:coturn.ivanchristian.me",
+            username: "ivan",
+            credential: "5521",
+          },
+          {
+            urls: "Turn:coturn.ivanchristian.me",
+            username: "ivan",
+            credential: "5521",
+          },
+        ],
+      },
       stream,
     });
 
@@ -384,6 +398,20 @@ const TutoringPage = (props) => {
     const peer = new Peer({
       initiator: false,
       trickle: false,
+      config: {
+        iceServers: [
+          {
+            urls: "stun:coturn.ivanchristian.me",
+            username: "ivan",
+            credential: "5521",
+          },
+          {
+            urls: "Turn:coturn.ivanchristian.me",
+            username: "ivan",
+            credential: "5521",
+          },
+        ],
+      },
       stream,
     });
 

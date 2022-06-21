@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 import { Table, Button, notification } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const AdminInstructor = () => {
+  var navigate = useNavigate();
+
   let [dataInstructor, setDataInstructor] = useState([]);
 
   const columns = [
@@ -57,7 +60,13 @@ const AdminInstructor = () => {
       render: (record) => {
         return (
           <>
-            <Button>Details</Button>
+            <Button
+              onClick={() => {
+                navigate("/admin/detailInstructor/" + record.id);
+              }}
+            >
+              Details
+            </Button>
             <Button
               style={{ marginLeft: "5px" }}
               onClick={(e) => onClickApprove(e, record)}

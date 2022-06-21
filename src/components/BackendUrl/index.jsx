@@ -1,3 +1,3 @@
-const BackendUrl = "http://localhost:8000";
+const BackendUrl = "https://api.ferryindragunawan.com";
 
 export default BackendUrl;

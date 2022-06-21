@@ -11,18 +11,18 @@ const CategoriesCard = (props) => {
       return (
         <img
           class="card-img-top"
-          src="../asset/home/mentor.jpeg"
+          src="../asset/image/noPic.jpg"
           alt="Card image cap"
-          style={{ aspectRatio: "4 / 3" }}
+          style={{ aspectRatio: "3 / 4" }}
         />
       );
     } else {
       return (
         <img
           class="card-img-top"
-          src={BackendUrl + "/public/uploads/userProfile/" + props.image}
+          src={BackendUrl + props.image}
           alt="Card image cap"
-          style={{ aspectRatio: "4 / 3" }}
+          style={{ aspectRatio: "3 / 4" }}
         />
       );
     }

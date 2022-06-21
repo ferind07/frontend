@@ -29,28 +29,35 @@ const CashOutComp = (props) => {
   }
 
   function cashOut() {
-    axios
-      .post(BackendUrl + "/user/cashOut", {
-        token: localStorage.getItem("token"),
-        amount: nominalCashOut,
-        accountHolderName: accountInfo.accountHolderName,
-        accountNumber: accountInfo.accountNumber,
-        bankCode: accountInfo.bankCode,
-        saldoBaru: parseInt(props.userInfo.saldo) - parseInt(nominalCashOut),
-      })
-      .then((success) => {
-        console.log(success);
-        if (success.data.status == true) {
-          notification.success({
-            message: "Success",
-            description: success.data.msg,
-          });
-          props.getInfo();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
+    if (props.userInfo.saldo < nominalCashOut) {
+      notification.error({
+        message: "Error",
+        description: "Not Enough Balance",
       });
+    } else {
+      axios
+        .post(BackendUrl + "/user/cashOut", {
+          token: localStorage.getItem("token"),
+          amount: nominalCashOut,
+          accountHolderName: accountInfo.accountHolderName,
+          accountNumber: accountInfo.accountNumber,
+          bankCode: accountInfo.bankCode,
+          saldoBaru: parseInt(props.userInfo.saldo) - parseInt(nominalCashOut),
+        })
+        .then((success) => {
+          console.log(success);
+          if (success.data.status == true) {
+            notification.success({
+              message: "Success",
+              description: success.data.msg,
+            });
+            props.getInfo();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }
 
   const renderOption = () => {

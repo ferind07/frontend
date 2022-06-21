@@ -6,6 +6,7 @@ import { Worker } from "@react-pdf-viewer/core";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 import { Input, TimePicker } from "antd";
+import { TextInput } from "react-materialize";
 
 const RegisterInstructorPage = () => {
   const { Option } = Select;
@@ -14,6 +15,7 @@ const RegisterInstructorPage = () => {
   const [time, setTime] = useState();
   const [katagori, setKatagori] = useState(1);
   const [aboutMe, setAboutMe] = useState("");
+  const [catagoryDetail, setCatagoryDetail] = useState("");
   const format = "HH:mm";
   const { TextArea } = Input;
 
@@ -65,6 +67,7 @@ const RegisterInstructorPage = () => {
     console.log("btn submit clicked");
     let bodyFormData = new FormData();
     bodyFormData.append("katagori", katagori);
+    bodyFormData.append("katagoriDetail", catagoryDetail);
     bodyFormData.append("berkas", fileBerkas);
     bodyFormData.append("detail", aboutMe);
     bodyFormData.append("timeStart", time[0]);
@@ -79,7 +82,7 @@ const RegisterInstructorPage = () => {
       .then((success) => {
         console.log(success);
         if (success.data.status) {
-          navigate("/instructor/home");
+          navigate("/instructor");
         } else {
         }
       })
@@ -114,6 +117,20 @@ const RegisterInstructorPage = () => {
                         <Option value={4}>Design</Option>
                         <Option value={5}>Programming</Option>
                       </Select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">
+                      Catagory detail
+                    </label>
+                    <div class="col-sm-10">
+                      <Input
+                        type="text"
+                        value={catagoryDetail}
+                        onChange={(e) => {
+                          setCatagoryDetail(e.target.value);
+                        }}
+                      />
                     </div>
                   </div>
                   <div class="form-group row">

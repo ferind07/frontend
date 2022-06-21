@@ -298,6 +298,7 @@ const InstructorAboutMe = () => {
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
       .then((success) => {
+        console.log(success);
         if (success.data.status) {
           notification.success({
             message: "success",

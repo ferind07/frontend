@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 import { Table, Tag, Button, notification, Input } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const AdminMaster = () => {
+  var navigate = useNavigate();
+
   const [listUser, setListUser] = useState([]);
   const [tempListUser, setTempListUser] = useState([]);
 
@@ -63,11 +66,21 @@ const AdminMaster = () => {
     {
       title: "Role",
       dataIndex: "role",
-      render: (text) => {
+      render: (text, record) => {
         if (text == 1) {
           return <Tag color="cyan">User</Tag>;
         } else {
-          return <Tag color="blue">Instructor</Tag>;
+          return (
+            <Tag
+              color="blue"
+              onClick={() => {
+                navigate("/admin/detailInstructor/" + record.id);
+              }}
+              style={{ cursor: "pointer" }}
+            >
+              Instructor
+            </Tag>
+          );
         }
       },
     },
