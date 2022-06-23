@@ -106,8 +106,8 @@ const InstructorAboutMe = () => {
         <>
           <img
             src={BackendUrl + userInfo.image}
-            width="100%"
-            style={{ aspectRatio: "4/3" }}
+            width="70%"
+            style={{ aspectRatio: "3/4" }}
           />
           <input
             type="file"
@@ -192,7 +192,7 @@ const InstructorAboutMe = () => {
     return (
       <>
         <div className="row" style={{ height: "100vh" }}>
-          <div className="col-lg-3 col-md-4">{userImage()}</div>
+          <div className="col-lg-3 col-md-4 text-center">{userImage()}</div>
           <div className="col-lg-9 col-md-8">
             <div className="form-group row">
               <label for="email" className="col-sm-2 col-form-label">
