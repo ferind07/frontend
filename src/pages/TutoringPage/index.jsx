@@ -27,7 +27,13 @@ const Video = (props) => {
 
   return (
     <>
-      <video playsInline autoPlay ref={ref} style={{ height: "70%" }} />
+      <video
+        playsInline
+        controls
+        autoPlay
+        ref={ref}
+        style={{ height: "70%" }}
+      />
     </>
   );
 };
