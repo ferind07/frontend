@@ -111,6 +111,7 @@ const TopUserComp = () => {
           dateEnd
       )
       .then((success) => {
+        console.log("top ins");
         console.log(success.data);
         setTopInstructor(success.data);
       })
