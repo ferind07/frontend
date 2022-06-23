@@ -5,7 +5,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Categories from "./pages/Categories";
 import DetailInstructor from "./pages/DetailInstructor";
-import InstructorRoutes from "./pages/InstructorRutes";
+import InstructorRoutes from "./pages/InstructorRoutes";
 import AdminRoute from "./pages/AdminRoute";
 import MyAccount from "./pages/myAccount";
 import ExploreClass from "./pages/ExploreClass";
