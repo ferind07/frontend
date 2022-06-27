@@ -86,6 +86,7 @@ const AdminInstructor = () => {
         idUser: data.id,
       })
       .then((success) => {
+        console.log(success);
         if (success.data.status == true) {
           notification.success({
             message: "Success",

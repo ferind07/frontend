@@ -36,14 +36,12 @@ const CategoriesCard = (props) => {
           style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
         >
           {renderImage()}
-          <hr className="mb-0" />
+          <hr className="mb-0 mt-0" />
 
           <div className="card-body">
             <h6 className="mb-0">{props.name}</h6>
-            <p className="text-muted mb-0">
-              Indonesian language {props.detail}
-            </p>
-            <Rate disabled value={5} />
+            <p className="text-muted mb-0">{props.detail}</p>
+
             <div className="mt-2 d-flex justify-content-start">
               <a
                 onClick={(e) => {

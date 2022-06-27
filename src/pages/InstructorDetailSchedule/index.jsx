@@ -48,8 +48,8 @@ const InstructorDetailSchedule = () => {
         <>
           <img
             src="/asset/image/noPic.jpg"
-            className="w-100"
-            style={{ aspectRatio: "4/3" }}
+            className=""
+            style={{ aspectRatio: "3/4", width: "50%" }}
           />
         </>
       );
@@ -99,6 +99,12 @@ const InstructorDetailSchedule = () => {
         })
         .then((success) => {
           console.log(success);
+          notification.error({
+            message: "Success",
+            description: "Success reject class",
+          });
+          getHSumbission();
+          getListSubmission();
         })
         .catch((error) => {
           console.log(error);
@@ -112,6 +118,12 @@ const InstructorDetailSchedule = () => {
       })
       .then((success) => {
         console.log(success);
+        notification.error({
+          message: "Success",
+          description: "Success accept class",
+        });
+        getHSumbission();
+        getListSubmission();
       })
       .catch((error) => {
         console.log(error);
