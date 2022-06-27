@@ -34,6 +34,9 @@ const InstructorDetailComp = (props) => {
       <Descriptions.Item label="Name" span={3}>
         {props.name}
       </Descriptions.Item>
+      <Descriptions.Item label="Detail" span={3}>
+        {props.katagoriDetail}
+      </Descriptions.Item>
       <Descriptions.Item label="Phone number" span={2}>
         {props.phoneNumber}
       </Descriptions.Item>

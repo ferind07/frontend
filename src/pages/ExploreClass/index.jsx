@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 import NumberFormat from "react-number-format";
-import moment from "moment";
+import moment, { now } from "moment";
 import { notification, Descriptions, Drawer, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 
@@ -18,13 +18,6 @@ const ExploreClass = () => {
   const htmlToReactParser = new HtmlToReactParser();
 
   let navigate = useNavigate();
-
-  const showDrawer = () => {
-    setVisible(true);
-  };
-  const onClose = () => {
-    setVisible(false);
-  };
 
   function laodClass() {
     console.log(id);
@@ -59,56 +52,6 @@ const ExploreClass = () => {
     laodClass();
   }, []);
 
-  function payCourse(insertId) {
-    const insertID = insertId;
-    axios
-      .post(BackendUrl + "/user/userPay", {
-        order_id: "T-" + insertID,
-        gross_amount: classDetail.price,
-        token: localStorage.getItem("token"),
-      })
-      .then((success) => {
-        const token = success.data;
-        window.snap.pay(token, {
-          onSuccess: function (result) {
-            console.log("success");
-            console.log(result);
-          },
-          onPending: function (result) {
-            console.log("pending");
-            console.log(result);
-          },
-          onError: function (result) {
-            console.log("error");
-            console.log(result);
-          },
-          onClose: function () {
-            console.log(
-              "customer closed the popup without finishing the payment"
-            );
-            axios
-              .post(BackendUrl + "/user/unFinishedPayment", {
-                insertId: insertID,
-              })
-              .then((success) => {
-                if (success.data.status) {
-                  notification.info({
-                    description: "User not finished the payment",
-                    message: "Info",
-                  });
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          },
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
   function xenditPay(id, amount) {
     console.log("xenditPay");
     axios
@@ -124,6 +67,49 @@ const ExploreClass = () => {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  function checkTime(timeStart, timeEnd) {
+    // check invalid date
+    // check time timeRange
+    // const insTimeStart = moment(classDetail.timeStart);
+    // const insTimeEnd = moment(classDetail.timeEnd);
+
+    // console.log(classDetail.timeStart);
+    // console.log(insTimeStart);
+
+    const tStart = String(classDetail.timeStart);
+    const tEnd = String(classDetail.timeEnd);
+
+    const ttimeStart = tStart.split(":");
+    const ttimeEnd = tEnd.split(":");
+
+    //console.log(ttimeStart);
+
+    var insTimeStart = timeStart.set({
+      hour: ttimeStart[0],
+      minute: ttimeStart[1],
+      second: ttimeStart[2],
+    });
+    var insTimeEnd = timeEnd.set({
+      hour: ttimeEnd[0],
+      minute: ttimeEnd[1],
+      second: ttimeEnd[2],
+    });
+
+    // console.log(insTimeStart.hour());
+    // console.log(insTimeEnd);
+
+    console.log(timeStart.isBetween(insTimeStart, insTimeEnd));
+    console.log(timeStart.hour());
+    console.log(insTimeStart.hour());
+    console.log(insTimeEnd.hour());
+    if (
+      timeStart.isBetween(insTimeStart, insTimeEnd) ||
+      timeEnd.isBetween(insTimeStart, insTimeEnd)
+    ) {
+      console.log("menumpuk");
+    }
   }
 
   function submitClass(e) {
@@ -154,33 +140,110 @@ const ExploreClass = () => {
         dateEnd.push(moment(tdateEnd).format("YYYY-MM-DD HH:mm:ss"));
       }
 
-      axios
-        .post(BackendUrl + "/user/submissionClass", {
-          token: token,
-          idClass: idClass,
-          idInstructor: idInstructor,
-          dateStart: dateStart,
-          dateEnd: dateEnd,
-        })
-        .then((success) => {
-          console.log(success);
-          if (success.data.status) {
-            //if no intersec schedule
-            //payCourse(success.data.data.insertId);
-            xenditPay(success.data.data.insertId, classDetail.price);
-            navigate("/schedule");
-          } else {
-            notification.error({
-              description: "Error",
-              message: success.data.msg,
-            });
-          }
-          //if payment success
-          //console.log(success.data.data.insertId);
-        })
-        .catch((error) => {
-          console.log(error);
+      var valid = true;
+
+      for (let i = 0; i < dateStart.length; i++) {
+        const dStart = moment(dateStart[i]);
+        const dEnd = moment(dateEnd[i]);
+        const dNow = moment();
+
+        if (dStart < dNow) {
+          console.log("invalid date");
+          valid = false;
+          notification.error({
+            message: "Error",
+            description: "Invalid time " + (i + 1),
+          });
+        }
+        console.log(dStart.hour());
+        const tStart = String(classDetail.timeStart);
+        const tEnd = String(classDetail.timeEnd);
+
+        const ttimeStart = tStart.split(":");
+        const ttimeEnd = tEnd.split(":");
+
+        //console.log(ttimeStart);
+
+        var tempDStart = dStart;
+        var tempDEnd = dEnd;
+
+        var insTimeStart = tempDStart.set({
+          hour: ttimeStart[0],
+          minute: ttimeStart[1],
+          second: ttimeStart[2],
         });
+
+        var insTimeEnd = tempDEnd.set({
+          hour: ttimeEnd[0],
+          minute: ttimeEnd[1],
+          second: ttimeEnd[2],
+        });
+
+        if (!moment(dateStart[i]).isBetween(insTimeStart, insTimeEnd)) {
+          console.log("menumpuk");
+          valid = false;
+          notification.error({
+            message: "Error",
+            description: "Invalid instructor time " + (i + 1),
+          });
+        }
+      }
+      if (valid) {
+        axios
+          .post(BackendUrl + "/user/submissionClass", {
+            token: token,
+            idClass: idClass,
+            idInstructor: idInstructor,
+            dateStart: dateStart,
+            dateEnd: dateEnd,
+          })
+          .then((success) => {
+            console.log(success);
+            if (success.data.status) {
+              //if no intersec schedule
+              //payCourse(success.data.data.insertId);
+              xenditPay(success.data.data.insertId, classDetail.price);
+              navigate("/schedule");
+            } else {
+              notification.error({
+                description: "Error",
+                message: success.data.msg,
+              });
+            }
+            //if payment success
+            //console.log(success.data.data.insertId);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+      // axios
+      //   .post(BackendUrl + "/user/submissionClass", {
+      //     token: token,
+      //     idClass: idClass,
+      //     idInstructor: idInstructor,
+      //     dateStart: dateStart,
+      //     dateEnd: dateEnd,
+      //   })
+      //   .then((success) => {
+      //     console.log(success);
+      //     if (success.data.status) {
+      //       //if no intersec schedule
+      //       //payCourse(success.data.data.insertId);
+      //       xenditPay(success.data.data.insertId, classDetail.price);
+      //       navigate("/schedule");
+      //     } else {
+      //       notification.error({
+      //         description: "Error",
+      //         message: success.data.msg,
+      //       });
+      //     }
+      //     //if payment success
+      //     //console.log(success.data.data.insertId);
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
     }
   }
   function renderCatagories() {
@@ -247,17 +310,6 @@ const ExploreClass = () => {
                           <div className="center">
                             {classDetail.timeStart} to {classDetail.timeEnd}
                           </div>
-                          <div>
-                            <Button
-                              type="primary"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                showDrawer();
-                              }}
-                            >
-                              Schedule
-                            </Button>
-                          </div>
                         </div>
                       </Descriptions.Item>
                     </Descriptions>
@@ -277,24 +329,13 @@ const ExploreClass = () => {
                 </div>
                 <hr />
                 <h5 className="mt-2">Detail Course</h5>
-                {htmlToReactParser.parse(classDetail.detail)}
+                <div>{htmlToReactParser.parse(classDetail.detail)}</div>
               </div>
             </div>
           </div>
           <div className="col-12"></div>
         </div>
       </div>
-      <Drawer
-        title="Schedule"
-        placement="right"
-        onClose={onClose}
-        visible={visible}
-        size="large"
-      >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Drawer>
     </>
   );
 };

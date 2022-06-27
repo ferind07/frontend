@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbarr from "../../components/Navbar";
 import { useParams } from "react-router-dom";
-import { Rate, Tabs } from "antd";
+import { Rate, Tabs, Image } from "antd";
 import Footer from "../../components/Footer";
 import axios from "axios";
 import "./index.css";
@@ -83,7 +83,8 @@ const DetailInstructor = () => {
     if (dInstructor.image == "") {
       return <img src="/asset/image/noPic.jpg" width="100%" />;
     } else {
-      return <img src={BackendUrl + dInstructor.image} width="100%" />;
+      //return <img src={BackendUrl + dInstructor.image} width="100%" />;
+      return <Image src={BackendUrl + dInstructor.image} width="100%" />;
     }
   };
 
@@ -99,7 +100,9 @@ const DetailInstructor = () => {
         </div>
         <hr className="mt-1" />
         <div className="row">
-          <div className="col-md-3 mt-2">{renderImage()}</div>
+          <div className="col-md-3 mt-2">
+            <div className="card-shadow">{renderImage()}</div>
+          </div>
           <div className="col-md-9 mt-2">
             <div className="card card-shadow">
               <div className="card-body">
@@ -119,6 +122,7 @@ const DetailInstructor = () => {
                           berkas={dInstructor.berkas}
                           timeStart={dInstructor.timeStart}
                           timeEnd={dInstructor.timeEnd}
+                          katagoriDetail={dInstructor.katagoriDetail}
                         />
                         <div className="ant-descriptions-title mt-3">
                           Instructor detail

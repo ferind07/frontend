@@ -5,7 +5,7 @@ import { Viewer } from "@react-pdf-viewer/core";
 import { Worker } from "@react-pdf-viewer/core";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
-import { Input, TimePicker } from "antd";
+import { Input, TimePicker, notification } from "antd";
 import { TextInput } from "react-materialize";
 
 const RegisterInstructorPage = () => {
@@ -80,10 +80,13 @@ const RegisterInstructorPage = () => {
       config: { headers: { "Content-Type": "multipart/form-data" } },
     })
       .then((success) => {
-        console.log(success);
+        console.log(success.data);
         if (success.data.status) {
-          navigate("/instructor");
-        } else {
+          notification.success({
+            message: "Success",
+            description: success.data.msg,
+          });
+          window.location.reload();
         }
       })
       .catch((error) => {

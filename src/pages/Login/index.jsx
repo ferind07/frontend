@@ -131,7 +131,14 @@ const Login = (props) => {
             Log In
           </Button>
           <p className="mt-2">
-            Don't have account <a href="/register">Sign Up</a>
+            Don't have account{" "}
+            <a
+              onClick={() => {
+                navigate("/register");
+              }}
+            >
+              Sign Up
+            </a>
           </p>
 
           <a href="/forgetPassword">Forget password</a>

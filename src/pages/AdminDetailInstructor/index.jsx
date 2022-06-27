@@ -76,7 +76,7 @@ const AdminDetailInstructor = () => {
         <img
           src={BackendUrl + image}
           alt="Avatar"
-          style={{ borderRadius: "50%", width: "100%" }}
+          style={{ borderRadius: "50%", width: "100%", aspectRatio: "3/4" }}
         />
       );
     }
@@ -159,7 +159,7 @@ const AdminDetailInstructor = () => {
 
   return (
     <div className="container mt-3">
-      <div className="card">
+      <div className="card mb-5">
         <div className="card-body">
           <h3>Detail Instructor</h3>
           <hr />
