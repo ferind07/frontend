@@ -107,8 +107,10 @@ const RegisterInstructorPage = () => {
                   onSubmit={(e) => onClickSubmit(e)}
                 >
                   <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Catagories</label>
-                    <div class="col-sm-10">
+                    <label className="col-sm-2 col-form-label">
+                      Catagories
+                    </label>
+                    <div className="col-sm-10">
                       <Select
                         defaultValue="language"
                         style={{ width: "100%" }}
@@ -122,11 +124,11 @@ const RegisterInstructorPage = () => {
                       </Select>
                     </div>
                   </div>
-                  <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">
+                  <div className="form-group row">
+                    <label className="col-sm-2 col-form-label">
                       Catagory detail
                     </label>
-                    <div class="col-sm-10">
+                    <div className="col-sm-10">
                       <Input
                         type="text"
                         value={catagoryDetail}
@@ -136,9 +138,9 @@ const RegisterInstructorPage = () => {
                       />
                     </div>
                   </div>
-                  <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">About Me</label>
-                    <div class="col-sm-10">
+                  <div className="form-group row">
+                    <label className="col-sm-2 col-form-label">About Me</label>
+                    <div className="col-sm-10">
                       <TextArea
                         rows={5}
                         value={aboutMe}
@@ -148,11 +150,11 @@ const RegisterInstructorPage = () => {
                       />
                     </div>
                   </div>
-                  <div class="form-group row mt-2">
-                    <label class="col-sm-2 col-form-label">
+                  <div className="form-group row mt-2">
+                    <label className="col-sm-2 col-form-label">
                       Available Time
                     </label>
-                    <div class="col-sm-10">
+                    <div className="col-sm-10">
                       <TimePicker.RangePicker
                         format={format}
                         value={time}
@@ -163,12 +165,15 @@ const RegisterInstructorPage = () => {
                       />
                     </div>
                   </div>
-                  <div class="form-group row mt-2">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">
+                  <div className="form-group row mt-2">
+                    <label
+                      for="inputPassword"
+                      className="col-sm-2 col-form-label"
+                    >
                       Upload CV
                     </label>
-                    <div class="col-sm-10">
-                      <div class="custom-file">
+                    <div className="col-sm-10">
+                      <div className="custom-file">
                         <input
                           type="file"
                           accept="application/pdf"

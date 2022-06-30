@@ -3,6 +3,7 @@ import moment from "moment";
 import BackendUrl from "../../components/BackendUrl";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Select } from "antd";
 
 const UnconfirmedSchedule = (props) => {
   const listSchedule = props.scheduleList;
@@ -10,6 +11,8 @@ const UnconfirmedSchedule = (props) => {
 
   const [tempListSchedule, setTempListSchedule] = useState([]);
   //var tempListSchedule = props.scheduleList;
+
+  const { Option } = Select;
 
   function loadSubmission() {
     axios
@@ -42,9 +45,9 @@ const UnconfirmedSchedule = (props) => {
                 />
               </div>
               <div className="col-8">
-                <h5>{detailSchedule.title} Class</h5>
-                <p>With {detailSchedule.iName}</p>
-                <p>Applied at {dateStr}</p>
+                <h5 className="mb-2">{detailSchedule.title} Class</h5>
+                <p className="mb-2 font-italic">With {detailSchedule.name}</p>
+                <p className="mb-2">Applied at {dateStr}</p>
                 <p>
                   Status{" "}
                   {detailSchedule.status == 4
@@ -72,16 +75,50 @@ const UnconfirmedSchedule = (props) => {
     tempListSchedule.map((detailSchedule) => {
       const today = new Date(detailSchedule.timeInsert);
       const yyyy = today.getFullYear();
-      let mm = today.getMonth() + 1; // Months start at 0!
+      let mm = today.getMonth(); // Months start at 0!
       let dd = today.getDate();
 
+      const dayList = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+
+      const monthList = [
+        "January",
+        "Febuary",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+
       if (dd < 10) dd = "0" + dd;
-      if (mm < 10) mm = "0" + mm;
+      //if (mm < 10) mm = "0" + mm;
 
       var formatteddatestr = moment(detailSchedule.timeInsert).format(
         "hh:mm a"
       );
-      const dateStr = dd + "/" + mm + "/" + yyyy + " " + formatteddatestr;
+      const dateStr =
+        dayList[today.getDay()] +
+        ", " +
+        dd +
+        " " +
+        monthList[mm] +
+        " " +
+        yyyy +
+        " " +
+        formatteddatestr;
 
       componentList.push(compRenderSchedule(detailSchedule, dateStr));
     });
@@ -89,20 +126,53 @@ const UnconfirmedSchedule = (props) => {
   };
 
   function onStatusChange(e) {
-    e.preventDefault();
+    if (e == 10) {
+      setTempListSchedule(listSchedule);
+    } else {
+      const temp = listSchedule.filter((element) => {
+        return element.status == e;
+      });
+      console.log(temp);
+      setTempListSchedule(temp);
+    }
 
-    const temp = listSchedule.filter((element) => {
-      return element.status == e.target.value;
-    });
-    console.log(temp);
-    setTempListSchedule(temp);
     //tempListSchedule = temp;
   }
 
   return (
     <>
       <div className="row">
-        <div className="col-12" style={{ height: "100vh", overflowY: "auto" }}>
+        <div className="col-3">
+          <h5>Filter</h5>
+          <hr />
+          <p className="mb-1">Status</p>
+          <div>
+            <Select
+              className="w-100 mt-0"
+              onChange={(e) => {
+                onStatusChange(e);
+              }}
+            >
+              <Option value="0">Unconfirmed</Option>
+              <Option value="1">Confirmed</Option>
+              <Option value="2">Cancelled</Option>
+              <Option value="10">All</Option>
+            </Select>
+          </div>
+        </div>
+        <div className="col-9">
+          <div className="card">
+            <div
+              className="card-body"
+              style={{ height: "75vh", overflowY: "auto" }}
+            >
+              {renderSchedule()}
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <div className="row">
+        <div className="col-12" style={{ height: "80vh", overflowY: "auto" }}>
           Status :{" "}
           <select
             name="status"
@@ -118,7 +188,7 @@ const UnconfirmedSchedule = (props) => {
           </select>
           {renderSchedule()}
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

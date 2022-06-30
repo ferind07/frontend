@@ -129,10 +129,10 @@ const InstructorDetailSchedule = () => {
         console.log(error);
       });
 
-    const temp = hSubmission;
-    temp.status = action;
-    setHSubmission(temp);
-    window.location.reload();
+    // const temp = hSubmission;
+    // temp.status = action;
+    // setHSubmission(temp);
+    // window.location.reload();
   }
 
   function createClass(e, idUser, idSubmission) {

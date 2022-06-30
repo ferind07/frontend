@@ -20,22 +20,35 @@ const Video = (props) => {
   useEffect(() => {
     console.log(props.peer);
     props.peer.on("stream", (stream) => {
-      ref.current.srcObject = stream;
       console.log(stream);
+      ref.current.srcObject = stream;
     });
   }, []);
-
-  return (
-    <>
-      <video
-        playsInline
-        controls
-        autoPlay
-        ref={ref}
-        style={{ height: "70%" }}
-      />
-    </>
-  );
+  if (props.panjang == 0) {
+    return (
+      <>
+        <video
+          playsInline
+          controls
+          autoPlay
+          ref={ref}
+          style={{ height: "70%" }}
+        />
+      </>
+    );
+  } else {
+    return (
+      <>
+        <video
+          playsInline
+          controls
+          autoPlay
+          ref={ref}
+          style={{ height: "20%" }}
+        />
+      </>
+    );
+  }
 };
 
 const TutoringPage = (props) => {
@@ -89,6 +102,9 @@ const TutoringPage = (props) => {
     setMute(!mute);
   }
 
+  // const shareScreenVideo = useRef();
+  // const [shareScreenVideoStream, setShareScreenVideoStream] = useState();
+
   function onClickShareScreen(e) {
     e.preventDefault();
     if (shareScreen) {
@@ -107,16 +123,63 @@ const TutoringPage = (props) => {
       navigator.mediaDevices
         .getDisplayMedia({ video: true, audio: true })
         .then((stream) => {
-          peersRef.current.forEach((element) => {
-            element.peer.replaceTrack(
-              element.peer.streams[0].getVideoTracks()[0],
-              stream.getVideoTracks()[0],
-              element.peer.streams[0]
-            );
-            console.log(stream.getVideoTracks()[0]);
-            console.log(userVideo.current.srcObject.getVideoTracks()[0]);
+          //shareScreenVideo.current.srcObject = stream;
+          //setShareScreenVideoStream(stream);
+
+          const peer1 = new window.SimplePeer({
+            initiator: true,
+            trickle: false,
+            stream: stream,
+            iceServers: [
+              {
+                urls: "stun:coturn.ivanchristian.me",
+                username: "ivan",
+                credential: "5521",
+              },
+              {
+                urls: "turn:coturn.ivanchristian.me",
+                username: "ivan",
+                credential: "5521",
+              },
+            ],
           });
+
+          peer1.on("signal", (data) => {
+            socketRef.current.emit("share screen", {
+              to: partnerSocketId.current,
+              signal: data,
+            });
+          });
+
+          socketRef.current.on(
+            "receiving returned share screen signal",
+            (payload) => {
+              console.log(payload.signal);
+              peer1.signal(payload.signal);
+            }
+          );
+
+          //userVideo.current.srcObject = stream;
         });
+
+      // navigator.mediaDevices
+      //   .getDisplayMedia({ video: true, audio: true })
+      //   .then((stream) => {
+      //     peersRef.current.forEach((element) => {
+      //       // const vidTrack = stream.getVideoTracks()[0];
+
+      //       element.peer.replaceTrack(
+      //         element.peer.streams[0].getVideoTracks()[0],
+      //         stream.getVideoTracks()[0],
+      //         element.peer.streams[0]
+      //       );
+
+      //       console.log(element.peer.streams[0].getVideoTracks());
+
+      //       //console.log(stream.getVideoTracks()[0]);
+      //       //console.log(userVideo.current.srcObject.getVideoTracks()[0]);
+      //     });
+      //   });
     }
 
     setShareScreen(!shareScreen);
@@ -298,6 +361,8 @@ const TutoringPage = (props) => {
       </div>
     );
   };
+  const [shareScreenPeer, setShareScreenPeer] = useState([]);
+  const shareScreenVideo = useRef();
 
   useEffect(() => {
     getUserInfo();
@@ -355,6 +420,41 @@ const TutoringPage = (props) => {
           endMeet();
           navigate("/resultPage/" + id);
         });
+
+        socketRef.current.on("reciveShareScreen", (payload) => {
+          //alert("user share screen");
+          const listPeer = [];
+
+          //console.log(payload.signal);
+
+          console.log("user share screen");
+          const signal = payload.signal;
+          const from = payload.from;
+
+          const peer = new window.SimplePeer();
+
+          peer.on("stream", (stream) => {
+            console.log(stream.getVideoTracks());
+            shareScreenVideo.current.srcObject = stream;
+          });
+
+          peer.on("signal", (data) => {
+            socketRef.current.emit("return share screen signal", {
+              signal: data,
+              to: from,
+            });
+          });
+
+          peer.on("error", (error) => {
+            console.log(error);
+          });
+
+          peer.signal(signal);
+
+          listPeer.push(peer);
+
+          setShareScreenPeer(listPeer);
+        });
       });
 
     socketRef.current.on("newChat", (data) => {
@@ -376,13 +476,14 @@ const TutoringPage = (props) => {
             credential: "5521",
           },
           {
-            urls: "Turn:coturn.ivanchristian.me",
+            urls: "turn:coturn.ivanchristian.me",
             username: "ivan",
             credential: "5521",
           },
         ],
       },
-      stream,
+      streams: [stream],
+      //stream,
     });
 
     peer.on("signal", (signal) => {
@@ -412,13 +513,14 @@ const TutoringPage = (props) => {
             credential: "5521",
           },
           {
-            urls: "Turn:coturn.ivanchristian.me",
+            urls: "turn:coturn.ivanchristian.me",
             username: "ivan",
             credential: "5521",
           },
         ],
       },
-      stream,
+      streams: [stream],
+      //stream,
     });
 
     peer.on("signal", (signal) => {
@@ -446,16 +548,34 @@ const TutoringPage = (props) => {
     }
   };
 
+  const renderShareScreen = () => {
+    if (shareScreenPeer.length !== 0) {
+      console.log(shareScreenPeer[0]);
+      return (
+        <video
+          ref={shareScreenVideo}
+          autoPlay
+          playsInline
+          muted
+          style={{ height: "85%" }}
+        ></video>
+      );
+    }
+  };
+
   return (
     <>
       <div className="container-tutor">
         <div className="content-atas">
+          {renderShareScreen()}
           {peers.map((peer, index) => {
+            const panjang = shareScreenPeer.length;
             return (
               <Video
                 key={index}
                 peer={peersRef.current[index].peer}
                 index={index}
+                panjang={panjang}
               />
             );
           })}
