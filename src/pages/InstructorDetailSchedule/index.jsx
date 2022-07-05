@@ -59,7 +59,7 @@ const InstructorDetailSchedule = () => {
           <img
             src={BackendUrl + hSubmission.userImage}
             className="w-100"
-            style={{ aspectRatio: "4/3" }}
+            style={{ aspectRatio: "3/4" }}
           />
         </>
       );

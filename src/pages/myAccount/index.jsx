@@ -4,13 +4,14 @@ import axios from "axios";
 import Navbarr from "../../components/Navbar";
 import BackendUrl from "../../components/BackendUrl";
 import { AiFillSave } from "react-icons/ai";
-import { Input, notification } from "antd";
+import { Input, notification, Tabs } from "antd";
 
 function MyAccount() {
   let [userData, setUserData] = useState({});
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [image, setImage] = useState([]);
+  const { TabPane } = Tabs;
   function getInfo() {
     axios
       .get(BackendUrl + "/user/getInfo?token=" + localStorage.getItem("token"))
@@ -24,6 +25,50 @@ function MyAccount() {
         console.log(err);
       });
   }
+
+  const changePasswordOnClick = (e) => {
+    e.preventDefault();
+
+    if (
+      currentPassword == "" ||
+      newPassword == "" ||
+      newPasswordConfirmation == ""
+    ) {
+      notification.error({
+        message: "Error",
+        description: "Please fill the empty field",
+      });
+    } else {
+      if (newPassword == newPasswordConfirmation) {
+        axios
+          .post(BackendUrl + "/user/changePassword", {
+            token: localStorage.getItem("token"),
+          })
+          .then((response) => {
+            console.log(response);
+            if (response.data.status) {
+              notification.success({
+                message: "Success",
+                description: response.data.msg,
+              });
+            } else {
+              notification.error({
+                message: "Error",
+                description: response.data.msg,
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        notification.error({
+          message: "Error",
+          description: "Password confirmation not same",
+        });
+      }
+    }
+  };
 
   const saveOnclick = (e) => {
     e.preventDefault();
@@ -71,7 +116,7 @@ function MyAccount() {
         <img
           src={BackendUrl + userData.image}
           width="100%"
-          style={{ aspectRatio: "4/3" }}
+          style={{ aspectRatio: "3/4" }}
         />
       );
     }
@@ -81,6 +126,120 @@ function MyAccount() {
     if (e.target.files && e.target.files.length > 0) {
       setImage(e.target.files[0]);
     }
+  };
+
+  const compDetailUser = () => {
+    return (
+      <>
+        <div className="form-group row">
+          <label for="email" className="col-sm-2 col-form-label">
+            Email
+          </label>
+          <div class="col-sm-10">
+            <Input type="text" id="email" readOnly value={userData.email} />
+          </div>
+        </div>
+        <div class="form-group row mt-2">
+          <label for="name" className="col-sm-2 col-form-label">
+            Name
+          </label>
+          <div class="col-sm-10">
+            <Input
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+        <div class="form-group row mt-2">
+          <label for="phoneNumber" className="col-sm-2 col-form-label">
+            Phone
+          </label>
+          <div class="col-sm-10">
+            <Input
+              type="number"
+              id="phoneNumber"
+              value={phoneNumber}
+              onChange={(e) => {
+                setPhoneNumber(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+        <div className="mt-2">
+          <h5>Register as {userData.role == 1 ? "User" : "Instructor"}</h5>
+        </div>
+        <div className="d-flex justify-content-end">
+          <button className="btn btn-success" onClick={(e) => saveOnclick(e)}>
+            Save <AiFillSave />
+          </button>
+        </div>
+      </>
+    );
+  };
+
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
+
+  const changePasswordComp = () => {
+    return (
+      <>
+        <div class="form-group row mt-2">
+          <label for="name" className="col-sm-3 col-form-label">
+            Current password
+          </label>
+          <div class="col-sm-9">
+            <Input
+              type="password"
+              value={currentPassword}
+              onChange={(e) => {
+                setCurrentPassword(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+        <div class="form-group row mt-2">
+          <label for="name" className="col-sm-3 col-form-label">
+            New password
+          </label>
+          <div class="col-sm-9">
+            <Input
+              type="password"
+              value={newPassword}
+              onChange={(e) => {
+                setNewPassword(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+        <div class="form-group row mt-2">
+          <label for="name" className="col-sm-3 col-form-label">
+            New password confirmation
+          </label>
+          <div class="col-sm-9">
+            <Input
+              type="password"
+              value={newPasswordConfirmation}
+              onChange={(e) => {
+                setNewPasswordConfirmation(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+        <div className="d-flex justify-content-end">
+          <button
+            className="btn btn-success"
+            onClick={(e) => changePasswordOnClick(e)}
+          >
+            Save <AiFillSave />
+          </button>
+        </div>
+      </>
+    );
   };
 
   return (
@@ -112,65 +271,15 @@ function MyAccount() {
             <div className="col-lg-9 col-md-8">
               <div className="card card-shadow">
                 <div className="card-body">
-                  <div className="form-group row">
-                    <label for="email" className="col-sm-2 col-form-label">
-                      Email
-                    </label>
-                    <div class="col-sm-10">
-                      <Input
-                        type="text"
-                        id="email"
-                        readOnly
-                        value={userData.email}
-                      />
-                    </div>
-                  </div>
-                  <div class="form-group row mt-2">
-                    <label for="name" className="col-sm-2 col-form-label">
-                      Name
-                    </label>
-                    <div class="col-sm-10">
-                      <Input
-                        type="text"
-                        id="name"
-                        value={name}
-                        onChange={(e) => {
-                          setName(e.target.value);
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div class="form-group row mt-2">
-                    <label
-                      for="phoneNumber"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Phone
-                    </label>
-                    <div class="col-sm-10">
-                      <Input
-                        type="number"
-                        id="phoneNumber"
-                        value={phoneNumber}
-                        onChange={(e) => {
-                          setPhoneNumber(e.target.value);
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="mt-2">
-                    <h5>
-                      Register as {userData.role == 1 ? "User" : "Instructor"}
-                    </h5>
-                  </div>
-                  <div className="d-flex justify-content-end">
-                    <button
-                      className="btn btn-success"
-                      onClick={(e) => saveOnclick(e)}
-                    >
-                      Save <AiFillSave />
-                    </button>
-                  </div>
+                  <h4>My Account</h4>
+                  <Tabs defaultActiveKey="1">
+                    <TabPane tab="User Info" key="1">
+                      {compDetailUser()}
+                    </TabPane>
+                    <TabPane tab="Change password" key="2">
+                      {changePasswordComp()}
+                    </TabPane>
+                  </Tabs>
                 </div>
               </div>
             </div>

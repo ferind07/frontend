@@ -7,6 +7,7 @@ import {
   FaMicrophoneSlash,
   FaPhoneSlash,
 } from "react-icons/fa";
+import { notification } from "antd";
 import { MdScreenShare, MdStopScreenShare, MdChat } from "react-icons/md";
 import { useParams, useNavigate } from "react-router-dom";
 import Peer from "simple-peer";
@@ -110,12 +111,15 @@ const TutoringPage = (props) => {
     if (shareScreen) {
       console.log("stop share screen");
 
-      peersRef.current.forEach((element) => {
-        element.peer.replaceTrack(
-          element.peer.streams[0].getVideoTracks()[0],
-          userVideo.current.srcObject.getVideoTracks()[0],
-          element.peer.streams[0]
-        );
+      // peersRef.current.forEach((element) => {
+      //   element.peer.replaceTrack(
+      //     element.peer.streams[0].getVideoTracks()[0],
+      //     userVideo.current.srcObject.getVideoTracks()[0],
+      //     element.peer.streams[0]
+      //   );
+      // });
+      socketRef.current.emit("stop share screen", {
+        to: partnerSocketId.current,
       });
     } else {
       console.log("start share screen");
@@ -379,6 +383,7 @@ const TutoringPage = (props) => {
           const peers = [];
           console.log("my socket id : " + mySocketID);
           users.forEach((userID, i) => {
+            partnerSocketId.current = userID;
             const peer = createPeer(
               userID,
               socketRef.current.id,
@@ -454,6 +459,27 @@ const TutoringPage = (props) => {
           listPeer.push(peer);
 
           setShareScreenPeer(listPeer);
+        });
+
+        socketRef.current.on("share screen stopped", () => {
+          notification.info({
+            message: "Info",
+            description: "Partner stopped share screen",
+          });
+
+          shareScreenPeer.forEach((peer) => {
+            peer.peer.destroy();
+          });
+          //console.log(userVideo.current);
+
+          console.log(shareScreenVideo);
+
+          let tracks = shareScreenVideo.current.srcObject.getTracks();
+
+          tracks.forEach((track) => track.stop());
+          shareScreenVideo.current.srcObject = null;
+
+          setShareScreenPeer([]);
         });
       });
 
