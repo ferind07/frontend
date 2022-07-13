@@ -3,16 +3,22 @@ import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 import Navbarr from "../../components/Navbar";
 import ScheduleCard from "./ScheduleCard";
-import { Empty } from "antd";
+import { Empty, Select, Button, Input } from "antd";
 import {
   ExclamationCircleTwoTone,
   CloseCircleTwoTone,
   CheckCircleTwoTone,
+  WarningTwoTone,
+  ClockCircleTwoTone,
 } from "@ant-design/icons";
 
 const Schedule = () => {
   const [hSubmission, setHSubmission] = useState([]);
   const [tempHSubmission, setTempHSubmission] = useState([]);
+  const [keyword, setKeyword] = useState("");
+  const [option, setOption] = useState(9);
+
+  const { Option } = Select;
 
   function getHsubmission() {
     axios
@@ -20,6 +26,7 @@ const Schedule = () => {
         BackendUrl + "/user/getSchedule?token=" + localStorage.getItem("token")
       )
       .then((success) => {
+        console.log(success.data);
         setHSubmission(success.data);
         setTempHSubmission(success.data);
       })
@@ -40,11 +47,26 @@ const Schedule = () => {
   }
 
   function optionSelected(option) {
-    const temp = tempHSubmission.filter((item) => {
-      return item.status == option;
-    });
-    console.log(temp);
-    setHSubmission(temp);
+    if (option != 9) {
+      const temp = tempHSubmission.filter((item) => {
+        return item.status == option;
+      });
+      console.log(temp);
+
+      const data = temp.filter((detailHsubmission) => {
+        return detailHsubmission.title
+          .toLowerCase()
+          .includes(keyword.toLowerCase());
+      });
+      setHSubmission(data);
+    } else {
+      const data = tempHSubmission.filter((detailHsubmission) => {
+        return detailHsubmission.title
+          .toLowerCase()
+          .includes(keyword.toLowerCase());
+      });
+      setHSubmission(data);
+    }
   }
 
   function renderSchedule() {
@@ -63,6 +85,18 @@ const Schedule = () => {
     }
   }
 
+  const handleChange = (value) => {
+    setOption(value);
+  };
+
+  function onClickFilter() {
+    console.log("filter");
+
+    //setHSubmission(tempHSubmission);
+
+    optionSelected(option);
+  }
+
   useEffect(() => {
     getHsubmission();
   }, []);
@@ -76,9 +110,39 @@ const Schedule = () => {
           <div className="col-3">
             <div className="card mb-5 card-shadow">
               <div className="card-body">
-                <h5>Status</h5>
+                <h5>Filter</h5>
                 <hr className="mt-0 mb-2" />
-                <div className="w-100 d-flex">
+                <div className="w-100">
+                  <p className="mb-1">Status</p>
+                  <Select onChange={handleChange} className="w-100">
+                    <Option value={0}>Unconfirmed</Option>
+                    <Option value={1}>Accepted</Option>
+                    <Option value={2}>Rejected</Option>
+                    <Option value={3}>Waiting for payment</Option>
+                    <Option value={4}>Expired</Option>
+                    <Option value={5}>Completed</Option>
+                    <Option value={9}>All</Option>
+                  </Select>
+                </div>
+
+                <div className="w-100 mt-2">
+                  <p className="mb-1">Course name</p>
+                  <Input
+                    value={keyword}
+                    onChange={(e) => {
+                      setKeyword(e.target.value);
+                    }}
+                  />
+                  <Button
+                    className="mt-2"
+                    type="primary"
+                    onClick={onClickFilter}
+                  >
+                    Filter
+                  </Button>
+                </div>
+
+                {/* <div className="w-100 d-flex">
                   <div
                     className="d-flex w-100 p-1 box-option"
                     style={{ gap: "15px" }}
@@ -93,41 +157,7 @@ const Schedule = () => {
                     </div>
                     <h5 className="mb-0">Unconfirmed</h5>
                   </div>
-                </div>
-
-                <div className="w-100 d-flex">
-                  <div
-                    className="d-flex w-100 p-1 box-option"
-                    style={{ gap: "15px" }}
-                    onClick={(e) => {
-                      optionSelected(1);
-                    }}
-                  >
-                    <div className="center">
-                      <CheckCircleTwoTone
-                        style={{ fontSize: "35px", color: "#08c" }}
-                      />
-                    </div>
-                    <h5 className="mb-0">Accepted</h5>
-                  </div>
-                </div>
-
-                <div className="w-100 d-flex">
-                  <div
-                    className="d-flex w-100 p-1 box-option"
-                    style={{ gap: "15px" }}
-                    onClick={(e) => {
-                      optionSelected(2);
-                    }}
-                  >
-                    <div className="center">
-                      <CloseCircleTwoTone
-                        style={{ fontSize: "35px", color: "#08c" }}
-                      />
-                    </div>
-                    <h5 className="mb-0">Rejected</h5>
-                  </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

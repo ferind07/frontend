@@ -60,18 +60,21 @@ const TutoringPage = (props) => {
   const peersRef = useRef([]);
   //const myStream = useRef();
 
-  const chatPeer = useRef([]);
-
   const [userInfo, setUserInfo] = useState({});
   const partnerSocketId = useRef();
 
   const [video, setVideo] = useState(true);
   const [mute, setMute] = useState(false);
   const [shareScreen, setShareScreen] = useState(false);
-  const [chatView, setChatView] = useState(false);
+  const [chatView, setChatView] = useState(true);
   const [chatValue, setChatValue] = useState("");
   const [chat, setChat] = useState([]);
   const [connectionEstablished, setConnection] = useState(false);
+
+  const [shareScreenPeer, setShareScreenPeer] = useState([]);
+  const shareScreenPeerRef = useRef([]);
+  const shareScreenVideo = useRef();
+
   //const roomID = props.match.params.roomID;
 
   const { id } = useParams();
@@ -118,53 +121,90 @@ const TutoringPage = (props) => {
       //     element.peer.streams[0]
       //   );
       // });
+      // console.log(shareScreenPeerRef.current.length);
+      // shareScreenPeerRef.current.forEach((peer) => {
+      //   peer.destroy();
+      // });
+      resetSC();
       socketRef.current.emit("stop share screen", {
         to: partnerSocketId.current,
       });
+      setShareScreen(!shareScreen);
     } else {
       console.log("start share screen");
 
-      navigator.mediaDevices
-        .getDisplayMedia({ video: true, audio: true })
-        .then((stream) => {
-          //shareScreenVideo.current.srcObject = stream;
-          //setShareScreenVideoStream(stream);
-
-          const peer1 = new window.SimplePeer({
-            initiator: true,
-            trickle: false,
-            stream: stream,
-            iceServers: [
-              {
-                urls: "stun:coturn.ivanchristian.me",
-                username: "ivan",
-                credential: "5521",
-              },
-              {
-                urls: "turn:coturn.ivanchristian.me",
-                username: "ivan",
-                credential: "5521",
-              },
-            ],
-          });
-
-          peer1.on("signal", (data) => {
-            socketRef.current.emit("share screen", {
-              to: partnerSocketId.current,
-              signal: data,
-            });
-          });
-
-          socketRef.current.on(
-            "receiving returned share screen signal",
-            (payload) => {
-              console.log(payload.signal);
-              peer1.signal(payload.signal);
-            }
-          );
-
-          //userVideo.current.srcObject = stream;
+      if (shareScreenPeerRef.current.length > 0) {
+        notification.warn({
+          message: "Warning",
+          description: "Partner already share screen",
         });
+      } else {
+        navigator.mediaDevices
+          .getDisplayMedia({ video: true, audio: false })
+          .then((stream) => {
+            //shareScreenVideo.current.srcObject = stream;
+            //setShareScreenVideoStream(stream);
+
+            const peer1 = new window.SimplePeer({
+              initiator: true,
+              trickle: false,
+              stream: stream,
+              iceServers: [
+                {
+                  urls: "stun:openrelay.metered.ca:80",
+                },
+                {
+                  urls: "turn:openrelay.metered.ca:80",
+                  username: "openrelayproject",
+                  credential: "openrelayproject",
+                },
+                {
+                  urls: "turn:openrelay.metered.ca:443",
+                  username: "openrelayproject",
+                  credential: "openrelayproject",
+                },
+                {
+                  urls: "turn:openrelay.metered.ca:443?transport=tcp",
+                  username: "openrelayproject",
+                  credential: "openrelayproject",
+                },
+              ],
+            });
+            peer1._debug = console.log;
+
+            peer1.on("signal", (data) => {
+              socketRef.current.emit("share screen", {
+                to: partnerSocketId.current,
+                signal: data,
+              });
+            });
+
+            peer1.on("error", (error) => {
+              console.log("error from send peer");
+              console.log(error);
+              console.log(error.code);
+            });
+
+            peer1.on("close", () => {
+              console.log("close");
+              socketRef.current.off("receiving returned share screen signal");
+            });
+
+            shareScreenPeerRef.current.push(peer1);
+
+            socketRef.current.on(
+              "receiving returned share screen signal",
+              (payload) => {
+                console.log("signal from reciving peer");
+                console.log(payload.signal);
+                peer1.signal(payload.signal);
+              }
+            );
+
+            //userVideo.current.srcObject = stream;
+            setShareScreen(!shareScreen);
+          });
+      }
 
       // navigator.mediaDevices
       //   .getDisplayMedia({ video: true, audio: true })
@@ -185,8 +225,6 @@ const TutoringPage = (props) => {
       //     });
       //   });
     }
-
-    setShareScreen(!shareScreen);
   }
 
   const videoComp = () => {
@@ -199,7 +237,7 @@ const TutoringPage = (props) => {
           }}
         >
           <FaVideo size={45} />
-          <p>Video</p>
+          <p className="unselectable">Video</p>
         </div>
       );
     } else {
@@ -210,7 +248,9 @@ const TutoringPage = (props) => {
           }}
         >
           <FaVideoSlash size={45} />
-          <p style={{ color: "red" }}>Video</p>
+          <p style={{ color: "red" }} className="unselectable">
+            Video
+          </p>
         </div>
       );
     }
@@ -226,7 +266,9 @@ const TutoringPage = (props) => {
           }}
         >
           <FaMicrophoneSlash size={45} />
-          <p style={{ color: "red" }}>Mic</p>
+          <p style={{ color: "red" }} className="unselectable">
+            Mic
+          </p>
         </div>
       );
     } else {
@@ -237,7 +279,7 @@ const TutoringPage = (props) => {
           }}
         >
           <FaMicrophone size={45} />
-          <p>Mic</p>
+          <p className="unselectable">Mic</p>
         </div>
       );
     }
@@ -252,7 +294,9 @@ const TutoringPage = (props) => {
           }}
         >
           <MdStopScreenShare size={45} />
-          <p style={{ color: "red" }}>Share screen</p>
+          <p style={{ color: "red" }} className="unselectable">
+            Share screen
+          </p>
         </div>
       );
     } else {
@@ -263,7 +307,7 @@ const TutoringPage = (props) => {
           }}
         >
           <MdScreenShare size={45} />
-          <p>Share screen</p>
+          <p className="unselectable">Share screen</p>
         </div>
       );
     }
@@ -323,11 +367,11 @@ const TutoringPage = (props) => {
     return (
       <div className="chat-container" style={{ display: displayValue }}>
         <div className="chat-body">
-          {chat.map((chatDetail) => {
+          {chat.map((chatDetail, index) => {
             if (chatDetail.sender) {
               return (
                 <>
-                  <div className="d-flex justify-content-end">
+                  <div className="d-flex justify-content-end" key={index}>
                     <div className="chat-bubble">{chatDetail.text}</div>
                   </div>
                 </>
@@ -335,7 +379,7 @@ const TutoringPage = (props) => {
             } else {
               return (
                 <>
-                  <div className="d-flex justify-content-start">
+                  <div className="d-flex justify-content-start" key={index}>
                     <div className="chat-bubble">{chatDetail.text}</div>
                   </div>
                 </>
@@ -365,8 +409,6 @@ const TutoringPage = (props) => {
       </div>
     );
   };
-  const [shareScreenPeer, setShareScreenPeer] = useState([]);
-  const shareScreenVideo = useRef();
 
   useEffect(() => {
     getUserInfo();
@@ -425,91 +467,149 @@ const TutoringPage = (props) => {
           endMeet();
           navigate("/resultPage/" + id);
         });
+      });
 
-        socketRef.current.on("reciveShareScreen", (payload) => {
-          //alert("user share screen");
-          const listPeer = [];
+    socketRef.current.on("reciveShareScreen", (payload) => {
+      //alert("user share screen");
+      const listPeer = [];
 
-          //console.log(payload.signal);
+      //console.log(payload.signal);
 
-          console.log("user share screen");
-          const signal = payload.signal;
-          const from = payload.from;
+      console.log("user share screen");
+      notification.info({
+        message: "Info",
+        description: "Partner start share screen",
+      });
+      const signal = payload.signal;
+      const from = payload.from;
 
-          const peer = new window.SimplePeer();
+      const peer = new window.SimplePeer({
+        initiator: false,
+        trickle: false,
+        iceServers: [
+          {
+            urls: "stun:openrelay.metered.ca:80",
+          },
+          {
+            urls: "turn:openrelay.metered.ca:80",
+            username: "openrelayproject",
+            credential: "openrelayproject",
+          },
+          {
+            urls: "turn:openrelay.metered.ca:443",
+            username: "openrelayproject",
+            credential: "openrelayproject",
+          },
+          {
+            urls: "turn:openrelay.metered.ca:443?transport=tcp",
+            username: "openrelayproject",
+            credential: "openrelayproject",
+          },
+        ],
+      });
+      peer._debug = console.log;
 
-          peer.on("stream", (stream) => {
-            console.log(stream.getVideoTracks());
-            shareScreenVideo.current.srcObject = stream;
-          });
+      // peer.on("stream", (stream) => {
+      //   shareScreenVideo.current.srcObject = stream;
+      // });
 
-          peer.on("signal", (data) => {
-            socketRef.current.emit("return share screen signal", {
-              signal: data,
-              to: from,
-            });
-          });
-
-          peer.on("error", (error) => {
-            console.log(error);
-          });
-
-          peer.signal(signal);
-
-          listPeer.push(peer);
-
-          setShareScreenPeer(listPeer);
-        });
-
-        socketRef.current.on("share screen stopped", () => {
-          notification.info({
-            message: "Info",
-            description: "Partner stopped share screen",
-          });
-
-          shareScreenPeer.forEach((peer) => {
-            peer.peer.destroy();
-          });
-          //console.log(userVideo.current);
-
-          console.log(shareScreenVideo);
-
-          let tracks = shareScreenVideo.current.srcObject.getTracks();
-
-          tracks.forEach((track) => track.stop());
-          shareScreenVideo.current.srcObject = null;
-
-          setShareScreenPeer([]);
+      peer.on("signal", (data) => {
+        console.log("signal from penerima share screen");
+        console.log(signal);
+        socketRef.current.emit("return share screen signal", {
+          signal: data,
+          to: from,
         });
       });
 
+      peer.on("close", () => {
+        console.log("share screen closed");
+        peer.removeAllListeners();
+      });
+
+      peer.on("error", (error) => {
+        console.log("error from reciving peer");
+        console.log(error);
+        console.log(error.code);
+      });
+
+      peer.signal(signal);
+      listPeer.push(peer);
+
+      shareScreenPeerRef.current.push(peer);
+      setShareScreenPeer(listPeer);
+
+      console.log(
+        "share screen peer length : " + shareScreenPeerRef.current.length
+      );
+    });
+
+    socketRef.current.on("share screen stopped", () => {
+      notification.info({
+        message: "Info",
+        description: "Partner stopped share screen",
+      });
+
+      console.log(shareScreenPeer);
+      // shareScreenPeerRef.current.forEach((peer) => {
+      //   console.log(peer);
+      //   peer.removeAllListeners("signal");
+      //   peer.peer.destroy();
+      // });
+      // //console.log(userVideo.current);
+
+      // console.log(shareScreenVideo);
+
+      // let tracks = shareScreenVideo.current.srcObject.getTracks();
+
+      // tracks.forEach((track) => track.stop());
+      // shareScreenVideo.current.srcObject = null;
+
+      resetSC();
+    });
     socketRef.current.on("newChat", (data) => {
       console.log(data);
       setChat((chats) => [...chats, data]);
     });
   }, []);
 
+  function resetSC() {
+    shareScreenPeerRef.current.forEach((peer) => {
+      peer.destroy();
+    });
+    shareScreenPeerRef.current = [];
+    setShareScreenPeer([]);
+  }
+
   function createPeer(userToSignal, callerID, stream) {
     //initiator true
-    const peer = new Peer({
+    const peer = new window.SimplePeer({
       initiator: true,
       trickle: false,
       config: {
         iceServers: [
           {
-            urls: "stun:coturn.ivanchristian.me",
-            username: "ivan",
-            credential: "5521",
+            urls: "stun:openrelay.metered.ca:80",
           },
           {
-            urls: "turn:coturn.ivanchristian.me",
-            username: "ivan",
-            credential: "5521",
+            urls: "turn:openrelay.metered.ca:80",
+            username: "openrelayproject",
+            credential: "openrelayproject",
+          },
+          {
+            urls: "turn:openrelay.metered.ca:443",
+            username: "openrelayproject",
+            credential: "openrelayproject",
+          },
+          {
+            urls: "turn:openrelay.metered.ca:443?transport=tcp",
+            username: "openrelayproject",
+            credential: "openrelayproject",
           },
         ],
       },
-      streams: [stream],
-      //stream,
+      //streams: [stream],
+      stream,
     });
 
     peer.on("signal", (signal) => {
@@ -528,25 +628,33 @@ const TutoringPage = (props) => {
 
   function addPeer(incomingSignal, callerID, stream) {
     //initiator false
-    const peer = new Peer({
+    const peer = new window.SimplePeer({
       initiator: false,
       trickle: false,
       config: {
         iceServers: [
           {
-            urls: "stun:coturn.ivanchristian.me",
-            username: "ivan",
-            credential: "5521",
+            urls: "stun:openrelay.metered.ca:80",
           },
           {
-            urls: "turn:coturn.ivanchristian.me",
-            username: "ivan",
-            credential: "5521",
+            urls: "turn:openrelay.metered.ca:80",
+            username: "openrelayproject",
+            credential: "openrelayproject",
+          },
+          {
+            urls: "turn:openrelay.metered.ca:443",
+            username: "openrelayproject",
+            credential: "openrelayproject",
+          },
+          {
+            urls: "turn:openrelay.metered.ca:443?transport=tcp",
+            username: "openrelayproject",
+            credential: "openrelayproject",
           },
         ],
       },
-      streams: [stream],
-      //stream,
+      //streams: [stream],
+      stream,
     });
 
     peer.on("signal", (signal) => {
@@ -568,18 +676,24 @@ const TutoringPage = (props) => {
           }}
         >
           <FaPhoneSlash size={45} />
-          <p>End</p>
+          <p className="unselectable">End</p>
         </div>
       );
     }
   };
 
+  const scRef = useRef();
   const renderShareScreen = () => {
     if (shareScreenPeer.length !== 0) {
-      console.log(shareScreenPeer[0]);
+      console.log(shareScreenPeerRef.current[0]);
+      const scPeer = shareScreenPeerRef.current[0];
+      // const ref = useRef();
+      scPeer.on("stream", (stream) => {
+        scRef.current.srcObject = stream;
+      });
       return (
         <video
-          ref={shareScreenVideo}
+          ref={scRef}
           autoPlay
           playsInline
           muted
@@ -605,7 +719,6 @@ const TutoringPage = (props) => {
               />
             );
           })}
-
           <video
             ref={userVideo}
             autoPlay
@@ -633,7 +746,9 @@ const TutoringPage = (props) => {
               }}
             >
               <MdChat size={45} />
-              <p style={{ pointerEvents: "none" }}>Chat</p>
+              <p style={{ pointerEvents: "none" }} className="unselectable">
+                Chat
+              </p>
             </div>
             <div
               className="float-left"

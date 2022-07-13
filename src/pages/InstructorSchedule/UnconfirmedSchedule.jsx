@@ -33,6 +33,24 @@ const UnconfirmedSchedule = (props) => {
   }, []);
 
   const compRenderSchedule = (detailSchedule, dateStr) => {
+    function statusText() {
+      let text = "";
+      if (detailSchedule.status == 0) {
+        text = "Unconfirmed";
+      } else if (detailSchedule.status == 1) {
+        text = "Accepted";
+      } else if (detailSchedule.status == 2) {
+        text = "Declined";
+      } else if (detailSchedule.status == 3) {
+        text = "Completed";
+      } else if (detailSchedule.status == 4) {
+        text = "Expired";
+      } else if (detailSchedule.status == 5) {
+        text = "Unpaid";
+      }
+
+      return text;
+    }
     return (
       <>
         <div className="card mt-2">
@@ -48,12 +66,7 @@ const UnconfirmedSchedule = (props) => {
                 <h5 className="mb-2">{detailSchedule.title} Class</h5>
                 <p className="mb-2 font-italic">With {detailSchedule.name}</p>
                 <p className="mb-2">Applied at {dateStr}</p>
-                <p>
-                  Status{" "}
-                  {detailSchedule.status == 4
-                    ? "Expired"
-                    : detailSchedule.status}
-                </p>
+                <p>Status {statusText()}</p>
                 <button
                   className="btn btn-primary"
                   onClick={(e) => {
@@ -155,7 +168,8 @@ const UnconfirmedSchedule = (props) => {
             >
               <Option value="0">Unconfirmed</Option>
               <Option value="1">Confirmed</Option>
-              <Option value="2">Cancelled</Option>
+              <Option value="2">Canceled</Option>
+              <Option value="3">Completed</Option>
               <Option value="10">All</Option>
             </Select>
           </div>

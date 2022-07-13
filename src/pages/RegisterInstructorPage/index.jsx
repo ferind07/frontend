@@ -5,8 +5,7 @@ import { Viewer } from "@react-pdf-viewer/core";
 import { Worker } from "@react-pdf-viewer/core";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
-import { Input, TimePicker, notification } from "antd";
-import { TextInput } from "react-materialize";
+import { Input, TimePicker, notification, Checkbox } from "antd";
 
 const RegisterInstructorPage = () => {
   const { Option } = Select;
@@ -163,6 +162,20 @@ const RegisterInstructorPage = () => {
                           setTime(time);
                         }}
                       />
+                    </div>
+                  </div>
+                  <div className="form-group row mt-2">
+                    <label className="col-sm-2 col-form-label">
+                      Available day
+                    </label>
+                    <div className="col-sm-10">
+                      <Checkbox>Sunday</Checkbox>
+                      <Checkbox>Monday</Checkbox>
+                      <Checkbox>Tuesday</Checkbox>
+                      <Checkbox>Wednesday</Checkbox>
+                      <Checkbox>Thursday</Checkbox>
+                      <Checkbox>Friday</Checkbox>
+                      <Checkbox>Saturday</Checkbox>
                     </div>
                   </div>
                   <div className="form-group row mt-2">
