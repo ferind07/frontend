@@ -183,6 +183,7 @@ const InstructorDetailSchedule = () => {
 
   const renderButton = (subMissionItem) => {
     console.log(subMissionItem);
+
     if (
       hSubmission.status == 0 ||
       hSubmission.status == 2 ||

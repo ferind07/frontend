@@ -3,13 +3,16 @@ import moment from "moment";
 import BackendUrl from "../../components/BackendUrl";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Select } from "antd";
+import { Select, Input, Button, Empty } from "antd";
 
 const UnconfirmedSchedule = (props) => {
   const listSchedule = props.scheduleList;
   const navigate = useNavigate();
 
   const [tempListSchedule, setTempListSchedule] = useState([]);
+  const [keyword, setKeyword] = useState("");
+  const [status, setStatus] = useState(10);
+
   //var tempListSchedule = props.scheduleList;
 
   const { Option } = Select;
@@ -85,72 +88,106 @@ const UnconfirmedSchedule = (props) => {
 
   const renderSchedule = () => {
     const componentList = [];
-    tempListSchedule.map((detailSchedule) => {
-      const today = new Date(detailSchedule.timeInsert);
-      const yyyy = today.getFullYear();
-      let mm = today.getMonth(); // Months start at 0!
-      let dd = today.getDate();
+    if (tempListSchedule.length > 0) {
+      tempListSchedule.map((detailSchedule) => {
+        const today = new Date(detailSchedule.timeInsert);
+        const yyyy = today.getFullYear();
+        let mm = today.getMonth(); // Months start at 0!
+        let dd = today.getDate();
 
-      const dayList = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ];
+        const dayList = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
 
-      const monthList = [
-        "January",
-        "Febuary",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
+        const monthList = [
+          "January",
+          "Febuary",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
 
-      if (dd < 10) dd = "0" + dd;
-      //if (mm < 10) mm = "0" + mm;
+        if (dd < 10) dd = "0" + dd;
+        //if (mm < 10) mm = "0" + mm;
 
-      var formatteddatestr = moment(detailSchedule.timeInsert).format(
-        "hh:mm a"
-      );
-      const dateStr =
-        dayList[today.getDay()] +
-        ", " +
-        dd +
-        " " +
-        monthList[mm] +
-        " " +
-        yyyy +
-        " " +
-        formatteddatestr;
+        var formatteddatestr = moment(detailSchedule.timeInsert).format(
+          "hh:mm a"
+        );
+        const dateStr =
+          dayList[today.getDay()] +
+          ", " +
+          dd +
+          " " +
+          monthList[mm] +
+          " " +
+          yyyy +
+          " " +
+          formatteddatestr;
 
-      componentList.push(compRenderSchedule(detailSchedule, dateStr));
-    });
-    return componentList;
+        componentList.push(compRenderSchedule(detailSchedule, dateStr));
+      });
+      return componentList;
+    } else {
+      return <Empty className="mt-5" />;
+    }
   };
 
   function onStatusChange(e) {
-    if (e == 10) {
-      setTempListSchedule(listSchedule);
+    //tempListSchedule = temp;
+    setStatus(e);
+  }
+
+  const onClickBtnFilter = (e) => {
+    console.log(status);
+    var hasil;
+    if (status == 10) {
+      //setTempListSchedule(listSchedule);
+      if (keyword != "") {
+        hasil = listSchedule.filter((item) => {
+          return item.title.toLowerCase().includes(keyword.toLowerCase());
+        });
+        console.log(hasil);
+        setTempListSchedule(hasil);
+      } else {
+        console.log(hasil);
+        setTempListSchedule(listSchedule);
+      }
     } else {
       const temp = listSchedule.filter((element) => {
-        return element.status == e;
+        return element.status == status;
       });
-      console.log(temp);
-      setTempListSchedule(temp);
-    }
 
-    //tempListSchedule = temp;
-  }
+      if (temp.length > 0) {
+        if (keyword != "") {
+          hasil = temp.filter((item) => {
+            return item.title.toLowerCase().includes(keyword.toLowerCase());
+          });
+        }
+        console.log(hasil);
+        setTempListSchedule(hasil);
+      } else {
+        setTempListSchedule(temp);
+      }
+    }
+  };
+
+  const onClickBtnReset = (e) => {
+    setKeyword("");
+    setTempListSchedule(listSchedule);
+  };
 
   return (
     <>
@@ -158,6 +195,15 @@ const UnconfirmedSchedule = (props) => {
         <div className="col-3">
           <h5>Filter</h5>
           <hr />
+          <div className="mb-2">
+            <p className="mb-1">Course name</p>
+            <Input
+              value={keyword}
+              onChange={(e) => {
+                setKeyword(e.target.value);
+              }}
+            />
+          </div>
           <p className="mb-1">Status</p>
           <div>
             <Select
@@ -172,6 +218,15 @@ const UnconfirmedSchedule = (props) => {
               <Option value="3">Completed</Option>
               <Option value="10">All</Option>
             </Select>
+          </div>
+          <div
+            className="d-flex mt-3 justify-content-end"
+            style={{ gap: "10px" }}
+          >
+            <Button type="primary" onClick={onClickBtnFilter}>
+              Filter
+            </Button>
+            <Button onClick={onClickBtnReset}>Reset</Button>
           </div>
         </div>
         <div className="col-9">

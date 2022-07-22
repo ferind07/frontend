@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400&family=Zen+Kaku+Gothic+Antique:wght@300;400&display=swap");
-ul,
-li {
+
+.ul-li-style #ul #li {
   margin: 0;
   list-style: none;
 }

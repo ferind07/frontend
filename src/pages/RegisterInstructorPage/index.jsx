@@ -15,6 +15,7 @@ const RegisterInstructorPage = () => {
   const [katagori, setKatagori] = useState(1);
   const [aboutMe, setAboutMe] = useState("");
   const [catagoryDetail, setCatagoryDetail] = useState("");
+  const [availableDay, setAvailableDay] = useState([]);
   const format = "HH:mm";
   const { TextArea } = Input;
 
@@ -71,6 +72,7 @@ const RegisterInstructorPage = () => {
     bodyFormData.append("detail", aboutMe);
     bodyFormData.append("timeStart", time[0]);
     bodyFormData.append("timeEnd", time[1]);
+    bodyFormData.append("availableDay", availableDay);
     bodyFormData.append("token", localStorage.getItem("token"));
     axios({
       method: "post",
@@ -91,6 +93,11 @@ const RegisterInstructorPage = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const onCheckBoxChange = (checkedValue) => {
+    //console.log(checkedValue);
+    setAvailableDay(checkedValue);
   };
 
   return (
@@ -169,13 +176,15 @@ const RegisterInstructorPage = () => {
                       Available day
                     </label>
                     <div className="col-sm-10">
-                      <Checkbox>Sunday</Checkbox>
-                      <Checkbox>Monday</Checkbox>
-                      <Checkbox>Tuesday</Checkbox>
-                      <Checkbox>Wednesday</Checkbox>
-                      <Checkbox>Thursday</Checkbox>
-                      <Checkbox>Friday</Checkbox>
-                      <Checkbox>Saturday</Checkbox>
+                      <Checkbox.Group onChange={onCheckBoxChange}>
+                        <Checkbox value={0}>Sunday</Checkbox>
+                        <Checkbox value={1}>Monday</Checkbox>
+                        <Checkbox value={2}>Tuesday</Checkbox>
+                        <Checkbox value={3}>Wednesday</Checkbox>
+                        <Checkbox value={4}>Thursday</Checkbox>
+                        <Checkbox value={5}>Friday</Checkbox>
+                        <Checkbox value={6}>Saturday</Checkbox>
+                      </Checkbox.Group>
                     </div>
                   </div>
                   <div className="form-group row mt-2">
