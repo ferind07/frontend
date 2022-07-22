@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import BackendUrl from "../../components/BackendUrl";
 import moment from "moment";
 import axios from "axios";
-import { Drawer, notification } from "antd";
+import { Drawer, notification, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const ScheduleCard = (props) => {
@@ -88,6 +88,8 @@ const ScheduleCard = (props) => {
       text = "Complete";
     } else if (props.submissionDetail.status == 4) {
       text = "Expired";
+    } else if (props.submissionDetail.status == 5) {
+      text = "Waiting for payment";
     }
 
     return text;
@@ -126,6 +128,23 @@ const ScheduleCard = (props) => {
     }
   };
 
+  const renderLinkPayment = () => {
+    if (props.submissionDetail.status == 5) {
+      return (
+        <>
+          <Button
+            type="primary"
+            onClick={(e) => {
+              window.open(props.submissionDetail.linkPayment, "_blank");
+            }}
+          >
+            Link payment
+          </Button>
+        </>
+      );
+    }
+  };
+
   return (
     <>
       <div className="card mt-2">
@@ -143,6 +162,7 @@ const ScheduleCard = (props) => {
               <p className="mb-1">Applied at {dateStr}</p>
               <p className="mb-1">Status : {renderStatus()}</p>
               {btnStatus()}
+              {renderLinkPayment()}
             </div>
           </div>
         </div>

@@ -156,14 +156,14 @@ const AddClassContent = (props) => {
             </div>
           </div>
 
-          <button
+          {/* <button
             onClick={(e) => {
               e.preventDefault();
               props.functionGetClass();
             }}
           >
             load class
-          </button>
+          </button> */}
         </div>
       </form>
     </>

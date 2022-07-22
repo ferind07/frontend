@@ -5,8 +5,7 @@ import { Viewer } from "@react-pdf-viewer/core";
 import { Worker } from "@react-pdf-viewer/core";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
-import { Input, TimePicker, notification } from "antd";
-import { TextInput } from "react-materialize";
+import { Input, TimePicker, notification, Checkbox } from "antd";
 
 const RegisterInstructorPage = () => {
   const { Option } = Select;
@@ -16,6 +15,7 @@ const RegisterInstructorPage = () => {
   const [katagori, setKatagori] = useState(1);
   const [aboutMe, setAboutMe] = useState("");
   const [catagoryDetail, setCatagoryDetail] = useState("");
+  const [availableDay, setAvailableDay] = useState([]);
   const format = "HH:mm";
   const { TextArea } = Input;
 
@@ -72,6 +72,7 @@ const RegisterInstructorPage = () => {
     bodyFormData.append("detail", aboutMe);
     bodyFormData.append("timeStart", time[0]);
     bodyFormData.append("timeEnd", time[1]);
+    bodyFormData.append("availableDay", availableDay);
     bodyFormData.append("token", localStorage.getItem("token"));
     axios({
       method: "post",
@@ -94,6 +95,11 @@ const RegisterInstructorPage = () => {
       });
   };
 
+  const onCheckBoxChange = (checkedValue) => {
+    //console.log(checkedValue);
+    setAvailableDay(checkedValue);
+  };
+
   return (
     <>
       <div className="container myaccount">
@@ -107,8 +113,10 @@ const RegisterInstructorPage = () => {
                   onSubmit={(e) => onClickSubmit(e)}
                 >
                   <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Catagories</label>
-                    <div class="col-sm-10">
+                    <label className="col-sm-2 col-form-label">
+                      Catagories
+                    </label>
+                    <div className="col-sm-10">
                       <Select
                         defaultValue="language"
                         style={{ width: "100%" }}
@@ -122,11 +130,11 @@ const RegisterInstructorPage = () => {
                       </Select>
                     </div>
                   </div>
-                  <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">
+                  <div className="form-group row">
+                    <label className="col-sm-2 col-form-label">
                       Catagory detail
                     </label>
-                    <div class="col-sm-10">
+                    <div className="col-sm-10">
                       <Input
                         type="text"
                         value={catagoryDetail}
@@ -136,9 +144,9 @@ const RegisterInstructorPage = () => {
                       />
                     </div>
                   </div>
-                  <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">About Me</label>
-                    <div class="col-sm-10">
+                  <div className="form-group row">
+                    <label className="col-sm-2 col-form-label">About Me</label>
+                    <div className="col-sm-10">
                       <TextArea
                         rows={5}
                         value={aboutMe}
@@ -148,11 +156,11 @@ const RegisterInstructorPage = () => {
                       />
                     </div>
                   </div>
-                  <div class="form-group row mt-2">
-                    <label class="col-sm-2 col-form-label">
+                  <div className="form-group row mt-2">
+                    <label className="col-sm-2 col-form-label">
                       Available Time
                     </label>
-                    <div class="col-sm-10">
+                    <div className="col-sm-10">
                       <TimePicker.RangePicker
                         format={format}
                         value={time}
@@ -163,12 +171,31 @@ const RegisterInstructorPage = () => {
                       />
                     </div>
                   </div>
-                  <div class="form-group row mt-2">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">
+                  <div className="form-group row mt-2">
+                    <label className="col-sm-2 col-form-label">
+                      Available day
+                    </label>
+                    <div className="col-sm-10">
+                      <Checkbox.Group onChange={onCheckBoxChange}>
+                        <Checkbox value={0}>Sunday</Checkbox>
+                        <Checkbox value={1}>Monday</Checkbox>
+                        <Checkbox value={2}>Tuesday</Checkbox>
+                        <Checkbox value={3}>Wednesday</Checkbox>
+                        <Checkbox value={4}>Thursday</Checkbox>
+                        <Checkbox value={5}>Friday</Checkbox>
+                        <Checkbox value={6}>Saturday</Checkbox>
+                      </Checkbox.Group>
+                    </div>
+                  </div>
+                  <div className="form-group row mt-2">
+                    <label
+                      for="inputPassword"
+                      className="col-sm-2 col-form-label"
+                    >
                       Upload CV
                     </label>
-                    <div class="col-sm-10">
-                      <div class="custom-file">
+                    <div className="col-sm-10">
+                      <div className="custom-file">
                         <input
                           type="file"
                           accept="application/pdf"

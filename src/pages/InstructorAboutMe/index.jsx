@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import BackendUrl from "../../components/BackendUrl";
 import axios from "axios";
 import { Document, Page, pdfjs } from "react-pdf";
-import { Input, Tabs, notification, TimePicker } from "antd";
+import { Input, Tabs, notification, TimePicker, Checkbox } from "antd";
 import moment from "moment";
 
 const InstructorAboutMe = () => {
@@ -10,6 +10,7 @@ const InstructorAboutMe = () => {
   const [instructorInfo, setInstructorInfo] = useState({});
   const [image, setImage] = useState([]);
   const [numPages, setNumPages] = useState(null);
+  const [activeDays, setActiveDays] = useState([]);
   let [pageNumber, setPageNumber] = useState(1);
 
   pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
@@ -57,7 +58,12 @@ const InstructorAboutMe = () => {
         const tempTime = [];
         tempTime.push(timeStart);
         tempTime.push(timeEnd);
-        console.log(tempTime);
+        console.log(success.data);
+
+        const activeDaysArr = success.data.activeDays.split(",");
+        //console.log(activeDaysArr);
+        const parseIntArr = activeDaysArr.map(Number);
+        setActiveDays(parseIntArr);
         setTime(tempTime);
       })
       .catch((error) => {
@@ -188,6 +194,42 @@ const InstructorAboutMe = () => {
     );
   };
 
+  const onChangeCheckBox = (selectedValue) => {
+    setActiveDays(selectedValue);
+    console.log(selectedValue);
+  };
+
+  const options = [
+    {
+      label: "Sunday",
+      value: 0,
+    },
+    {
+      label: "Monday",
+      value: 1,
+    },
+    {
+      label: "Tuesday",
+      value: 2,
+    },
+    {
+      label: "Wednesday",
+      value: 3,
+    },
+    {
+      label: "Thursday",
+      value: 4,
+    },
+    {
+      label: "Friday",
+      value: 5,
+    },
+    {
+      label: "Saturday",
+      value: 6,
+    },
+  ];
+
   const compUserInfo = () => {
     return (
       <>
@@ -262,6 +304,19 @@ const InstructorAboutMe = () => {
                 />
               </div>
             </div>
+            <div className="form-group row">
+              <label for="name" className="col-sm-2 col-form-label">
+                Active days
+              </label>
+              <div class="col-sm-10 mt-1">
+                <Checkbox.Group
+                  onChange={onChangeCheckBox}
+                  options={options}
+                  defaultValue={activeDays}
+                  value={activeDays}
+                />
+              </div>
+            </div>
             <div className="d-flex justify-content-end mt-2">
               <button
                 className="btn btn-success"
@@ -290,6 +345,7 @@ const InstructorAboutMe = () => {
     bodyFormData.append("timeStart", time[0]);
     bodyFormData.append("timeEnd", time[1]);
     bodyFormData.append("userProfile", image);
+    bodyFormData.append("activeDays", activeDays);
 
     axios({
       method: "post",

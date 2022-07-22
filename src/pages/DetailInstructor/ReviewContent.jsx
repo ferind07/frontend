@@ -17,6 +17,7 @@ const ReviewContent = (props) => {
               name={element.name}
               rating={element.rating}
               comment={element.comment}
+              className={element.title}
             />
           </div>
         );

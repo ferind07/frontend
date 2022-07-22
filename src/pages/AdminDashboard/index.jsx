@@ -219,7 +219,7 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
-          <div className="col-12 mt-3 mb-5">
+          {/* <div className="col-12 mt-3 mb-5">
             <div className="card card-shadow">
               <div className="card-body">
                 <div className="row">
@@ -239,7 +239,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

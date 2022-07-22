@@ -123,6 +123,7 @@ const DetailInstructor = () => {
                           timeStart={dInstructor.timeStart}
                           timeEnd={dInstructor.timeEnd}
                           katagoriDetail={dInstructor.katagoriDetail}
+                          activeDays={dInstructor.activeDays}
                         />
                         <div className="ant-descriptions-title mt-3">
                           Instructor detail

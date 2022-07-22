@@ -3,13 +3,19 @@ import moment from "moment";
 import BackendUrl from "../../components/BackendUrl";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Select, Input, Button, Empty } from "antd";
 
 const UnconfirmedSchedule = (props) => {
   const listSchedule = props.scheduleList;
   const navigate = useNavigate();
 
   const [tempListSchedule, setTempListSchedule] = useState([]);
+  const [keyword, setKeyword] = useState("");
+  const [status, setStatus] = useState(10);
+
   //var tempListSchedule = props.scheduleList;
+
+  const { Option } = Select;
 
   function loadSubmission() {
     axios
@@ -30,6 +36,24 @@ const UnconfirmedSchedule = (props) => {
   }, []);
 
   const compRenderSchedule = (detailSchedule, dateStr) => {
+    function statusText() {
+      let text = "";
+      if (detailSchedule.status == 0) {
+        text = "Unconfirmed";
+      } else if (detailSchedule.status == 1) {
+        text = "Accepted";
+      } else if (detailSchedule.status == 2) {
+        text = "Declined";
+      } else if (detailSchedule.status == 3) {
+        text = "Completed";
+      } else if (detailSchedule.status == 4) {
+        text = "Expired";
+      } else if (detailSchedule.status == 5) {
+        text = "Unpaid";
+      }
+
+      return text;
+    }
     return (
       <>
         <div className="card mt-2">
@@ -42,15 +66,10 @@ const UnconfirmedSchedule = (props) => {
                 />
               </div>
               <div className="col-8">
-                <h5>{detailSchedule.title} Class</h5>
-                <p>With {detailSchedule.iName}</p>
-                <p>Applied at {dateStr}</p>
-                <p>
-                  Status{" "}
-                  {detailSchedule.status == 4
-                    ? "Expired"
-                    : detailSchedule.status}
-                </p>
+                <h5 className="mb-2">{detailSchedule.title} Class</h5>
+                <p className="mb-2 font-italic">With {detailSchedule.name}</p>
+                <p className="mb-2">Applied at {dateStr}</p>
+                <p>Status {statusText()}</p>
                 <button
                   className="btn btn-primary"
                   onClick={(e) => {
@@ -69,40 +88,160 @@ const UnconfirmedSchedule = (props) => {
 
   const renderSchedule = () => {
     const componentList = [];
-    tempListSchedule.map((detailSchedule) => {
-      const today = new Date(detailSchedule.timeInsert);
-      const yyyy = today.getFullYear();
-      let mm = today.getMonth() + 1; // Months start at 0!
-      let dd = today.getDate();
+    if (tempListSchedule.length > 0) {
+      tempListSchedule.map((detailSchedule) => {
+        const today = new Date(detailSchedule.timeInsert);
+        const yyyy = today.getFullYear();
+        let mm = today.getMonth(); // Months start at 0!
+        let dd = today.getDate();
 
-      if (dd < 10) dd = "0" + dd;
-      if (mm < 10) mm = "0" + mm;
+        const dayList = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
 
-      var formatteddatestr = moment(detailSchedule.timeInsert).format(
-        "hh:mm a"
-      );
-      const dateStr = dd + "/" + mm + "/" + yyyy + " " + formatteddatestr;
+        const monthList = [
+          "January",
+          "Febuary",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
 
-      componentList.push(compRenderSchedule(detailSchedule, dateStr));
-    });
-    return componentList;
+        if (dd < 10) dd = "0" + dd;
+        //if (mm < 10) mm = "0" + mm;
+
+        var formatteddatestr = moment(detailSchedule.timeInsert).format(
+          "hh:mm a"
+        );
+        const dateStr =
+          dayList[today.getDay()] +
+          ", " +
+          dd +
+          " " +
+          monthList[mm] +
+          " " +
+          yyyy +
+          " " +
+          formatteddatestr;
+
+        componentList.push(compRenderSchedule(detailSchedule, dateStr));
+      });
+      return componentList;
+    } else {
+      return <Empty className="mt-5" />;
+    }
   };
 
   function onStatusChange(e) {
-    e.preventDefault();
-
-    const temp = listSchedule.filter((element) => {
-      return element.status == e.target.value;
-    });
-    console.log(temp);
-    setTempListSchedule(temp);
     //tempListSchedule = temp;
+    setStatus(e);
   }
+
+  const onClickBtnFilter = (e) => {
+    console.log(status);
+    var hasil;
+    if (status == 10) {
+      //setTempListSchedule(listSchedule);
+      if (keyword != "") {
+        hasil = listSchedule.filter((item) => {
+          return item.title.toLowerCase().includes(keyword.toLowerCase());
+        });
+        console.log(hasil);
+        setTempListSchedule(hasil);
+      } else {
+        console.log(hasil);
+        setTempListSchedule(listSchedule);
+      }
+    } else {
+      const temp = listSchedule.filter((element) => {
+        return element.status == status;
+      });
+
+      if (temp.length > 0) {
+        if (keyword != "") {
+          hasil = temp.filter((item) => {
+            return item.title.toLowerCase().includes(keyword.toLowerCase());
+          });
+        }
+        console.log(hasil);
+        setTempListSchedule(hasil);
+      } else {
+        setTempListSchedule(temp);
+      }
+    }
+  };
+
+  const onClickBtnReset = (e) => {
+    setKeyword("");
+    setTempListSchedule(listSchedule);
+  };
 
   return (
     <>
       <div className="row">
-        <div className="col-12" style={{ height: "100vh", overflowY: "auto" }}>
+        <div className="col-3">
+          <h5>Filter</h5>
+          <hr />
+          <div className="mb-2">
+            <p className="mb-1">Course name</p>
+            <Input
+              value={keyword}
+              onChange={(e) => {
+                setKeyword(e.target.value);
+              }}
+            />
+          </div>
+          <p className="mb-1">Status</p>
+          <div>
+            <Select
+              className="w-100 mt-0"
+              onChange={(e) => {
+                onStatusChange(e);
+              }}
+            >
+              <Option value="0">Unconfirmed</Option>
+              <Option value="1">Confirmed</Option>
+              <Option value="2">Canceled</Option>
+              <Option value="3">Completed</Option>
+              <Option value="10">All</Option>
+            </Select>
+          </div>
+          <div
+            className="d-flex mt-3 justify-content-end"
+            style={{ gap: "10px" }}
+          >
+            <Button type="primary" onClick={onClickBtnFilter}>
+              Filter
+            </Button>
+            <Button onClick={onClickBtnReset}>Reset</Button>
+          </div>
+        </div>
+        <div className="col-9">
+          <div className="card">
+            <div
+              className="card-body"
+              style={{ height: "75vh", overflowY: "auto" }}
+            >
+              {renderSchedule()}
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <div className="row">
+        <div className="col-12" style={{ height: "80vh", overflowY: "auto" }}>
           Status :{" "}
           <select
             name="status"
@@ -118,7 +257,7 @@ const UnconfirmedSchedule = (props) => {
           </select>
           {renderSchedule()}
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

@@ -20,6 +20,7 @@ import ReviewPage from "./pages/ReviewPage";
 import ForgetPassword from "./pages/ForgetPassword";
 import UserCashOut from "./pages/UserCashOut";
 import ResultPage from "./pages/ResultPage";
+import ActiveUser from "./pages/ActiveUser";
 
 const App = () => {
   const socket = useRef();
@@ -78,6 +79,7 @@ const App = () => {
         <Route path="/forgetPassword" element={<ForgetPassword />} />
         <Route path="/userCashOut" element={<UserCashOut />} />
         <Route path="/resultPage/:id" element={<ResultPage />} />
+        <Route path="/activeUser/:id" element={<ActiveUser />} />
       </Routes>
     </>
   );

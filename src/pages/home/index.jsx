@@ -45,11 +45,15 @@ const Home = () => {
         <hr />
         <div className="container-fluid">
           <div className="row">
-            <Card catagory="Cooking" url="/asset/home/cooking.png" />
-            <Card catagory="Design" url="/asset/home/design.png" />
-            <Card catagory="Language" url="/asset/home/lang.png" />
-            <Card catagory="Programming" url="/asset/home/progamming.png" />
-            <Card catagory="Sport" url="/asset/home/sport.png" />
+            <Card catagory="Cooking" idCat="1" url="/asset/home/cooking.png" />
+            <Card catagory="Design" idCat="2" url="/asset/home/design.png" />
+            <Card catagory="Language" idCat="3" url="/asset/home/lang.png" />
+            <Card
+              catagory="Programming"
+              idCat="4"
+              url="/asset/home/progamming.png"
+            />
+            <Card catagory="Sport" idCat="5" url="/asset/home/sport.png" />
           </div>
         </div>
         <hr />
@@ -67,7 +71,14 @@ const Home = () => {
                 Many instructor teach millions of students on T-DEMY. We provide
                 platform for you to be an insturctor in here
               </p>
-              <button className="btn btn-dark">Register here</button>
+              <button
+                className="btn btn-dark"
+                onClick={() => {
+                  navigate("/register");
+                }}
+              >
+                Register here
+              </button>
             </div>
           </div>
         </div>

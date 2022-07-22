@@ -5,14 +5,16 @@ import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 import NumberFormat from "react-number-format";
 import moment, { now } from "moment";
-import { notification, Descriptions, Drawer, Button } from "antd";
+import { notification, Descriptions, DatePicker, Button, Drawer } from "antd";
 import { useNavigate } from "react-router-dom";
+import CalendarComp from "./CalendarComp";
 
 const HtmlToReactParser = require("html-to-react").Parser;
 
 const ExploreClass = () => {
   let { id } = useParams();
   const [classDetail, setClassDetail] = useState({});
+  const [activeDays, setActiveDays] = useState([]);
   const [visible, setVisible] = useState(false);
 
   const htmlToReactParser = new HtmlToReactParser();
@@ -26,11 +28,42 @@ const ExploreClass = () => {
       .then((success) => {
         setClassDetail(success.data);
         console.log(success.data);
+        var activeDaysData = success.data.activeDays.split(",");
+        //console.log(activeDaysData);
+        activeDaysData = activeDaysData.map(Number);
+
+        setActiveDays(activeDaysData);
       })
       .catch((error) => {
         console.log(error);
       });
   }
+
+  const renderActiveDays = () => {
+    const comp = [];
+
+    activeDays.map((element) => {
+      var text = "";
+      if (element == 0) {
+        text = "Sunday";
+      } else if (element == 1) {
+        text = "Monday";
+      } else if (element == 2) {
+        text = "Tuesday";
+      } else if (element == 3) {
+        text = "Wednesday";
+      } else if (element == 4) {
+        text = "Thursday";
+      } else if (element == 5) {
+        text = "Friday";
+      } else if (element == 6) {
+        text = "Saturday";
+      }
+      comp.push(<p className="mt-1 mb-1">{text}</p>);
+    });
+
+    return comp;
+  };
 
   const renderJumlahClass = () => {
     const element = [];
@@ -142,6 +175,25 @@ const ExploreClass = () => {
 
       var valid = true;
 
+      //check hari
+
+      for (let i = 0; i < dateStart.length; i++) {
+        const dStart = moment(dateStart[i]);
+
+        const daysStart = dStart.days();
+
+        // console.log(daysStart);
+        // console.log(activeDays);
+        //console.log(activeDays.includes(daysStart));
+        if (activeDays.includes(daysStart) == false) {
+          valid = false;
+          notification.error({
+            message: "Error",
+            description: "Instructor inactive day at time " + (i + 1),
+          });
+        }
+      }
+
       for (let i = 0; i < dateStart.length; i++) {
         const dStart = moment(dateStart[i]);
         const dEnd = moment(dateEnd[i]);
@@ -155,40 +207,75 @@ const ExploreClass = () => {
             description: "Invalid time " + (i + 1),
           });
         }
-        console.log(dStart.hour());
+
         const tStart = String(classDetail.timeStart);
         const tEnd = String(classDetail.timeEnd);
 
-        const ttimeStart = tStart.split(":");
-        const ttimeEnd = tEnd.split(":");
+        const arrTimeStart = tStart.split(":");
+        const arrTimeEnd = tEnd.split(":");
 
-        //console.log(ttimeStart);
-
-        var tempDStart = dStart;
-        var tempDEnd = dEnd;
-
-        var insTimeStart = tempDStart.set({
-          hour: ttimeStart[0],
-          minute: ttimeStart[1],
-          second: ttimeStart[2],
+        const momentTimeStart = moment({
+          h: arrTimeStart[0],
+          m: arrTimeStart[1],
         });
 
-        var insTimeEnd = tempDEnd.set({
-          hour: ttimeEnd[0],
-          minute: ttimeEnd[1],
-          second: ttimeEnd[2],
+        const momentTimeEnd = moment({
+          h: arrTimeEnd[0],
+          m: arrTimeEnd[1],
         });
 
-        if (!moment(dateStart[i]).isBetween(insTimeStart, insTimeEnd)) {
-          console.log("menumpuk");
+        const momentTimeCourseStart = moment({
+          h: dStart.hours(),
+          m: dStart.minutes(),
+        });
+
+        // console.log(momentTimeStart);
+        // console.log(momentTimeEnd);
+        // console.log(momentTimeCourseStart);
+
+        if (!momentTimeCourseStart.isBetween(momentTimeStart, momentTimeEnd)) {
+          console.log("invalid");
           valid = false;
           notification.error({
             message: "Error",
             description: "Invalid instructor time " + (i + 1),
           });
         }
+        // console.log(dStart.hour());
+        // const tStart = String(classDetail.timeStart);
+        // const tEnd = String(classDetail.timeEnd);
+
+        // const ttimeStart = tStart.split(":");
+        // const ttimeEnd = tEnd.split(":");
+
+        // //console.log(ttimeStart);
+
+        // var tempDStart = dStart;
+        // var tempDEnd = dEnd;
+
+        // var insTimeStart = tempDStart.set({
+        //   hour: ttimeStart[0],
+        //   minute: ttimeStart[1],
+        //   second: ttimeStart[2],
+        // });
+
+        // var insTimeEnd = tempDEnd.set({
+        //   hour: ttimeEnd[0],
+        //   minute: ttimeEnd[1],
+        //   second: ttimeEnd[2],
+        // });
+
+        // if (!moment(dateStart[i]).isBetween(insTimeStart, insTimeEnd)) {
+        //   console.log("menumpuk");
+        //   valid = false;
+        //   notification.error({
+        //     message: "Error",
+        //     description: "Invalid instructor time " + (i + 1),
+        //   });
+        // }
       }
       if (valid) {
+        alert("valid");
         axios
           .post(BackendUrl + "/user/submissionClass", {
             token: token,
@@ -261,13 +348,20 @@ const ExploreClass = () => {
     }
     return katText;
   }
+  const showDrawer = () => {
+    setVisible(true);
+  };
+
+  const closeDrawer = () => {
+    setVisible(false);
+  };
   return (
     <>
       <Navbarr />
-      <div className="container mt-3">
+      <div className="container mt-3 mb-5">
         <div className="row">
           <div className="col-12">
-            <div className="card card-shadow">
+            <div className="card card-shadow mb-5">
               <div className="card-body">
                 <h1 className="mb-0">{classDetail.title} Course</h1>
                 <hr />
@@ -305,12 +399,18 @@ const ExploreClass = () => {
                       <Descriptions.Item label="Total class">
                         {classDetail.classCount} class
                       </Descriptions.Item>
-                      <Descriptions.Item label="Available time">
+                      <Descriptions.Item label="Available time" span={3}>
                         <div className="d-flex justify-content-between">
                           <div className="center">
                             {classDetail.timeStart} to {classDetail.timeEnd}
                           </div>
+                          <Button type="primary" onClick={showDrawer}>
+                            Schedule
+                          </Button>
                         </div>
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Available days">
+                        {renderActiveDays()}
                       </Descriptions.Item>
                     </Descriptions>
                     <hr />
@@ -336,6 +436,15 @@ const ExploreClass = () => {
           <div className="col-12"></div>
         </div>
       </div>
+      <Drawer
+        title="Schedule"
+        placement="right"
+        size="large"
+        visible={visible}
+        onClose={closeDrawer}
+      >
+        <CalendarComp idInstructor={classDetail.idInstructor} />
+      </Drawer>
     </>
   );
 };

@@ -59,7 +59,7 @@ const InstructorDetailSchedule = () => {
           <img
             src={BackendUrl + hSubmission.userImage}
             className="w-100"
-            style={{ aspectRatio: "4/3" }}
+            style={{ aspectRatio: "3/4" }}
           />
         </>
       );
@@ -129,10 +129,10 @@ const InstructorDetailSchedule = () => {
         console.log(error);
       });
 
-    const temp = hSubmission;
-    temp.status = action;
-    setHSubmission(temp);
-    window.location.reload();
+    // const temp = hSubmission;
+    // temp.status = action;
+    // setHSubmission(temp);
+    // window.location.reload();
   }
 
   function createClass(e, idUser, idSubmission) {
@@ -183,6 +183,7 @@ const InstructorDetailSchedule = () => {
 
   const renderButton = (subMissionItem) => {
     console.log(subMissionItem);
+
     if (
       hSubmission.status == 0 ||
       hSubmission.status == 2 ||
@@ -300,35 +301,52 @@ const InstructorDetailSchedule = () => {
       </div> */}
       <div className="container mt-3 mb-4">
         <div className="row">
-          <div className="col-5">
+          <div className="col-6">
             <div className="card">
               <div className="card-body">
-                <h3>Detail Class</h3>
-                <hr />
-                <div>
-                  <img
-                    src={BackendUrl + hSubmission.image}
-                    className="w-100"
-                    style={{ aspectRatio: "4/3" }}
-                  />
-                  <h5 className="text-muted mt-2 mb-0">
-                    {hSubmission.title} class
-                  </h5>
-                  <p>Applied at {timeString(hSubmission.timeInsert)}</p>
+                <div className="row">
+                  <div className="col-6">
+                    <div className="card">
+                      <div className="card-body">
+                        <h3 className="text-center">Detail Class</h3>
+                        <hr />
+                        <div>
+                          <img
+                            src={BackendUrl + hSubmission.image}
+                            className="w-100"
+                            style={{ aspectRatio: "4/3" }}
+                          />
+                          <h5 className="text-muted mt-2 mb-0">
+                            {hSubmission.title} class
+                          </h5>
+                          <p>Applied at {timeString(hSubmission.timeInsert)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="card h-100">
+                      <div className="card-body">
+                        <h4 className="text-center">Detail student</h4>
+                        <hr />
+                        <div className="text-center">
+                          {renderUserImage()}
+                          <h5 className="text-muted mt-2">
+                            {hSubmission.name}
+                          </h5>
+                        </div>
+                        <hr />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 mt-3 d-flex justify-content-end">
+                    <div>{btnAction()}</div>
+                  </div>
                 </div>
-
-                <h4>Detail student</h4>
-                <hr />
-                <div>
-                  {renderUserImage()}
-                  <h5 className="text-muted mt-2">{hSubmission.name}</h5>
-                </div>
-                <hr />
-                <div>{btnAction()}</div>
               </div>
             </div>
           </div>
-          <div className="col-7">
+          <div className="col-6">
             <div className="card">
               <div className="card-body">
                 <h3>Schedule</h3>
