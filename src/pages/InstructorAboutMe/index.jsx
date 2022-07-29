@@ -5,6 +5,8 @@ import { Document, Page, pdfjs } from "react-pdf";
 import { Input, Tabs, notification, TimePicker, Checkbox } from "antd";
 import moment from "moment";
 
+import { AiFillSave } from "react-icons/ai";
+
 const InstructorAboutMe = () => {
   const [userInfo, setUserInfo] = useState({});
   const [instructorInfo, setInstructorInfo] = useState({});
@@ -21,6 +23,10 @@ const InstructorAboutMe = () => {
   const [detail, setDetail] = useState("");
   const [time, setTime] = useState();
   const { TextArea } = Input;
+
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
@@ -129,6 +135,107 @@ const InstructorAboutMe = () => {
   useEffect(() => {
     getDetailIns();
   }, []);
+
+  const changePasswordOnClick = (e) => {
+    e.preventDefault();
+
+    if (
+      currentPassword == "" ||
+      newPassword == "" ||
+      newPasswordConfirmation == ""
+    ) {
+      notification.error({
+        message: "Error",
+        description: "Please fill the empty field",
+      });
+    } else {
+      if (newPassword == newPasswordConfirmation) {
+        axios
+          .post(BackendUrl + "/user/changePassword", {
+            token: localStorage.getItem("token"),
+          })
+          .then((response) => {
+            console.log(response);
+            if (response.data.status) {
+              notification.success({
+                message: "Success",
+                description: response.data.msg,
+              });
+            } else {
+              notification.error({
+                message: "Error",
+                description: response.data.msg,
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        notification.error({
+          message: "Error",
+          description: "Password confirmation not same",
+        });
+      }
+    }
+  };
+
+  const changePasswordComp = () => {
+    return (
+      <>
+        <div class="form-group row mt-2">
+          <label for="name" className="col-sm-3 col-form-label">
+            Current password
+          </label>
+          <div class="col-sm-9">
+            <Input
+              type="password"
+              value={currentPassword}
+              onChange={(e) => {
+                setCurrentPassword(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+        <div class="form-group row mt-2">
+          <label for="name" className="col-sm-3 col-form-label">
+            New password
+          </label>
+          <div class="col-sm-9">
+            <Input
+              type="password"
+              value={newPassword}
+              onChange={(e) => {
+                setNewPassword(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+        <div class="form-group row mt-2">
+          <label for="name" className="col-sm-3 col-form-label">
+            New password confirmation
+          </label>
+          <div class="col-sm-9">
+            <Input
+              type="password"
+              value={newPasswordConfirmation}
+              onChange={(e) => {
+                setNewPasswordConfirmation(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+        <div className="d-flex justify-content-end">
+          <button
+            className="btn btn-success"
+            onClick={(e) => changePasswordOnClick(e)}
+          >
+            Save <AiFillSave />
+          </button>
+        </div>
+      </>
+    );
+  };
 
   const katagoriComp = () => {
     let katagori = "";
@@ -381,7 +488,10 @@ const InstructorAboutMe = () => {
                   <TabPane tab="User Info" key="1">
                     {compUserInfo()}
                   </TabPane>
-                  <TabPane tab="Document" key="2">
+                  <TabPane tab="Change Password" key="2">
+                    {changePasswordComp()}
+                  </TabPane>
+                  <TabPane tab="Document" key="3">
                     {compBerkas()}
                   </TabPane>
                 </Tabs>

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
-import { notification, Button } from "antd";
+import { notification, Button, Collapse, Descriptions } from "antd";
 import { useNavigate } from "react-router-dom";
+import NumberFormat from "react-number-format";
+import moment from "moment";
 
 const InstructorDetailSchedule = () => {
   let { id } = useParams();
@@ -11,6 +13,59 @@ const InstructorDetailSchedule = () => {
   const navigate = useNavigate();
   const [hSubmission, setHSubmission] = useState({});
   const [listSubmission, setListSubmission] = useState([]);
+  const [userDetail, setUserDetail] = useState({});
+  const [classDetail, setClassDetail] = useState({});
+
+  const { Panel } = Collapse;
+
+  function getUserDetail(idUser) {
+    axios
+      .get(BackendUrl + "/user/getUser?id=" + idUser)
+      .then((success) => {
+        setUserDetail(success.data);
+        console.log(success.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const monthText = [
+    "January",
+    "Febuary",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  function getClassDetail(idClass) {
+    axios
+      .get(BackendUrl + "/user/getClassDetail?id=" + idClass)
+      .then((success) => {
+        setClassDetail(success.data);
+        console.log(success.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   function getListSubmission() {
     axios
@@ -24,6 +79,11 @@ const InstructorDetailSchedule = () => {
       .then((success) => {
         console.log(success.data);
         setListSubmission(success.data);
+        const idUser = success.data[0].idUser;
+        const idClass = success.data[0].idClass;
+
+        getClassDetail(idClass);
+        getUserDetail(idUser);
       })
       .catch((error) => {
         console.log(error);
@@ -58,12 +118,77 @@ const InstructorDetailSchedule = () => {
         <>
           <img
             src={BackendUrl + hSubmission.userImage}
-            className="w-100"
+            className="w-75"
             style={{ aspectRatio: "3/4" }}
           />
         </>
       );
     }
+  };
+
+  const renderTimeApliedAT = () => {
+    var timeText = "";
+    const momentAppliedat = moment(hSubmission.timeInsert);
+    timeText =
+      momentAppliedat.date() +
+      " " +
+      monthText[momentAppliedat.month()] +
+      " " +
+      momentAppliedat.year() +
+      " at " +
+      momentAppliedat.hours() +
+      ":" +
+      momentAppliedat.minutes();
+    return timeText;
+  };
+
+  const renderPotentialIncome = () => {
+    let potentialIncome = classDetail.price;
+
+    potentialIncome = (potentialIncome * 95) / 100;
+
+    return potentialIncome;
+  };
+
+  const userDescription = () => {
+    return (
+      <>
+        <Descriptions bordered title="Student Info" size="small">
+          <Descriptions.Item label="Email" span={3}>
+            {userDetail.email}
+          </Descriptions.Item>
+          <Descriptions.Item label="Name" span={3}>
+            {userDetail.name}
+          </Descriptions.Item>
+          <Descriptions.Item label="Phone number" span={3}>
+            {userDetail.phoneNumber}
+          </Descriptions.Item>
+        </Descriptions>
+      </>
+    );
+  };
+
+  const classDesciption = () => {
+    return (
+      <>
+        <Descriptions bordered title="Class Info" size="small">
+          <Descriptions.Item label="Title" span={3}>
+            {classDetail.title}
+          </Descriptions.Item>
+          <Descriptions.Item label="Duration" span={3}>
+            {classDetail.duration} minutes
+          </Descriptions.Item>
+          <Descriptions.Item label="Phone number" span={3}>
+            <NumberFormat
+              value={classDetail.price}
+              className="foo"
+              displayType={"text"}
+              thousandSeparator={true}
+            />
+          </Descriptions.Item>
+        </Descriptions>
+      </>
+    );
   };
 
   useEffect(() => {
@@ -302,47 +427,58 @@ const InstructorDetailSchedule = () => {
       <div className="container mt-3 mb-4">
         <div className="row">
           <div className="col-6">
-            <div className="card">
+            <div className="card mb-5">
               <div className="card-body">
+                <h3>Class Info</h3>
                 <div className="row">
                   <div className="col-6">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3 className="text-center">Detail Class</h3>
-                        <hr />
-                        <div>
-                          <img
-                            src={BackendUrl + hSubmission.image}
-                            className="w-100"
-                            style={{ aspectRatio: "4/3" }}
-                          />
-                          <h5 className="text-muted mt-2 mb-0">
-                            {hSubmission.title} class
-                          </h5>
-                          <p>Applied at {timeString(hSubmission.timeInsert)}</p>
-                        </div>
-                      </div>
-                    </div>
+                    <img
+                      src={BackendUrl + hSubmission.image}
+                      className="w-100"
+                      style={{ aspectRatio: "4/3" }}
+                    />
                   </div>
                   <div className="col-6">
-                    <div className="card h-100">
-                      <div className="card-body">
-                        <h4 className="text-center">Detail student</h4>
-                        <hr />
-                        <div className="text-center">
-                          {renderUserImage()}
-                          <h5 className="text-muted mt-2">
-                            {hSubmission.name}
-                          </h5>
-                        </div>
-                        <hr />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 mt-3 d-flex justify-content-end">
+                    <h5 className="mb-1">{hSubmission.title} class</h5>
+                    <p className="text-muted">
+                      Applied at {renderTimeApliedAT()}
+                    </p>
+                    <h6>Potential Income</h6>
+                    <NumberFormat
+                      value={renderPotentialIncome()}
+                      className="foo"
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      renderText={(value, props) => (
+                        <h5 {...props}>Rp. {value}</h5>
+                      )}
+                    />
                     <div>{btnAction()}</div>
                   </div>
                 </div>
+
+                <Collapse className="mt-3">
+                  <Panel header="Detail Student" key="1">
+                    <div className="row">
+                      <div className="col-6 text-center">
+                        {renderUserImage()}
+                      </div>
+                      <div className="col-6">{userDescription()}</div>
+                    </div>
+                  </Panel>
+                  <Panel header="Detail Class" key="2">
+                    <div className="row">
+                      <div className="col-5">
+                        <img
+                          src={BackendUrl + hSubmission.image}
+                          className="w-100"
+                          style={{ aspectRatio: "4/3" }}
+                        />
+                      </div>
+                      <div className="col-7">{classDesciption()}</div>
+                    </div>
+                  </Panel>
+                </Collapse>
               </div>
             </div>
           </div>
