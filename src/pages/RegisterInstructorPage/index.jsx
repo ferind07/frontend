@@ -62,7 +62,6 @@ const RegisterInstructorPage = () => {
 
   const onClickSubmit = (e) => {
     e.preventDefault();
-    //console.log(localStorage.getItem("token"));
     console.log(time);
     console.log("btn submit clicked");
     let bodyFormData = new FormData();

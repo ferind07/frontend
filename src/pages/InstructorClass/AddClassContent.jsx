@@ -15,6 +15,41 @@ const AddClassContent = (props) => {
   const [classCount, setClassCount] = useState(1);
   const [image, setImage] = useState();
 
+  function addClass() {
+    let bodyFormData = new FormData();
+    bodyFormData.append("token", localStorage.getItem("token"));
+    bodyFormData.append("title", title);
+    bodyFormData.append("detail", value);
+    bodyFormData.append("duration", duration);
+    bodyFormData.append("price", price);
+    bodyFormData.append("classCount", classCount);
+    bodyFormData.append("classImage", image);
+
+    axios({
+      method: "post",
+      url: BackendUrl + "/user/addClass",
+      data: bodyFormData,
+      config: { headers: { "Content-Type": "multipart/form-data" } },
+    })
+      .then((success) => {
+        //console.log(success);
+        if (success.data.status == true) {
+          notification.success({
+            message: "Success",
+            description: success.data.msg,
+          });
+          setValue("");
+          setTitle("");
+          setDuration("");
+          setPrice("");
+          setImage();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   const onSubmit = (e) => {
     e.preventDefault();
 

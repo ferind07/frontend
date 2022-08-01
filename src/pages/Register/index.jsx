@@ -121,7 +121,6 @@ const Register = () => {
       },
     })
       .then((response) => {
-        console.log(response);
         alert(response.data.msg);
         navigate("/login");
       })

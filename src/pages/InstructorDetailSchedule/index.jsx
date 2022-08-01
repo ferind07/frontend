@@ -243,7 +243,7 @@ const InstructorDetailSchedule = () => {
       })
       .then((success) => {
         console.log(success);
-        notification.error({
+        notification.success({
           message: "Success",
           description: "Success accept class",
         });
