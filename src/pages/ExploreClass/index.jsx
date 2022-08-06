@@ -86,7 +86,6 @@ const ExploreClass = () => {
   }, []);
 
   function xenditPay(id, amount) {
-    console.log("xenditPay");
     axios
       .post(BackendUrl + "/user/xenditPay", {
         token: localStorage.getItem("token"),
@@ -94,7 +93,6 @@ const ExploreClass = () => {
         id: id,
       })
       .then((success) => {
-        console.log(success);
         window.open(success.data.invoice_url, "_blank");
       })
       .catch((error) => {

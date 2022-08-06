@@ -108,7 +108,6 @@ const AdminInstructor = () => {
           localStorage.getItem("token")
       )
       .then((success) => {
-        //console.log(success.data.rows);
         setDataInstructor(success.data.rows);
       })
       .catch((error) => {

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Select } from "antd";
+import { Select, notification } from "antd";
 import { Viewer } from "@react-pdf-viewer/core";
 import { Worker } from "@react-pdf-viewer/core";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
-import { Input, TimePicker, notification, Checkbox } from "antd";
+import { Input, TimePicker, Checkbox } from "antd";
 
 const RegisterInstructorPage = () => {
   const { Option } = Select;
@@ -60,10 +60,7 @@ const RegisterInstructorPage = () => {
     files.length > 0 && setUrl(URL.createObjectURL(files[0]));
   };
 
-  const onClickSubmit = (e) => {
-    e.preventDefault();
-    console.log(time);
-    console.log("btn submit clicked");
+  function registerInstructor() {
     let bodyFormData = new FormData();
     bodyFormData.append("katagori", katagori);
     bodyFormData.append("katagoriDetail", catagoryDetail);
@@ -92,6 +89,41 @@ const RegisterInstructorPage = () => {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  function checkInput() {
+    var valid = true;
+    if (catagoryDetail == "") {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "You must fill catagory detail first",
+      });
+    }
+    if (time == undefined) {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "Time not selected yet",
+      });
+    }
+    if (availableDay.length < 1) {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "Days not selected",
+      });
+    }
+    return valid;
+  }
+
+  const onClickSubmit = (e) => {
+    e.preventDefault();
+    console.log(time);
+    console.log("btn submit clicked");
+    if (checkInput()) {
+      registerInstructor();
+    }
   };
 
   const onCheckBoxChange = (checkedValue) => {

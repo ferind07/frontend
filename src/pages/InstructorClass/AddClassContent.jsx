@@ -50,41 +50,77 @@ const AddClassContent = (props) => {
       });
   }
 
+  function checkInput() {
+    var valid = true;
+    if (title == "") {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "Please fill title of the class",
+      });
+    }
+    if (value == "") {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "Please fill detail of the class",
+      });
+    }
+    if (duration == "") {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "Please fill duration of the class",
+      });
+    }
+    if (image.files.length == 0) {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "No files selected",
+      });
+    }
+    return valid;
+  }
+
   const onSubmit = (e) => {
     e.preventDefault();
 
-    let bodyFormData = new FormData();
-    bodyFormData.append("token", localStorage.getItem("token"));
-    bodyFormData.append("title", title);
-    bodyFormData.append("detail", value);
-    bodyFormData.append("duration", duration);
-    bodyFormData.append("price", price);
-    bodyFormData.append("classCount", classCount);
-    bodyFormData.append("classImage", image);
+    if (checkInput()) {
+      addClass();
+    }
+    // let bodyFormData = new FormData();
+    // bodyFormData.append("token", localStorage.getItem("token"));
+    // bodyFormData.append("title", title);
+    // bodyFormData.append("detail", value);
+    // bodyFormData.append("duration", duration);
+    // bodyFormData.append("price", price);
+    // bodyFormData.append("classCount", classCount);
+    // bodyFormData.append("classImage", image);
 
-    axios({
-      method: "post",
-      url: BackendUrl + "/user/addClass",
-      data: bodyFormData,
-      config: { headers: { "Content-Type": "multipart/form-data" } },
-    })
-      .then((success) => {
-        //console.log(success);
-        if (success.data.status == true) {
-          notification.success({
-            message: "Success",
-            description: success.data.msg,
-          });
-          setValue("");
-          setTitle("");
-          setDuration("");
-          setPrice("");
-          setImage();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // axios({
+    //   method: "post",
+    //   url: BackendUrl + "/user/addClass",
+    //   data: bodyFormData,
+    //   config: { headers: { "Content-Type": "multipart/form-data" } },
+    // })
+    //   .then((success) => {
+    //     //console.log(success);
+    //     if (success.data.status == true) {
+    //       notification.success({
+    //         message: "Success",
+    //         description: success.data.msg,
+    //       });
+    //       setValue("");
+    //       setTitle("");
+    //       setDuration("");
+    //       setPrice("");
+    //       setImage();
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   const handleImageChange = (e) => {
@@ -162,6 +198,7 @@ const AddClassContent = (props) => {
                 value={classCount}
                 onChange={(e) => setClassCount(e.target.value)}
                 min={1}
+                max={3}
               />
               <p className="mb-0 mt-2">Class Image</p>
               <input

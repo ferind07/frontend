@@ -6,7 +6,6 @@ import Calendar from "react-awesome-calendar";
 const MySchedule = (props) => {
   return (
     <div className="row">
-      <p>{props.listEvent.length}</p>
       <div className="col-12">
         <Calendar events={props.listEvent} />
       </div>

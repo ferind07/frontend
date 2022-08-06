@@ -28,7 +28,11 @@ const TopUserComp = () => {
         <img
           src={BackendUrl + image}
           alt="Avatar"
-          style={{ borderRadius: "50%" }}
+          style={{
+            aspectRatio: "3/4",
+            width: "50%",
+            border: "2px solid black",
+          }}
         />
       );
     }

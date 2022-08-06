@@ -31,6 +31,16 @@ const InstructorSchedule = () => {
       });
   }
 
+  function returnColorStatus(status) {
+    var color = "";
+    if (status == 1) {
+      color = "#2980B9";
+    } else if (status == 2) {
+      color = "#27AE60";
+    }
+    return color;
+  }
+
   function getEvent() {
     axios
       .get(
@@ -48,7 +58,7 @@ const InstructorSchedule = () => {
           const tEnd = moment(element.dateEnd).add(7, "hours").format();
           event.push({
             id: index,
-            color: element.status == 0 ? "#A36A00" : "#0F7C4F",
+            color: returnColorStatus(element.status),
             from: tFrom,
             to: tEnd,
             title: element.title + " with " + element.name,

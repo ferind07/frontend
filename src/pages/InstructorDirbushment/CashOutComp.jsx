@@ -28,6 +28,25 @@ const CashOutComp = (props) => {
       });
   }
 
+  function checkInput() {
+    var valid = true;
+    if (nominalCashOut < 10000) {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "Min Rp. 10.000 to cashout",
+      });
+    }
+    if (accountInfo.accountNumber == undefined) {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "Please select your bank account first",
+      });
+    }
+    return valid;
+  }
+
   function cashOut() {
     if (props.userInfo.saldo < nominalCashOut) {
       notification.error({
@@ -35,28 +54,31 @@ const CashOutComp = (props) => {
         description: "Not Enough Balance",
       });
     } else {
-      axios
-        .post(BackendUrl + "/user/cashOut", {
-          token: localStorage.getItem("token"),
-          amount: nominalCashOut,
-          accountHolderName: accountInfo.accountHolderName,
-          accountNumber: accountInfo.accountNumber,
-          bankCode: accountInfo.bankCode,
-          saldoBaru: parseInt(props.userInfo.saldo) - parseInt(nominalCashOut),
-        })
-        .then((success) => {
-          console.log(success);
-          if (success.data.status == true) {
-            notification.success({
-              message: "Success",
-              description: success.data.msg,
-            });
-            props.getInfo();
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (checkInput()) {
+        axios
+          .post(BackendUrl + "/user/cashOut", {
+            token: localStorage.getItem("token"),
+            amount: nominalCashOut,
+            accountHolderName: accountInfo.accountHolderName,
+            accountNumber: accountInfo.accountNumber,
+            bankCode: accountInfo.bankCode,
+            saldoBaru:
+              parseInt(props.userInfo.saldo) - parseInt(nominalCashOut),
+          })
+          .then((success) => {
+            console.log(success);
+            if (success.data.status == true) {
+              notification.success({
+                message: "Success",
+                description: success.data.msg,
+              });
+              props.getInfo();
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     }
   }
 

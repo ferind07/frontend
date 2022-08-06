@@ -550,21 +550,6 @@ const TutoringPage = (props) => {
         description: "Partner stopped share screen",
       });
 
-      console.log(shareScreenPeer);
-      // shareScreenPeerRef.current.forEach((peer) => {
-      //   console.log(peer);
-      //   peer.removeAllListeners("signal");
-      //   peer.peer.destroy();
-      // });
-      // //console.log(userVideo.current);
-
-      // console.log(shareScreenVideo);
-
-      // let tracks = shareScreenVideo.current.srcObject.getTracks();
-
-      // tracks.forEach((track) => track.stop());
-      // shareScreenVideo.current.srcObject = null;
-
       resetSC();
     });
     socketRef.current.on("newChat", (data) => {
