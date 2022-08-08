@@ -197,14 +197,14 @@ const ExploreClass = () => {
         const dEnd = moment(dateEnd[i]);
         const dNow = moment();
 
-        if (dStart < dNow) {
-          console.log("invalid date");
-          valid = false;
-          notification.error({
-            message: "Error",
-            description: "Invalid time " + (i + 1),
-          });
-        }
+        // if (dStart < dNow) {
+        //   console.log("invalid date");
+        //   valid = false;
+        //   notification.error({
+        //     message: "Error",
+        //     description: "Invalid time " + (i + 1),
+        //   });
+        // }
 
         const tStart = String(classDetail.timeStart);
         const tEnd = String(classDetail.timeEnd);
