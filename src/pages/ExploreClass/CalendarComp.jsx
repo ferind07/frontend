@@ -22,8 +22,8 @@ const CalendarComp = (props) => {
           const temp = {
             id: index + 1,
             color: "#fd3153",
-            from: moment(element.dateStart).add(7, "hours").format(),
-            to: moment(element.dateEnd).add(7, "hours").format(),
+            from: moment(element.dateStart).add(0, "hours").format(),
+            to: moment(element.dateEnd).add(0, "hours").format(),
             title: "Unavailable",
           };
           eventDataArr.push(temp);

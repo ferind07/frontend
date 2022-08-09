@@ -18,6 +18,9 @@ const UnconfirmedSchedule = (props) => {
   const { Option } = Select;
 
   function loadSubmission() {
+    console.log(
+      BackendUrl + "/user/getSchedule?token=" + localStorage.getItem("token")
+    );
     axios
       .get(
         BackendUrl + "/user/getSchedule?token=" + localStorage.getItem("token")
@@ -123,9 +126,12 @@ const UnconfirmedSchedule = (props) => {
         if (dd < 10) dd = "0" + dd;
         //if (mm < 10) mm = "0" + mm;
 
-        var formatteddatestr = moment(detailSchedule.timeInsert).format(
-          "hh:mm a"
-        );
+        var formatteddatestr = moment(detailSchedule.timeInsert)
+          .add(17, "hours")
+          .format("hh:mm a");
+        // var formatteddatestr = moment(detailSchedule.timeInsert).format(
+        //   "hh:mm a"
+        // );
         const dateStr =
           dayList[today.getDay()] +
           ", " +

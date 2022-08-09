@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import BackendUrl from "../../components/BackendUrl";
 import axios from "axios";
-import { Document, Page, pdfjs } from "react-pdf";
-import { Input, Tabs, notification, TimePicker, Checkbox } from "antd";
+import { Input, Tabs, notification, TimePicker, Checkbox, Button } from "antd";
 import moment from "moment";
+import { Worker } from "@react-pdf-viewer/core";
+// Import the main Viewer component
+import { Viewer } from "@react-pdf-viewer/core";
+// Import the styles
+import "@react-pdf-viewer/core/lib/styles/index.css";
+// default layout plugin
+import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+// Import styles of default layout plugin
+import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 import { AiFillSave } from "react-icons/ai";
 
@@ -14,13 +22,15 @@ const InstructorAboutMe = () => {
   const [numPages, setNumPages] = useState(null);
   const [activeDays, setActiveDays] = useState([]);
   let [pageNumber, setPageNumber] = useState(1);
+  const [berkas, setBerkas] = useState();
 
-  pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
+  //pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
   const { TabPane } = Tabs;
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [detail, setDetail] = useState("");
+  const [katagoriDetail, setKatagoriDetail] = useState("");
   const [time, setTime] = useState();
   const { TextArea } = Input;
 
@@ -65,6 +75,7 @@ const InstructorAboutMe = () => {
         tempTime.push(timeStart);
         tempTime.push(timeEnd);
         console.log(success.data);
+        setKatagoriDetail(success.data.katagoriDetail);
 
         const activeDaysArr = success.data.activeDays.split(",");
         //console.log(activeDaysArr);
@@ -258,44 +269,103 @@ const InstructorAboutMe = () => {
     );
   };
 
+  // creating new plugin instance
+  const defaultLayoutPluginInstance = defaultLayoutPlugin();
+
+  // pdf file onChange state
+  const [pdfFile, setPdfFile] = useState(null);
+
+  // pdf file error state
+  const [pdfError, setPdfError] = useState("");
+
+  const allowedFiles = ["application/pdf"];
+  const uploadBerkas = (e) => {
+    let selectedFile = e.target.files[0];
+    // console.log(selectedFile.type);
+    if (selectedFile) {
+      if (selectedFile && allowedFiles.includes(selectedFile.type)) {
+        let reader = new FileReader();
+        reader.readAsDataURL(selectedFile);
+        reader.onloadend = (e) => {
+          setPdfError("");
+          setPdfFile(e.target.result);
+          setBerkas(selectedFile);
+        };
+      } else {
+        notification.error({
+          message: "Error",
+          description: "Not a valid pdf: Please select only PDF",
+        });
+      }
+    } else {
+      console.log("please select a PDF");
+      notification.error({
+        message: "Error",
+        description: "please select a PDF",
+      });
+    }
+  };
+  const onClickSave = (e) => {
+    let bodyFormData = new FormData();
+    bodyFormData.append("token", localStorage.getItem("token"));
+    bodyFormData.append("berkas", berkas);
+
+    axios({
+      method: "post",
+      url: BackendUrl + "/user/updateBerkas",
+      data: bodyFormData,
+      config: { headers: { "Content-Type": "multipart/form-data" } },
+    })
+      .then((success) => {
+        if (success.data.status) {
+          notification.success({
+            message: "Success",
+            description: success.data.msg,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const renderDocument = () => {
+    let url = "";
+    if (pdfFile) {
+      url = pdfFile;
+    } else {
+      url = BackendUrl + instructorInfo.berkas;
+    }
+    return (
+      <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.min.js">
+        <Viewer fileUrl={url} plugins={[defaultLayoutPluginInstance]}></Viewer>
+      </Worker>
+    );
+  };
+
   const compBerkas = () => {
     return (
       <>
         <div>
           <div className="mb-2">
-            <button
-              className="btn btn-success"
-              onClick={(e) => {
-                e.preventDefault();
-                if (pageNumber > 0) {
-                  setPageNumber(pageNumber--);
-                }
-              }}
-            >
-              -
-            </button>
-            <button
-              className="btn btn-success"
-              onClick={(e) => {
-                e.preventDefault();
-                if (pageNumber < numPages) {
-                  setPageNumber(pageNumber++);
-                }
-              }}
-            >
-              +
-            </button>
+            <div className="row">
+              <div className="col-6">
+                <h5>Document</h5>
+                {renderDocument()}
+              </div>
+              <div className="col-6">
+                <h5>Change Docuement</h5>
+                <input
+                  type="file"
+                  className="form-control-file"
+                  onChange={uploadBerkas}
+                />
+                <br />
+                <Button type="primary" className="mt-2" onClick={onClickSave}>
+                  Save
+                </Button>
+              </div>
+            </div>
           </div>
-
-          <Document
-            file={BackendUrl + instructorInfo.berkas}
-            onLoadSuccess={onDocumentLoadSuccess}
-          >
-            <Page pageNumber={pageNumber} scale={0.75} />
-          </Document>
-          <p>
-            Page {pageNumber} of {numPages}
-          </p>
         </div>
       </>
     );
@@ -369,6 +439,22 @@ const InstructorAboutMe = () => {
             </div>
             <div className="form-group row">
               <label for="name" className="col-sm-2 col-form-label">
+                Catagory Detail
+              </label>
+              <div class="col-sm-10">
+                <Input
+                  type="text"
+                  id="name"
+                  value={katagoriDetail}
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setKatagoriDetail(e.target.value);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="form-group row">
+              <label for="name" className="col-sm-2 col-form-label">
                 Phone Number
               </label>
               <div class="col-sm-10">
@@ -424,6 +510,7 @@ const InstructorAboutMe = () => {
                 />
               </div>
             </div>
+
             <div className="d-flex justify-content-end mt-2">
               <button
                 className="btn btn-success"
@@ -442,6 +529,53 @@ const InstructorAboutMe = () => {
     );
   };
 
+  function checkValid() {
+    var valid = true;
+    if (name == "") {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "Please set name",
+      });
+    }
+    if (phone == "") {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "Please set phone number",
+      });
+    }
+    if (detail == "") {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "Please set detail",
+      });
+    }
+    if (time == undefined) {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "Please set time",
+      });
+    }
+    if (activeDays.length < 1) {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "Please set active days",
+      });
+    }
+    if (katagoriDetail == "") {
+      valid = false;
+      notification.error({
+        message: "Error",
+        description: "Please set catagory detail",
+      });
+    }
+    return valid;
+  }
+
   const saveOnclick = (e) => {
     e.preventDefault();
     let bodyFormData = new FormData();
@@ -453,26 +587,29 @@ const InstructorAboutMe = () => {
     bodyFormData.append("timeEnd", time[1]);
     bodyFormData.append("userProfile", image);
     bodyFormData.append("activeDays", activeDays);
+    bodyFormData.append("katagoriDetail", katagoriDetail);
 
-    axios({
-      method: "post",
-      url: BackendUrl + "/user/updateInstructor",
-      data: bodyFormData,
-      config: { headers: { "Content-Type": "multipart/form-data" } },
-    })
-      .then((success) => {
-        console.log(success);
-        if (success.data.status) {
-          notification.success({
-            message: "success",
-            description: success.data.msg,
-          });
-        } else {
-        }
+    if (checkValid()) {
+      axios({
+        method: "post",
+        url: BackendUrl + "/user/updateInstructor",
+        data: bodyFormData,
+        config: { headers: { "Content-Type": "multipart/form-data" } },
       })
-      .catch((error) => {
-        console.log(error);
-      });
+        .then((success) => {
+          console.log(success);
+          if (success.data.status) {
+            notification.success({
+              message: "success",
+              description: success.data.msg,
+            });
+          } else {
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
@@ -480,7 +617,7 @@ const InstructorAboutMe = () => {
       <div className="container mt-3">
         <div className="row">
           <div className="col-12">
-            <div className="card card-shadow">
+            <div className="card card-shadow mb-5">
               <div className="card-body">
                 <h4>User Info</h4>
                 <hr />

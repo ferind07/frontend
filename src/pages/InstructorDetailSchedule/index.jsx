@@ -128,7 +128,7 @@ const InstructorDetailSchedule = () => {
 
   const renderTimeApliedAT = () => {
     var timeText = "";
-    const momentAppliedat = moment(hSubmission.timeInsert);
+    const momentAppliedat = moment(hSubmission.timeInsert).add(17, "hours");
     timeText =
       momentAppliedat.date() +
       " " +
@@ -491,36 +491,42 @@ const InstructorDetailSchedule = () => {
                     <div className="col-12">
                       {listSubmission.map((subMissionItem, i) => {
                         //console.log(subMissionItem);
-                        const dateStart = new Date(subMissionItem.dateStart);
+                        const dateStart = moment(subMissionItem.dateStart).add(
+                          17,
+                          "hours"
+                        );
                         const dateStartString =
-                          dateStart.getDate() +
+                          dateStart.date() +
                           "/" +
-                          (dateStart.getMonth() + 1) +
+                          (dateStart.month() + 1) +
                           "/" +
-                          dateStart.getFullYear() +
+                          dateStart.year() +
                           " " +
-                          (dateStart.getHours() < 10
-                            ? "0" + dateStart.getHours()
-                            : dateStart.getHours()) +
+                          (dateStart.hours() < 10
+                            ? "0" + dateStart.hours()
+                            : dateStart.hours()) +
                           ":" +
-                          (dateStart.getMinutes() < 10
-                            ? "0" + dateStart.getMinutes()
-                            : dateStart.getMinutes());
-                        const dateEnd = new Date(subMissionItem.dateEnd);
+                          (dateStart.minutes() < 10
+                            ? "0" + dateStart.minutes()
+                            : dateStart.minutes());
+                        const dateEnd = moment(subMissionItem.dateEnd).add(
+                          17,
+                          "hours"
+                        );
                         const dateEndString =
-                          dateEnd.getDate() +
+                          dateEnd.date() +
                           "/" +
-                          (dateEnd.getMonth() + 1) +
+                          (dateEnd.month() + 1) +
                           "/" +
-                          dateEnd.getFullYear() +
+                          dateEnd.year() +
                           " " +
-                          (dateEnd.getHours() < 10
-                            ? "0" + dateEnd.getHours()
-                            : dateEnd.getHours()) +
+                          (dateEnd.hours() < 10
+                            ? "0" + dateEnd.hours()
+                            : dateEnd.hours()) +
                           ":" +
-                          (dateEnd.getMinutes() < 10
-                            ? "0" + dateEnd.getMinutes()
-                            : dateEnd.getMinutes());
+                          (dateEnd.minutes() < 10
+                            ? "0" + dateEnd.minutes()
+                            : dateEnd.minutes());
                         return (
                           <>
                             <div className="mt-2" key={i}>

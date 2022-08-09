@@ -7,15 +7,47 @@ import BackendUrl from "../../components/BackendUrl";
 const ForgetPassword = () => {
   const [email, setEmail] = useState("");
 
-  function forgetPassword() {
-    axios
-      .post(BackendUrl + "/user/forgetPassword", { email: email })
-      .then((success) => {
-        console.log(success);
-      })
-      .catch((error) => {
-        console.log(error);
+  function validateEmail(email) {
+    let re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (re.test(email)) {
+      return true;
+    } else {
+      if (email == "") {
+        //message.error("Insert email");
+        notification.error({
+          message: "Error",
+          description: "Please insert email",
+        });
+        return false;
+      }
+      //message.error("Wrong email");
+      notification.error({
+        message: "Error",
+        description: "Wrong email format",
       });
+      return false;
+    }
+  }
+
+  function forgetPassword() {
+    if (validateEmail(email)) {
+      axios
+        .post(BackendUrl + "/user/forgetPassword", { email: email })
+        .then((success) => {
+          console.log(success);
+          if (success.data.status == false) {
+            notification.error({
+              message: "Error",
+              description: success.data.msg,
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }
 
   return (
