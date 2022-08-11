@@ -60,7 +60,7 @@ const ReviewPage = () => {
       });
       return compList;
     } else {
-      return <Empty />;
+      return <Empty className="mt-5" />;
     }
   }
 

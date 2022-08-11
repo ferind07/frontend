@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
-import { notification, Button, Collapse, Descriptions } from "antd";
+import { notification, Button, Collapse, Descriptions, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
 import NumberFormat from "react-number-format";
 import moment from "moment";
@@ -128,7 +128,7 @@ const InstructorDetailSchedule = () => {
 
   const renderTimeApliedAT = () => {
     var timeText = "";
-    const momentAppliedat = moment(hSubmission.timeInsert).add(17, "hours");
+    const momentAppliedat = moment(hSubmission.timeInsert).add(0, "hours");
     timeText =
       momentAppliedat.date() +
       " " +
@@ -136,9 +136,13 @@ const InstructorDetailSchedule = () => {
       " " +
       momentAppliedat.year() +
       " at " +
-      momentAppliedat.hours() +
+      (momentAppliedat.hours() < 10
+        ? "0" + momentAppliedat.hours()
+        : momentAppliedat.hours()) +
       ":" +
-      momentAppliedat.minutes();
+      (momentAppliedat.minutes() < 10
+        ? "0" + momentAppliedat.minutes()
+        : momentAppliedat.minutes());
     return timeText;
   };
 
@@ -221,6 +225,9 @@ const InstructorDetailSchedule = () => {
         .post(BackendUrl + "/user/declineClass", {
           idUser: hSubmission.idUser,
           price: hSubmission.price,
+          idUser: userDetail.id,
+          saldoUser: userDetail.saldo,
+          price: classDetail.price,
         })
         .then((success) => {
           console.log(success);
@@ -310,13 +317,16 @@ const InstructorDetailSchedule = () => {
     console.log(subMissionItem);
 
     if (
-      hSubmission.status == 0 ||
-      hSubmission.status == 2 ||
-      subMissionItem.status == 2
+      hSubmission.status == 0 || //unconfirm
+      hSubmission.status == 2 || //decline
+      hSubmission.status == 7 ||
+      subMissionItem.status == 2 ||
+      subMissionItem.status == 5
     ) {
       return (
         <>
           <button
+            style={{ marginRight: "10px" }}
             className="btn btn-primary"
             onClick={(e) => {
               createClass(e, subMissionItem.idUser, subMissionItem.id);
@@ -325,6 +335,7 @@ const InstructorDetailSchedule = () => {
           >
             Create Class
           </button>
+          {subMissionItem.status == 5 ? <Tag color="red">Reported</Tag> : ""}
         </>
       );
     } else {
@@ -338,6 +349,7 @@ const InstructorDetailSchedule = () => {
           >
             Create Class
           </button>
+          <p></p>
         </>
       );
     }
@@ -492,7 +504,7 @@ const InstructorDetailSchedule = () => {
                       {listSubmission.map((subMissionItem, i) => {
                         //console.log(subMissionItem);
                         const dateStart = moment(subMissionItem.dateStart).add(
-                          17,
+                          0,
                           "hours"
                         );
                         const dateStartString =
@@ -510,7 +522,7 @@ const InstructorDetailSchedule = () => {
                             ? "0" + dateStart.minutes()
                             : dateStart.minutes());
                         const dateEnd = moment(subMissionItem.dateEnd).add(
-                          17,
+                          0,
                           "hours"
                         );
                         const dateEndString =

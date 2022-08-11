@@ -178,6 +178,13 @@ const Navbarr = (props) => {
         >
           History
         </NavDropdown.Item>
+        <NavDropdown.Item
+          onClick={(e) => {
+            navigate("/reportPage");
+          }}
+        >
+          Report
+        </NavDropdown.Item>
       </NavDropdown>
     );
   };

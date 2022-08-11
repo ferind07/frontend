@@ -4,7 +4,7 @@ import axios from "axios";
 import Navbarr from "../../components/Navbar";
 import BackendUrl from "../../components/BackendUrl";
 import { AiFillSave } from "react-icons/ai";
-import { Input, notification, Tabs } from "antd";
+import { Input, notification, Tabs, Button } from "antd";
 
 function MyAccount() {
   let [userData, setUserData] = useState({});
@@ -70,13 +70,31 @@ function MyAccount() {
     }
   };
 
+  const onClickDelete = (e) => {
+    e.preventDefault();
+    axios
+      .post(BackendUrl + "/user/deleteProfilePic", {
+        token: localStorage.getItem("token"),
+      })
+      .then((success) => {
+        if (success.data.status) {
+          notification.success({
+            message: "Success",
+            description: success.data.msg,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const saveOnclick = (e) => {
     e.preventDefault();
     let bodyFormData = new FormData();
     bodyFormData.append("token", localStorage.getItem("token"));
     bodyFormData.append("name", name);
     bodyFormData.append("phoneNumber", phoneNumber);
-
     bodyFormData.append("userProfile", image);
 
     axios({
@@ -91,6 +109,7 @@ function MyAccount() {
             message: "success",
             description: success.data.msg,
           });
+          getInfo();
         } else {
         }
       })
@@ -261,8 +280,10 @@ function MyAccount() {
                         onChange={(e) => handleImageChange(e)}
                       />
                     </div>
-                    <div className="d-flex justify-content-center">
-                      <a className="text-danger">Delete image</a>
+                    <div className="d-flex justify-content-center mt-3">
+                      <Button type="danger" onClick={onClickDelete}>
+                        Delete Image
+                      </Button>
                     </div>
                   </div>
                 </div>

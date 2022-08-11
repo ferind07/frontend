@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import BackendUrl from "../../components/BackendUrl";
 import moment from "moment";
 import axios from "axios";
-import { Drawer, notification, Button } from "antd";
+import { Drawer, notification, Button, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const ScheduleCard = (props) => {
@@ -28,9 +28,9 @@ const ScheduleCard = (props) => {
   if (mm < 10) mm = "0" + mm;
 
   var formatteddatestr = moment(props.submissionDetail.timeInsert)
-    .add(17, "hours")
-    .format("hh:mm a");
-  const dateStr = dd + "/" + mm + "/" + yyyy + " " + formatteddatestr;
+    .add(0, "hours")
+    .format("dddd, DD MMMM yyyy kk:mm");
+  const dateStr = formatteddatestr;
 
   useEffect(() => {
     getSubmission();
@@ -90,6 +90,10 @@ const ScheduleCard = (props) => {
       text = "Expired";
     } else if (props.submissionDetail.status == 5) {
       text = "Waiting for payment";
+    } else if (props.submissionDetail.status == 6) {
+      text = "Reported";
+    } else if (props.submissionDetail.status == 7) {
+      text = "Ended by admin";
     }
 
     return text;
@@ -125,6 +129,8 @@ const ScheduleCard = (props) => {
           Join Class
         </button>
       );
+    } else if (subMissionItem.status == 5) {
+      return <Tag color="red">Reported</Tag>;
     }
   };
 
@@ -179,7 +185,7 @@ const ScheduleCard = (props) => {
             {submissionList.map((subMissionItem, i) => {
               //console.log(subMissionItem);
               const dateStart = moment(subMissionItem.dateStart).add(
-                17,
+                0,
                 "hours"
               );
               const dateStartString =
@@ -196,7 +202,7 @@ const ScheduleCard = (props) => {
                 (dateStart.minutes() < 10
                   ? "0" + dateStart.minutes()
                   : dateStart.minutes());
-              const dateEnd = moment(subMissionItem.dateEnd).add(17, "hours");
+              const dateEnd = moment(subMissionItem.dateEnd).add(0, "hours");
               const dateEndString =
                 dateEnd.date() +
                 "/" +

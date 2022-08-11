@@ -53,6 +53,10 @@ const UnconfirmedSchedule = (props) => {
         text = "Expired";
       } else if (detailSchedule.status == 5) {
         text = "Unpaid";
+      } else if (detailSchedule.status == 6) {
+        text = "Reported";
+      } else if (detailSchedule.status == 7) {
+        text = "Ended by admin";
       }
 
       return text;
@@ -127,7 +131,7 @@ const UnconfirmedSchedule = (props) => {
         //if (mm < 10) mm = "0" + mm;
 
         var formatteddatestr = moment(detailSchedule.timeInsert)
-          .add(17, "hours")
+          .add(0, "hours")
           .format("hh:mm a");
         // var formatteddatestr = moment(detailSchedule.timeInsert).format(
         //   "hh:mm a"

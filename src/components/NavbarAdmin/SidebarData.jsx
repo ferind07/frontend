@@ -32,4 +32,10 @@ export const SidebarData = [
     icon: <AiIcons.AiFillBank color="black" />,
     cName: "nav-text",
   },
+  {
+    title: "Problem",
+    path: "/admin/problem",
+    icon: <AiIcons.AiOutlineWarning color="black" />,
+    cName: "nav-text",
+  },
 ];

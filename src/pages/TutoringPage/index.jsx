@@ -82,7 +82,6 @@ const TutoringPage = (props) => {
 
   function onClickVideo(e) {
     e.preventDefault();
-    //console.log(myStream.current.srcObject.getVideoTracks());
     userVideo.current.srcObject.getVideoTracks()[0].enabled =
       !userVideo.current.srcObject.getVideoTracks()[0].enabled;
     setVideo(!video);
@@ -413,10 +412,9 @@ const TutoringPage = (props) => {
   useEffect(() => {
     getUserInfo();
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
+      .getUserMedia({ video: true, audio: false })
       .then((stream) => {
         userVideo.current.srcObject = stream;
-        //myStream.current = stream;
         socketRef.current.emit("join room", id);
         socketRef.current.on("all users", (users) => {
           //buatPeerChat(users);
@@ -549,6 +547,21 @@ const TutoringPage = (props) => {
         message: "Info",
         description: "Partner stopped share screen",
       });
+
+      console.log(shareScreenPeer);
+      // shareScreenPeerRef.current.forEach((peer) => {
+      //   console.log(peer);
+      //   peer.removeAllListeners("signal");
+      //   peer.peer.destroy();
+      // });
+      // //console.log(userVideo.current);
+
+      // console.log(shareScreenVideo);
+
+      // let tracks = shareScreenVideo.current.srcObject.getTracks();
+
+      // tracks.forEach((track) => track.stop());
+      // shareScreenVideo.current.srcObject = null;
 
       resetSC();
     });
