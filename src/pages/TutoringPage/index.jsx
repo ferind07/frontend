@@ -24,6 +24,11 @@ const Video = (props) => {
       console.log(stream);
       ref.current.srcObject = stream;
     });
+    props.peer.on("track", (track, stream) => {
+      console.log(track);
+      console.log(stream.getVideoTracks().length);
+      ref.current.srcObject = stream;
+    });
   }, []);
   if (props.panjang == 0) {
     return (
@@ -70,6 +75,7 @@ const TutoringPage = (props) => {
   const [chatValue, setChatValue] = useState("");
   const [chat, setChat] = useState([]);
   const [connectionEstablished, setConnection] = useState(false);
+  const [shareScreenError, setShareScreenError] = useState(false);
 
   const [shareScreenPeer, setShareScreenPeer] = useState([]);
   const shareScreenPeerRef = useRef([]);
@@ -108,18 +114,39 @@ const TutoringPage = (props) => {
   // const shareScreenVideo = useRef();
   // const [shareScreenVideoStream, setShareScreenVideoStream] = useState();
 
+  // function onClickShareScreen(e) {
+  //   console.log(peersRef.current.length);
+
+  //   navigator.mediaDevices
+  //     .getDisplayMedia({ video: true, audio: true })
+  //     .then((stream) => {
+  //       peersRef.current.forEach((element) => {
+  //         //console.log(element.peer);
+  //         console.log(element.peer.streams[0]);
+  //         const shareScreenVideoTracks = stream.getVideoTracks()[0];
+  //         console.log(stream.getTracks()[0]);
+  //         element.peer.addTrack(stream.getTracks()[0], element.peer.streams[0]);
+  //       });
+  //     });
+  // }
+
+  const shareScreenRef = useRef();
+
   function onClickShareScreen(e) {
     e.preventDefault();
     if (shareScreen) {
       console.log("stop share screen");
 
-      // peersRef.current.forEach((element) => {
-      //   element.peer.replaceTrack(
-      //     element.peer.streams[0].getVideoTracks()[0],
-      //     userVideo.current.srcObject.getVideoTracks()[0],
-      //     element.peer.streams[0]
-      //   );
-      // });
+      if (shareScreenError == true) {
+        peersRef.current.forEach((element) => {
+          element.peer.replaceTrack(
+            element.peer.streams[0].getVideoTracks()[0],
+            userVideo.current.srcObject.getVideoTracks()[0],
+            element.peer.streams[0]
+          );
+        });
+      }
+
       // console.log(shareScreenPeerRef.current.length);
       // shareScreenPeerRef.current.forEach((peer) => {
       //   peer.destroy();
@@ -139,7 +166,7 @@ const TutoringPage = (props) => {
         });
       } else {
         navigator.mediaDevices
-          .getDisplayMedia({ video: true, audio: false })
+          .getDisplayMedia({ video: true, audio: true })
           .then((stream) => {
             //shareScreenVideo.current.srcObject = stream;
             //setShareScreenVideoStream(stream);
@@ -150,22 +177,14 @@ const TutoringPage = (props) => {
               stream: stream,
               iceServers: [
                 {
-                  urls: "stun:openrelay.metered.ca:80",
+                  urls: "stun:coturn.ferryindra.xyz",
+                  username: "ferry",
+                  credential: "150699",
                 },
                 {
-                  urls: "turn:openrelay.metered.ca:80",
-                  username: "openrelayproject",
-                  credential: "openrelayproject",
-                },
-                {
-                  urls: "turn:openrelay.metered.ca:443",
-                  username: "openrelayproject",
-                  credential: "openrelayproject",
-                },
-                {
-                  urls: "turn:openrelay.metered.ca:443?transport=tcp",
-                  username: "openrelayproject",
-                  credential: "openrelayproject",
+                  urls: "turn:coturn.ferryindra.xyz",
+                  username: "ferry",
+                  credential: "150699",
                 },
               ],
             });
@@ -182,6 +201,21 @@ const TutoringPage = (props) => {
               console.log("error from send peer");
               console.log(error);
               console.log(error.code);
+              peersRef.current.forEach((element) => {
+                // const vidTrack = stream.getVideoTracks()[0];
+
+                element.peer.replaceTrack(
+                  element.peer.streams[0].getVideoTracks()[0],
+                  stream.getVideoTracks()[0],
+                  element.peer.streams[0]
+                );
+
+                console.log(element.peer.streams[0].getVideoTracks());
+
+                //console.log(stream.getVideoTracks()[0]);
+                //console.log(userVideo.current.srcObject.getVideoTracks()[0]);
+              });
+              socketRef.emit("shareScreenError", { to: partnerSocketId });
             });
 
             peer1.on("close", () => {
@@ -411,6 +445,7 @@ const TutoringPage = (props) => {
 
   useEffect(() => {
     getUserInfo();
+
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: false })
       .then((stream) => {
@@ -486,22 +521,14 @@ const TutoringPage = (props) => {
         trickle: false,
         iceServers: [
           {
-            urls: "stun:openrelay.metered.ca:80",
+            urls: "stun:coturn.ferryindra.xyz",
+            username: "ferry",
+            credential: "150699",
           },
           {
-            urls: "turn:openrelay.metered.ca:80",
-            username: "openrelayproject",
-            credential: "openrelayproject",
-          },
-          {
-            urls: "turn:openrelay.metered.ca:443",
-            username: "openrelayproject",
-            credential: "openrelayproject",
-          },
-          {
-            urls: "turn:openrelay.metered.ca:443?transport=tcp",
-            username: "openrelayproject",
-            credential: "openrelayproject",
+            urls: "turn:coturn.ferryindra.xyz",
+            username: "ferry",
+            credential: "150699",
           },
         ],
       });
@@ -569,6 +596,11 @@ const TutoringPage = (props) => {
       console.log(data);
       setChat((chats) => [...chats, data]);
     });
+
+    socketRef.current.on("partnerShareScreenError", () => {
+      resetSC();
+      setShareScreenError(true);
+    });
   }, []);
 
   function resetSC() {
@@ -586,28 +618,36 @@ const TutoringPage = (props) => {
       trickle: false,
       config: {
         iceServers: [
+          // {
+          //   urls: "stun:coturn.ivanchristian.me",
+          //   username: "ivan",
+          //   credential: "5521",
+          // },
+          // {
+          //   urls: "turn:coturn.ivanchristian.me",
+          //   username: "ivan",
+          //   credential: "5521",
+          // },
           {
-            urls: "stun:openrelay.metered.ca:80",
+            urls: "stun:coturn.ferryindra.xyz",
+            username: "ferry",
+            credential: "150699",
           },
           {
-            urls: "turn:openrelay.metered.ca:80",
-            username: "openrelayproject",
-            credential: "openrelayproject",
-          },
-          {
-            urls: "turn:openrelay.metered.ca:443",
-            username: "openrelayproject",
-            credential: "openrelayproject",
-          },
-          {
-            urls: "turn:openrelay.metered.ca:443?transport=tcp",
-            username: "openrelayproject",
-            credential: "openrelayproject",
+            urls: "turn:coturn.ferryindra.xyz",
+            username: "ferry",
+            credential: "150699",
           },
         ],
       },
       //streams: [stream],
       stream,
+    });
+
+    peer.on("error", (error) => {
+      console.log("error from function create peer");
+      console.log(error);
+      console.log(error.code);
     });
 
     peer.on("signal", (signal) => {
@@ -631,28 +671,36 @@ const TutoringPage = (props) => {
       trickle: false,
       config: {
         iceServers: [
+          // {
+          //   urls: "stun:coturn.ivanchristian.me",
+          //   username: "ivan",
+          //   credential: "5521",
+          // },
+          // {
+          //   urls: "turn:coturn.ivanchristian.me",
+          //   username: "ivan",
+          //   credential: "5521",
+          // },
           {
-            urls: "stun:openrelay.metered.ca:80",
+            urls: "stun:coturn.ferryindra.xyz",
+            username: "ferry",
+            credential: "150699",
           },
           {
-            urls: "turn:openrelay.metered.ca:80",
-            username: "openrelayproject",
-            credential: "openrelayproject",
-          },
-          {
-            urls: "turn:openrelay.metered.ca:443",
-            username: "openrelayproject",
-            credential: "openrelayproject",
-          },
-          {
-            urls: "turn:openrelay.metered.ca:443?transport=tcp",
-            username: "openrelayproject",
-            credential: "openrelayproject",
+            urls: "turn:coturn.ferryindra.xyz",
+            username: "ferry",
+            credential: "150699",
           },
         ],
       },
       //streams: [stream],
       stream,
+    });
+
+    peer.on("error", (error) => {
+      console.log("error from function add peer");
+      console.log(error);
+      console.log(error.code);
     });
 
     peer.on("signal", (signal) => {
@@ -695,8 +743,26 @@ const TutoringPage = (props) => {
           autoPlay
           playsInline
           muted
+          controls
           style={{ height: "85%" }}
         ></video>
+      );
+    }
+  };
+  const vidRef = useRef();
+  const renderPeer = () => {
+    if (peersRef.current.length > 0) {
+      peersRef.current[0].peer.on("track", (track, stream) => {
+        vidRef.current.srcObject = stream;
+      });
+      return (
+        <video
+          playsInline
+          controls
+          autoPlay
+          ref={vidRef}
+          style={{ height: "70%" }}
+        />
       );
     }
   };
@@ -706,7 +772,7 @@ const TutoringPage = (props) => {
       <div className="container-tutor">
         <div className="content-atas">
           {renderShareScreen()}
-          {peers.map((peer, index) => {
+          {/* {peers.map((peer, index) => {
             const panjang = shareScreenPeer.length;
             return (
               <Video
@@ -716,7 +782,8 @@ const TutoringPage = (props) => {
                 panjang={panjang}
               />
             );
-          })}
+          })} */}
+          {renderPeer()}
           <video
             ref={userVideo}
             autoPlay

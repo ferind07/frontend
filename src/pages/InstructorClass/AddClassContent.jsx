@@ -73,7 +73,7 @@ const AddClassContent = (props) => {
         description: "Please fill duration of the class",
       });
     }
-    if (image.files.length == 0) {
+    if (image == undefined) {
       valid = false;
       notification.error({
         message: "Error",
