@@ -118,11 +118,15 @@ const AdminInstructor = () => {
   useEffect(() => {
     getUnApprovedInstructor();
   }, []);
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
   return (
     <div className="container mt-3">
       <div className="row">
         <div className="col-12">
-          <div className="card">
+          <div className="card" style={boxStyle}>
             <div className="card-header">
               <h5 className="card-title">Approve New Instructor</h5>
             </div>

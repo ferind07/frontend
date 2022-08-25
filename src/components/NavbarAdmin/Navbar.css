@@ -72,3 +72,9 @@
 .nav-text span {
   margin-left: 16px;
 }
+
+.box-bagus {
+  box-shadow: 0px 20px 27px #0000000d;
+  border-radius: 12px;
+}
+

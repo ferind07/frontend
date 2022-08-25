@@ -48,38 +48,47 @@ const InstructorDirbushment = () => {
     getInfo();
   }, []);
 
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
   return (
     <>
       <div className="container">
         <div className="row">
           <div className="col-12 mt-3">
-            <h5>Dirbushment</h5>
+            <h4>Dirbushment</h4>
           </div>
           <div className="col-4">
-            <div className="card">
+            <div className="card card-shadow">
               <div className="card-body">
-                <div>
-                  <div className="d-flex" style={{ gap: "5px" }}>
-                    <div className="center">
-                      <DollarTwoTone
-                        style={{ fontSize: "25px", color: "#08c" }}
-                      />
+                <div className="card" style={boxStyle}>
+                  <div className="card-body">
+                    <div
+                      className="d-flex justify-content-start"
+                      style={{ gap: "5px" }}
+                    >
+                      <div className="center">
+                        <DollarTwoTone
+                          style={{ fontSize: "25px", color: "#08c" }}
+                        />
+                      </div>
+                      <h4 className="mb-0">Your balance</h4>
                     </div>
-                    <h4 className="mb-0">Your balance</h4>
-                  </div>
 
-                  <h3 className="text-muted">
-                    <NumberFormat
-                      value={userInfo.saldo}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"Rp. "}
-                    />
-                  </h3>
+                    <h3 className="text-muted mb-0">
+                      <NumberFormat
+                        value={userInfo.saldo}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"Rp. "}
+                      />
+                    </h3>
+                  </div>
                 </div>
                 <hr />
                 <div
-                  className="d-flex w-100 p-1 box-option"
+                  className="d-flex w-100 p-1 box-option justify-content-start"
                   style={{ gap: "5px" }}
                   onClick={(e) => {
                     optionSelected(e, 1);
@@ -91,7 +100,7 @@ const InstructorDirbushment = () => {
                   <h5 className="mb-0">Bank account</h5>
                 </div>
                 <div
-                  className="d-flex mt-2 w-100 p-1 box-option"
+                  className="d-flex mt-2 w-100 p-1 box-option justify-content-start"
                   style={{ gap: "5px" }}
                   onClick={(e) => {
                     optionSelected(e, 2);
@@ -105,7 +114,7 @@ const InstructorDirbushment = () => {
                   <h5 className="mb-0">Cash out</h5>
                 </div>
                 <div
-                  className="d-flex mt-2 w-100 p-1 box-option"
+                  className="d-flex mt-2 w-100 p-1 box-option justify-content-start"
                   style={{ gap: "5px" }}
                   onClick={(e) => {
                     optionSelected(e, 3);
@@ -122,7 +131,7 @@ const InstructorDirbushment = () => {
             </div>
           </div>
           <div className="col-8">
-            <div className="card">
+            <div className="card card-shadow">
               <div className="card-body">{renderContent()}</div>
               {/* <div className="card-body">
                 <HistoryCashOutComp />

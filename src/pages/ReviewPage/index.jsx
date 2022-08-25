@@ -123,7 +123,7 @@ const ReviewPage = () => {
           </div>
           <div className="row">
             <div className="col-3">
-              <div className="card">
+              <div className="card card-shadow">
                 <div className="card-body">
                   <h5>Filter</h5>
                   <div className="">
@@ -178,7 +178,7 @@ const ReviewPage = () => {
               </div>
             </div>
             <div className="col-9">
-              <div className="card" style={{ height: "80vh" }}>
+              <div className="card card-shadow" style={{ height: "80vh" }}>
                 <div className="card-body" style={{ overflowY: "auto" }}>
                   {renderData()}
                 </div>

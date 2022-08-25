@@ -201,7 +201,7 @@ const Navbarr = (props) => {
         <Container fluid>
           <Navbar.Brand className="text-dark" href="#home">
             <div className="nav-logo">
-              <Link to="/" style={{ display: "flex" }}>
+              <Link to="/" style={{ display: "flex", textDecoration: "none" }}>
                 <img src="/asset/image/logo.png" />
                 <p className="nav-title">DEMY</p>
               </Link>

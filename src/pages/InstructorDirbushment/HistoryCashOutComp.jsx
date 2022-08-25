@@ -133,7 +133,7 @@ const HistoryCashOutComp = () => {
 
         <div>
           <p className="mb-1">Select date</p>
-          <div className="d-flex" style={{ gap: "15px" }}>
+          <div className="d-flex justify-content-start" style={{ gap: "15px" }}>
             <RangePicker
               value={valRangePicker}
               onChange={(value) => {

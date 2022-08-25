@@ -22,6 +22,8 @@ import UserCashOut from "./pages/UserCashOut";
 import ResultPage from "./pages/ResultPage";
 import ActiveUser from "./pages/ActiveUser";
 import ReportPage from "./pages/reportPage";
+import AdminDashboardTemplate from "./pages/AdminDashboardTemplate";
+import "./assets/styles/main.css";
 
 const App = () => {
   const socket = useRef();
@@ -82,6 +84,10 @@ const App = () => {
         <Route path="/userCashOut" element={<UserCashOut />} />
         <Route path="/resultPage/:id" element={<ResultPage />} />
         <Route path="/activeUser/:id" element={<ActiveUser />} />
+        <Route
+          path="/adminDashboardTemplate"
+          element={<AdminDashboardTemplate />}
+        />
       </Routes>
     </>
   );

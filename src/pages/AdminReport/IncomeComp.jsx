@@ -216,13 +216,16 @@ const IncomeComp = () => {
     getCatagoryInfo();
     getInstuctorCatagory();
   }, []);
-
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
   return (
     <>
       <div className="w-100">
         <h3 className="mb-2">Income</h3>
         <hr className="mt-0" />
-        <div className="d-flex" style={{ gap: "20px" }}>
+        <div className="d-flex justify-content-start" style={{ gap: "20px" }}>
           <div className="center">
             <p className="mb-0">Filter</p>
           </div>
@@ -244,25 +247,34 @@ const IncomeComp = () => {
           </Button>
           <Button>Reset</Button>
         </div>
-        <div className="mt-3">
-          <Line options={options} data={dataLine} />
-        </div>
-        <hr />
-        <div className="row">
-          <div className="col-6">
-            <div className="mt-3">
-              <h3 className="text-center">Income catagory</h3>
-            </div>
-            <div className="mt-3">
-              <Pie data={data} />
-            </div>
+      </div>
+
+      <div className="card mt-4" style={boxStyle}>
+        <div className="card-body">
+          <div className="mt-3">
+            <Line options={options} data={dataLine} />
           </div>
-          <div className="col-6">
-            <div className="mt-3">
-              <h3 className="text-center">Instuctor catagory</h3>
+        </div>
+      </div>
+
+      <div className="card mt-3" style={boxStyle}>
+        <div className="card-body">
+          <div className="row">
+            <div className="col-6">
+              <div className="mt-3">
+                <h3 className="text-center">Income catagory</h3>
+              </div>
+              <div className="mt-3">
+                <Pie data={data} />
+              </div>
             </div>
-            <div className="mt-3">
-              <Pie data={dataInsturctorCatagory} />
+            <div className="col-6">
+              <div className="mt-3">
+                <h3 className="text-center">Instuctor catagory</h3>
+              </div>
+              <div className="mt-3">
+                <Pie data={dataInsturctorCatagory} />
+              </div>
             </div>
           </div>
         </div>

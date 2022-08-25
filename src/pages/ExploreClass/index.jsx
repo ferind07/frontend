@@ -5,9 +5,11 @@ import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 import NumberFormat from "react-number-format";
 import moment, { now } from "moment";
-import { notification, Descriptions, DatePicker, Button, Drawer } from "antd";
+import { notification, Descriptions, Button, Drawer, Image } from "antd";
 import { useNavigate } from "react-router-dom";
 import CalendarComp from "./CalendarComp";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const HtmlToReactParser = require("html-to-react").Parser;
 
@@ -16,6 +18,10 @@ const ExploreClass = () => {
   const [classDetail, setClassDetail] = useState({});
   const [activeDays, setActiveDays] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [selectedDay, setSelectedDay] = useState([]);
+  const [day1, setDay1] = useState();
+  const [day2, setDay2] = useState();
+  const [day3, setDay3] = useState();
 
   const htmlToReactParser = new HtmlToReactParser();
 
@@ -69,12 +75,58 @@ const ExploreClass = () => {
     const element = [];
     if (classDetail.classCount) {
       for (let index = 0; index < classDetail.classCount; index++) {
-        element.push(
-          <>
-            <h5 className="mt-2 mb-0">Select time {index + 1}</h5>
-            <input type="datetime-local" id={"time" + (index + 1)} />
-          </>
-        );
+        if (index + 1 == 1) {
+          element.push(
+            <>
+              <h5 className="mt-2 mb-0">Select time {index + 1}</h5>
+              <DatePicker
+                id={"time" + (index + 1)}
+                showTimeSelect
+                timeFormat="HH:mm"
+                timeIntervals={10}
+                dateFormat="MMMM d, yyyy h:mm aa"
+                selected={day1}
+                onChange={(date) => {
+                  setDay1(date);
+                }}
+              />
+            </>
+          );
+        } else if (index + 1 == 2) {
+          element.push(
+            <>
+              <h5 className="mt-2 mb-0">Select time {index + 1}</h5>
+              <DatePicker
+                id={"time" + (index + 1)}
+                showTimeSelect
+                timeFormat="HH:mm"
+                timeIntervals={10}
+                dateFormat="MMMM d, yyyy h:mm aa"
+                selected={day2}
+                onChange={(date) => {
+                  setDay2(date);
+                }}
+              />
+            </>
+          );
+        } else if (index + 1 == 3) {
+          element.push(
+            <>
+              <h5 className="mt-2 mb-0">Select time {index + 1}</h5>
+              <DatePicker
+                id={"time" + (index + 1)}
+                showTimeSelect
+                timeFormat="HH:mm"
+                timeIntervals={10}
+                dateFormat="MMMM d, yyyy h:mm aa"
+                selected={day3}
+                onChange={(date) => {
+                  setDay3(date);
+                }}
+              />
+            </>
+          );
+        }
       }
     }
     return element;
@@ -365,18 +417,15 @@ const ExploreClass = () => {
                 <hr />
                 <div className="row">
                   <div className="col-md-5">
-                    <img
+                    <Image
                       src={BackendUrl + classDetail.image}
                       width="100%"
                       style={{ aspectRatio: "4/3" }}
                     />
                   </div>
                   <div className="col-md-7">
-                    <Descriptions
-                      bordered
-                      title="Class description"
-                      size="small"
-                    >
+                    <h4>Class description</h4>
+                    <Descriptions bordered>
                       <Descriptions.Item label="Instructor" span={3}>
                         {classDetail.name}
                       </Descriptions.Item>

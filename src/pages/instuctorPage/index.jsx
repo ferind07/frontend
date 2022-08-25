@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
-import { InfoCircleFilled, ContainerOutlined } from "@ant-design/icons";
+import {
+  InfoCircleOutlined,
+  ContainerOutlined,
+  DollarCircleOutlined,
+} from "@ant-design/icons";
 import Calendar from "react-awesome-calendar";
 import moment from "moment";
 import NumberFormat from "react-number-format";
@@ -201,6 +205,10 @@ const InstructorPage = () => {
       return comp;
     }
   };
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
 
   return (
     <>
@@ -212,47 +220,87 @@ const InstructorPage = () => {
                 <h3>Instructor Dashboard</h3>
                 <hr />
                 <div className="row">
-                  <div className="col-4">
-                    <div className="card">
-                      <div className="card-body">
-                        <h4>Total course</h4>
-                        <div className="d-flex" style={{ gap: "10px" }}>
+                  <div className="col-lg-4 col-md-6 col-12 mt-2">
+                    <div className="card h-100" style={boxStyle}>
+                      <div className="card-body d-flex">
+                        <div>
+                          <div
+                            className="d-flex justify-content-start"
+                            style={{ gap: "15px" }}
+                          >
+                            <h4>Total course</h4>
+                          </div>
+                          <div
+                            className="d-flex justify-content-start mt-2"
+                            style={{ gap: "10px" }}
+                          >
+                            <h5 className="text-muted">
+                              {listClass.length} course
+                            </h5>
+                          </div>
+                        </div>
+                        <div className="icon-box2">
                           <ContainerOutlined style={{ fontSize: "40px" }} />
-                          <h5 className="text-muted">
-                            {listClass.length} course
-                          </h5>
                         </div>
+                        {/* <a href="">Cash out</a> */}
                       </div>
                     </div>
                   </div>
-                  <div className="col-4">
-                    <div className="card">
-                      <div className="card-body">
-                        <h4>Waiting response</h4>
-                        <div className="d-flex" style={{ gap: "10px" }}>
-                          <InfoCircleFilled style={{ fontSize: "40px" }} />
-                          <h5 className="text-muted">
-                            {waitingResponse().length} course
-                          </h5>
+                  <div className="col-lg-4 col-md-6 col-12 mt-2">
+                    <div className="card h-100" style={boxStyle}>
+                      <div className="card-body d-flex">
+                        <div>
+                          <div
+                            className="d-flex justify-content-start"
+                            style={{ gap: "15px" }}
+                          >
+                            <h3 className="mb-0">Total course</h3>
+                          </div>
+                          <div
+                            className="d-flex justify-content-start mt-2"
+                            style={{ gap: "10px" }}
+                          >
+                            <h5 className="text-muted">
+                              {waitingResponse().length} course
+                            </h5>
+                          </div>
                         </div>
+                        <div className="icon-box2">
+                          <InfoCircleOutlined style={{ fontSize: "40px" }} />
+                        </div>
+                        {/* <a href="">Cash out</a> */}
                       </div>
                     </div>
                   </div>
-                  <div className="col-4">
-                    <div className="card">
-                      <div className="card-body">
-                        <h4>Your balance</h4>
-                        <div className="d-flex" style={{ gap: "10px" }}>
-                          <NumberFormat
-                            value={detailUser.saldo}
-                            className="foo"
-                            displayType={"text"}
-                            thousandSeparator={true}
-                            renderText={(value, props) => (
-                              <h5 {...props}>Rp. {value}</h5>
-                            )}
-                          />
+                  <div className="col-lg-4 col-md-6 col-12 mt-2">
+                    <div className="card h-100" style={boxStyle}>
+                      <div className="card-body d-flex">
+                        <div>
+                          <div
+                            className="d-flex justify-content-start"
+                            style={{ gap: "15px" }}
+                          >
+                            <h3 className="mb-0">Your balance</h3>
+                          </div>
+                          <div
+                            className="d-flex justify-content-start mt-2"
+                            style={{ gap: "10px" }}
+                          >
+                            <NumberFormat
+                              value={detailUser.saldo}
+                              className="foo"
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              renderText={(value, props) => (
+                                <h5 {...props}>Rp. {value}</h5>
+                              )}
+                            />
+                          </div>
                         </div>
+                        <div className="icon-box2">
+                          <DollarCircleOutlined style={{ fontSize: "40px" }} />
+                        </div>
+                        {/* <a href="">Cash out</a> */}
                       </div>
                     </div>
                   </div>

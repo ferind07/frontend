@@ -131,7 +131,10 @@ const AdminMaster = () => {
 
     setListUser(temp);
   }
-
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
   useEffect(() => {
     getUser();
   }, []);
@@ -140,7 +143,7 @@ const AdminMaster = () => {
       <div className="container mt-3">
         <div className="row">
           <div className="col-12">
-            <div className="card card-shadow">
+            <div className="card" style={boxStyle}>
               <div className="card-body">
                 <h2 className="text-center">Master User</h2>
                 <div className="d-flex justify-content-between">

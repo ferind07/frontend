@@ -109,12 +109,16 @@ const AdminDetailProblem = () => {
       }
     }
   };
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
 
   return (
     <>
       <div className="container">
         <div className="col-12">
-          <div className="card mt-3 mb-5">
+          <div className="card mt-3 mb-5" style={boxStyle}>
             <div className="card-body">
               <div className="d-flex mb-3 justify-content-between">
                 <div>

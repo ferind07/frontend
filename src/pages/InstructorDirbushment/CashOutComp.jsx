@@ -100,14 +100,20 @@ const CashOutComp = (props) => {
   useEffect(() => {
     getBankAccountInformation();
   }, []);
-
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
   return (
     <>
       <div>
         <h2>Cash out</h2>
         <div className="w-100">
-          <div className="card card-shadow">
-            <div className="card-body d-flex" style={{ gap: "15px" }}>
+          <div className="card" style={boxStyle}>
+            <div
+              className="card-body d-flex justify-content-start"
+              style={{ gap: "15px" }}
+            >
               <DollarTwoTone style={{ fontSize: "50px" }} />
               <div className="center">
                 <div>

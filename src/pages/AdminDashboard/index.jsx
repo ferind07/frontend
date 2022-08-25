@@ -3,7 +3,7 @@ import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 import {
   UserOutlined,
-  InfoCircleFilled,
+  InfoCircleOutlined,
   ContainerOutlined,
 } from "@ant-design/icons";
 import { Tag, Table } from "antd";
@@ -141,7 +141,10 @@ const AdminDashboard = () => {
     getAllClass();
     getInstructorData();
   }, []);
-
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
   return (
     <>
       <div className="container mt-3">
@@ -150,75 +153,114 @@ const AdminDashboard = () => {
             <div className="card card-shadow">
               <div className="card-body">
                 <div className="row">
-                  <div className="col-4">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3>Total User</h3>
-                        <div className="d-flex" style={{ gap: "10px" }}>
+                  <div className="col-lg-4 col-md-6 col-12 mt-2">
+                    <div className="card h-100" style={boxStyle}>
+                      <div className="card-body d-flex">
+                        <div>
+                          <div
+                            className="d-flex justify-content-start"
+                            style={{ gap: "15px" }}
+                          >
+                            <h3 className="mb-0">Total user</h3>
+                          </div>
+                          <div
+                            className="d-flex justify-content-start mt-2"
+                            style={{ gap: "10px" }}
+                          >
+                            <h5 className="text-muted">
+                              {listUser.length} Users
+                            </h5>
+                          </div>
+                        </div>
+                        <div className="icon-box2">
                           <UserOutlined style={{ fontSize: "40px" }} />
-                          <h5 className="text-muted">
-                            {listUser.length} Users
-                          </h5>
                         </div>
+                        {/* <a href="">Cash out</a> */}
                       </div>
                     </div>
                   </div>
-                  <div className="col-4">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3>Total Instructor</h3>
-                        <div className="d-flex" style={{ gap: "10px" }}>
-                          <InfoCircleFilled style={{ fontSize: "40px" }} />
-                          <h5 className="text-muted">
-                            {listInstructor.length} Instructor
-                          </h5>
+                  <div className="col-lg-4 col-md-6 col-12 mt-2">
+                    <div className="card h-100" style={boxStyle}>
+                      <div className="card-body d-flex">
+                        <div>
+                          <div
+                            className="d-flex justify-content-start"
+                            style={{ gap: "15px" }}
+                          >
+                            <h3 className="mb-0">Total instructor</h3>
+                          </div>
+                          <div
+                            className="d-flex justify-content-start mt-2"
+                            style={{ gap: "10px" }}
+                          >
+                            <h5 className="text-muted">
+                              {listInstructor.length} Instructor
+                            </h5>
+                          </div>
                         </div>
+                        <div className="icon-box2">
+                          <InfoCircleOutlined style={{ fontSize: "40px" }} />
+                        </div>
+                        {/* <a href="">Cash out</a> */}
                       </div>
                     </div>
                   </div>
-                  <div className="col-4">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3>Total Class</h3>
-                        <div className="d-flex" style={{ gap: "10px" }}>
+                  <div className="col-lg-4 col-md-6 col-12 mt-2">
+                    <div className="card h-100" style={boxStyle}>
+                      <div className="card-body d-flex">
+                        <div>
+                          <div
+                            className="d-flex justify-content-start"
+                            style={{ gap: "15px" }}
+                          >
+                            <h3 className="mb-0">Total class</h3>
+                          </div>
+                          <div
+                            className="d-flex justify-content-start mt-2"
+                            style={{ gap: "10px" }}
+                          >
+                            <h5 className="text-muted">
+                              {listClass.length} Class
+                            </h5>
+                          </div>
+                        </div>
+                        <div className="icon-box2">
                           <ContainerOutlined style={{ fontSize: "40px" }} />
-                          <h5 className="text-muted">
-                            {listClass.length} Class
-                          </h5>
                         </div>
+                        {/* <a href="">Cash out</a> */}
                       </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-12 mt-4">
+            <div className="row">
+              <div className="col-4">
+                <div className="card" style={boxStyle}>
+                  <div className="card-body">
+                    <h4 className="text-center">User and Instructor</h4>
+                    <Pie data={data} />
+                  </div>
+                </div>
+              </div>
+              <div className="col-8">
+                <div className="card h-100" style={boxStyle}>
+                  <div className="card-body">
+                    <h3>Banned User</h3>
+                    <Table
+                      dataSource={getBannedUser()}
+                      columns={columns}
+                      size="middle"
+                      pagination={{ pageSize: 5 }}
+                    />
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="col-12 mt-3">
-            <div className="card card-shadow">
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-4">
-                    <h4 className="text-center">User and Instructor</h4>
-                    <Pie data={data} />
-                  </div>
-                  <div className="col-8">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3>Banned User</h3>
-                        <Table
-                          dataSource={getBannedUser()}
-                          columns={columns}
-                          size="middle"
-                          pagination={{ pageSize: 5 }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           {/* <div className="col-12 mt-3 mb-5">
             <div className="card card-shadow">
               <div className="card-body">

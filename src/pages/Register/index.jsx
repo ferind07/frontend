@@ -151,7 +151,14 @@ const Register = () => {
     <>
       <Navbar />
       <div className="container-login">
-        <h5>Register to ...</h5>
+        <div className="d-flex justify-content-center" style={{ gap: "10px" }}>
+          <h5 className="mb-0">Register to </h5>
+          <div className="d-flex justify-content-center">
+            <img src="/asset/image/logo.png" width="40px" />
+            <p className="nav-title mb-0">DEMY</p>
+          </div>
+        </div>
+
         <hr style={{ width: "80%", marginLeft: "auto", marginRight: "auto" }} />
         <AiOutlineUserAdd size="5vw" />
         <div

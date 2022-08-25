@@ -143,7 +143,7 @@ const CashOutComp = () => {
       <div className="w-100">
         <h3 className="mb-2">Cash out</h3>
         <hr className="mt-0" />
-        <div className="d-flex" style={{ gap: "20px" }}>
+        <div className="d-flex justify-content-start" style={{ gap: "20px" }}>
           <div className="center">
             <p className="mb-0">Filter</p>
           </div>

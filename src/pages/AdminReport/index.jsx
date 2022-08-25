@@ -25,6 +25,11 @@ const AdminReport = () => {
     }
   };
 
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
+
   return (
     <>
       <div className="container mt-3">
@@ -33,10 +38,10 @@ const AdminReport = () => {
             <h3>Report</h3>
           </div>
           <div className="col-3">
-            <div className="card">
+            <div className="card" style={boxStyle}>
               <div className="card-body">
                 <div
-                  className="d-flex w-100 p-1 box-option"
+                  className="d-flex justify-content-start w-100 p-1 box-option"
                   style={{ gap: "15px" }}
                   onClick={(e) => {
                     optionSelected(e, 1);
@@ -49,7 +54,7 @@ const AdminReport = () => {
                 </div>
 
                 <div
-                  className="d-flex w-100 p-1 box-option mt-2"
+                  className="d-flex justify-content-start w-100 p-1 box-option mt-2"
                   style={{ gap: "15px" }}
                   onClick={(e) => {
                     optionSelected(e, 2);
@@ -64,7 +69,7 @@ const AdminReport = () => {
                 </div>
 
                 <div
-                  className="d-flex w-100 p-1 box-option mt-2"
+                  className="d-flex justify-content-start w-100 p-1 box-option mt-2"
                   style={{ gap: "15px" }}
                   onClick={(e) => {
                     optionSelected(e, 3);
@@ -79,7 +84,7 @@ const AdminReport = () => {
             </div>
           </div>
           <div className="col-9 mb-5">
-            <div className="card">
+            <div className="card" style={boxStyle}>
               <div className="card-body">{renderContent()}</div>
             </div>
           </div>

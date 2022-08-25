@@ -76,7 +76,7 @@ const AdminDetailInstructor = () => {
         <img
           src={BackendUrl + image}
           alt="Avatar"
-          style={{ borderRadius: "50%", width: "100%", aspectRatio: "3/4" }}
+          style={{ width: "100%", aspectRatio: "3/4" }}
         />
       );
     }
@@ -157,19 +157,19 @@ const AdminDetailInstructor = () => {
     }
   };
 
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
+
   return (
     <div className="container mt-3">
-      <div className="card mb-5">
+      <div className="card mb-5" style={boxStyle}>
         <div className="card-body">
           <h3>Detail Instructor</h3>
           <hr />
           <div className="row">
-            <div
-              className="col-4"
-              style={{
-                borderRight: "1px solid grey",
-              }}
-            >
+            <div className="col-4">
               <div>{renderImage(userInfo.image)}</div>
               <div className="mt-3">
                 <h5 className="text-center text-muted">{userInfo.name}</h5>

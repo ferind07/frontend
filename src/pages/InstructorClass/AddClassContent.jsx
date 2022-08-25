@@ -150,7 +150,7 @@ const AddClassContent = (props) => {
               aspectRatio: "4 / 3",
               border: "2px dashed black",
             }}
-            className="d-flex center"
+            className="d-flex center justify-content-center"
           >
             <Empty description="No image" />
           </div>

@@ -133,6 +133,7 @@ const Login = (props) => {
           <p className="mt-2">
             Don't have account{" "}
             <a
+              href="#"
               onClick={() => {
                 navigate("/register");
               }}
