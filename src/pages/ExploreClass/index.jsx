@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import CalendarComp from "./CalendarComp";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Footer from "../../components/Footer";
 
 const HtmlToReactParser = require("html-to-react").Parser;
 
@@ -482,6 +483,9 @@ const ExploreClass = () => {
           </div>
           <div className="col-12"></div>
         </div>
+      </div>
+      <div className="mt-5">
+        <Footer />
       </div>
       <Drawer
         title="Schedule"

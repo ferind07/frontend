@@ -98,6 +98,9 @@ const Categories = () => {
           )}
         </div>
       </div>
+      <div className="mt-5">
+        <Footer className="mt-5" />
+      </div>
     </>
   );
 };

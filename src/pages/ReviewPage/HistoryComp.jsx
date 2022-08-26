@@ -155,8 +155,11 @@ const HistoryComp = (props) => {
       <div className="w-100 mt-2">
         <div className="card card-shadow">
           <div className="card-body">
-            <div className="d-flex" style={{ gap: "10px" }}>
-              <div className="d-flex center">
+            <div
+              className="d-flex justify-content-start"
+              style={{ gap: "10px" }}
+            >
+              <div className="d-flex justify-content-start center">
                 <LaptopOutlined
                   style={{ color: "#1890ff", fontSize: "16px" }}
                 />
@@ -174,7 +177,10 @@ const HistoryComp = (props) => {
                 <p className="mb-0 text-muted">T {orderId}</p>
               </div>
             </div>
-            <div className="d-flex mt-2" style={{ gap: "5px" }}>
+            <div
+              className="d-flex justify-content-start  mt-2"
+              style={{ gap: "5px" }}
+            >
               <div className="d-flex center">
                 <TeamOutlined style={{ fontSize: "16px" }} />
               </div>
@@ -182,13 +188,22 @@ const HistoryComp = (props) => {
                 <h6 className="mb-0">{instructorName}</h6>
               </div>
             </div>
-            <div className="d-flex mt-2" style={{ gap: "15px" }}>
-              <img
-                src={BackendUrl + picture}
-                width="150px"
-                style={{ aspectRatio: "4/3" }}
-              />
+            <div
+              className="d-flex justify-content-start mt-2"
+              style={{ gap: "15px" }}
+            >
               <div>
+                <img
+                  src={BackendUrl + picture}
+                  width="150px"
+                  style={{ aspectRatio: "4/3" }}
+                />
+              </div>
+
+              <div
+                className="h-100 justify-content-start"
+                style={{ height: "100%", alignItems: "start" }}
+              >
                 <h5>{courseName}</h5>
                 <p className="text-muted">
                   {
@@ -221,7 +236,7 @@ const HistoryComp = (props) => {
         onClose={onClose}
         visible={visible}
       >
-        <div className="d-flex" style={{ gap: "10px" }}>
+        <div className="d-flex justify-content-start" style={{ gap: "10px" }}>
           <div>
             <img
               src={BackendUrl + picture}
