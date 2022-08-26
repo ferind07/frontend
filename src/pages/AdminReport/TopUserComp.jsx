@@ -126,36 +126,47 @@ const TopUserComp = () => {
 
   const { RangePicker } = DatePicker;
 
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
+
   return (
     <>
       <div className="w-100">
         <h3 className="mb-2">Top user</h3>
-        <hr className="mt-0" />
-        <div className="d-flex justify-content-start" style={{ gap: "20px" }}>
-          <div className="center">
-            <p className="mb-0">Filter</p>
+        <div className="card mb-3 mt-3" style={boxStyle}>
+          <div className="card-body">
+            <div
+              className="d-flex justify-content-start"
+              style={{ gap: "20px" }}
+            >
+              <div className="center">
+                <p className="mb-0">Filter</p>
+              </div>
+
+              <RangePicker
+                value={time}
+                onChange={(value) => {
+                  setTime(value);
+                }}
+              />
+
+              <Button
+                type="primary"
+                onClick={() => {
+                  onClickFilter();
+                }}
+              >
+                Filter
+              </Button>
+            </div>
           </div>
-
-          <RangePicker
-            value={time}
-            onChange={(value) => {
-              setTime(value);
-            }}
-          />
-
-          <Button
-            type="primary"
-            onClick={() => {
-              onClickFilter();
-            }}
-          >
-            Filter
-          </Button>
         </div>
-        <hr />
+
         <div className="row">
           <div className="col-6">
-            <div className="card">
+            <div className="card h-100" style={boxStyle}>
               <div className="card-body">
                 <h3 className="text-center">Top User</h3>
                 {renderTopUser()}
@@ -163,7 +174,7 @@ const TopUserComp = () => {
             </div>
           </div>
           <div className="col-6">
-            <div className="card">
+            <div className="card h-100" style={boxStyle}>
               <div className="card-body">
                 <h3 className="text-center">Top Instructor</h3>
                 {renderTopInstructor()}

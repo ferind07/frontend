@@ -355,91 +355,17 @@ const InstructorDetailSchedule = () => {
     }
   };
 
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
+
   return (
     <>
-      {/* <div className="container mt-3">
-        <div className="row">
-          <div className="col-12">
-            <div className="card">
-              <div className="card-body">
-                <h3>{hSubmission.title} Class</h3>
-                <h6>Applied by {hSubmission.name}</h6>
-                <p>Applied At {timeString(hSubmission.timeInsert)}</p>
-                {btnAction()}
-                <hr />
-                <h5>Detail Class</h5>
-                <div className="row">
-                  <div className="col-12">
-                    {listSubmission.map((subMissionItem, i) => {
-                      //console.log(subMissionItem);
-                      const dateStart = new Date(subMissionItem.dateStart);
-                      const dateStartString =
-                        dateStart.getDate() +
-                        "/" +
-                        (dateStart.getMonth() + 1) +
-                        "/" +
-                        dateStart.getFullYear() +
-                        " " +
-                        (dateStart.getHours() < 10
-                          ? "0" + dateStart.getHours()
-                          : dateStart.getHours()) +
-                        ":" +
-                        (dateStart.getMinutes() < 10
-                          ? "0" + dateStart.getMinutes()
-                          : dateStart.getMinutes());
-                      const dateEnd = new Date(subMissionItem.dateEnd);
-                      const dateEndString =
-                        dateEnd.getDate() +
-                        "/" +
-                        (dateEnd.getMonth() + 1) +
-                        "/" +
-                        dateEnd.getFullYear() +
-                        " " +
-                        (dateEnd.getHours() < 10
-                          ? "0" + dateEnd.getHours()
-                          : dateEnd.getHours()) +
-                        ":" +
-                        (dateEnd.getMinutes() < 10
-                          ? "0" + dateEnd.getMinutes()
-                          : dateEnd.getMinutes());
-                      return (
-                        <>
-                          <div className="mt-2" key={i}>
-                            <div className="card">
-                              <div className="card-body">
-                                <h6>Date start</h6>
-                                <p>{dateStartString}</p>
-                                <h6>Date end</h6>
-                                <p>{dateEndString}</p>
-                                <button
-                                  className="btn btn-primary"
-                                  onClick={(e) => {
-                                    createClass(
-                                      e,
-                                      subMissionItem.idUser,
-                                      subMissionItem.id
-                                    );
-                                  }}
-                                >
-                                  Create Class
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
       <div className="container mt-3 mb-4">
         <div className="row">
-          <div className="col-6">
-            <div className="card mb-5">
+          <div className="col-7">
+            <div className="card mb-5" style={boxStyle}>
               <div className="card-body">
                 <h3>Class Info</h3>
                 <div className="row">
@@ -494,8 +420,8 @@ const InstructorDetailSchedule = () => {
               </div>
             </div>
           </div>
-          <div className="col-6">
-            <div className="card">
+          <div className="col-5">
+            <div className="card" style={boxStyle}>
               <div className="card-body">
                 <h3>Schedule</h3>
                 <div>

@@ -149,11 +149,15 @@ const HistoryComp = (props) => {
   const onClose = () => {
     setVisible(false);
   };
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
 
   return (
     <>
       <div className="w-100 mt-2">
-        <div className="card card-shadow">
+        <div className="card" style={boxStyle}>
           <div className="card-body">
             <div
               className="d-flex justify-content-start"
@@ -188,9 +192,10 @@ const HistoryComp = (props) => {
                 <h6 className="mb-0">{instructorName}</h6>
               </div>
             </div>
+
             <div
               className="d-flex justify-content-start mt-2"
-              style={{ gap: "15px" }}
+              style={{ gap: "15px", alignItems: "start" }}
             >
               <div>
                 <img
@@ -204,7 +209,7 @@ const HistoryComp = (props) => {
                 className="h-100 justify-content-start"
                 style={{ height: "100%", alignItems: "start" }}
               >
-                <h5>{courseName}</h5>
+                <h5 className="mb-1">{courseName}</h5>
                 <p className="text-muted">
                   {
                     <NumberFormat
@@ -246,7 +251,7 @@ const HistoryComp = (props) => {
           </div>
 
           <div>
-            <h6>Course name</h6>
+            <h6>{courseName}</h6>
             <p className="text-muted mb-0">How about your course</p>
             {renderReviewComp()}
             <div className="mt-2">{btnSend()}</div>

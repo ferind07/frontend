@@ -150,10 +150,13 @@ const ScheduleCard = (props) => {
       );
     }
   };
-
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
   return (
     <>
-      <div className="card mt-2">
+      <div className="card mt-2" style={boxStyle}>
         <div className="card-body">
           <div className="row">
             <div className="col-12 col-md-4">
@@ -219,13 +222,16 @@ const ScheduleCard = (props) => {
                   : dateEnd.minutes());
               return (
                 <>
-                  <div className="card card-shadow mt-2">
+                  <div className="card mt-2" style={boxStyle}>
                     <div className="card-body">
                       <h5>Class - {i + 1}</h5>
                       <h6>
                         {dateStartString} to {dateEndString}
                       </h6>
-                      {renderButton(subMissionItem)}
+                      <div className="d-flex justify-content-between">
+                        {renderButton(subMissionItem)}
+                        <button>Report</button>
+                      </div>
                     </div>
                   </div>
                 </>

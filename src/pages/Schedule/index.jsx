@@ -72,7 +72,10 @@ const Schedule = () => {
   function renderSchedule() {
     if (hSubmission.length == 0) {
       return (
-        <div className="d-flex center" style={{ height: "100%" }}>
+        <div
+          className="d-flex justify-content-center center"
+          style={{ height: "100%" }}
+        >
           <Empty description="No schedule" />
         </div>
       );
@@ -118,9 +121,9 @@ const Schedule = () => {
                     <Option value={0}>Unconfirmed</Option>
                     <Option value={1}>Accepted</Option>
                     <Option value={2}>Rejected</Option>
-                    <Option value={3}>Waiting for payment</Option>
+                    <Option value={3}>Completed</Option>
                     <Option value={4}>Expired</Option>
-                    <Option value={5}>Completed</Option>
+                    <Option value={5}>Unpaid</Option>
                     <Option value={9}>All</Option>
                   </Select>
                 </div>

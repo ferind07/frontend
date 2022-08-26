@@ -89,7 +89,7 @@ const Categories = () => {
                 detail={listInstrucor.detail}
                 image={listInstrucor.image}
                 id={listInstrucor.id}
-                detail={listInstrucor.katagoriDetail}
+                detaill={listInstrucor.katagoriDetail}
               />
             );
           })}

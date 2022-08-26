@@ -78,13 +78,16 @@ const InstructorSchedule = () => {
         console.log(error);
       });
   }
-
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
   return (
     <>
       <div className="container mt-3">
         <div className="row">
           <div className="col-12">
-            <div className="card card-shadow mb-5">
+            <div className="card card-shadow mb-5" style={boxStyle}>
               <div className="card-body">
                 <Tabs defaultActiveKey="1">
                   <TabPane tab="Unconfirmed schedule" key="1">

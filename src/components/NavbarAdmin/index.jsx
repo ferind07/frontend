@@ -55,13 +55,19 @@ const NavbarAdmin = () => {
         </div>
         <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
           <ul className="nav-menu-items" onClick={showSidebar}>
-            <li className="navbar-toggle">
-              <Link to="#" className="menu-bars d-flex">
-                <div className="center">
-                  <AiIcons.AiOutlineClose color="#29affcf3" />
+            <li className="navbar-toggle justify-content-center w-100">
+              <Link
+                to="#"
+                className="menu-bars d-flex"
+                style={{ marginLeft: "0px" }}
+              >
+                <div className="center w-100">
+                  <img src="/asset/image/logo.png" />
+                  <p style={{ fontSize: "25px" }}>ADMIN</p>
                 </div>
               </Link>
             </li>
+            <hr />
             {SidebarData.map((item, index) => {
               return (
                 <li key={index} className={item.cName}>

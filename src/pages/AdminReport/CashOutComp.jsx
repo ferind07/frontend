@@ -137,41 +137,51 @@ const CashOutComp = () => {
       </>
     );
   };
-
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
   return (
     <>
       <div className="w-100">
         <h3 className="mb-2">Cash out</h3>
-        <hr className="mt-0" />
-        <div className="d-flex justify-content-start" style={{ gap: "20px" }}>
-          <div className="center">
-            <p className="mb-0">Filter</p>
-          </div>
+        <div className="card mt-3" style={boxStyle}>
+          <div className="card-body">
+            <div
+              className="d-flex justify-content-start"
+              style={{ gap: "20px" }}
+            >
+              <div className="center">
+                <p className="mb-0">Filter</p>
+              </div>
 
-          <RangePicker
-            value={valRangePicker}
-            onChange={(value) => {
-              setValRangePicker(value);
-            }}
-          />
-          <Button
-            type="primary"
-            onClick={() => {
-              onClickFilter();
-            }}
-          >
-            Filter
-          </Button>
-          <Button
-            onClick={() => {
-              setCashOutHistoryList(tempCashOutHistoryList);
-            }}
-          >
-            Reset
-          </Button>
+              <RangePicker
+                value={valRangePicker}
+                onChange={(value) => {
+                  setValRangePicker(value);
+                }}
+              />
+              <Button
+                type="primary"
+                onClick={() => {
+                  onClickFilter();
+                }}
+              >
+                Filter
+              </Button>
+              <Button
+                onClick={() => {
+                  setCashOutHistoryList(tempCashOutHistoryList);
+                }}
+              >
+                Reset
+              </Button>
+            </div>
+          </div>
         </div>
+
         <div style={{ height: "65vh" }}>
-          <div className="card mt-3 h-100">
+          <div className="card mt-3 h-100" style={boxStyle}>
             <div className="card-body" style={{ overflowY: "auto" }}>
               {renderComponent()}
             </div>

@@ -61,9 +61,13 @@ const UnconfirmedSchedule = (props) => {
 
       return text;
     }
+    const boxStyle = {
+      boxShadow: "0px 20px 27px #0000000d",
+      borderRadius: "12px",
+    };
     return (
       <>
-        <div className="card mt-2">
+        <div className="card mt-2" style={boxStyle}>
           <div className="card-body">
             <div className="row">
               <div className="col-12 col-md-4">

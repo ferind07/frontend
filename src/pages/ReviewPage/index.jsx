@@ -155,7 +155,10 @@ const ReviewPage = () => {
                       setValRangePicker(value);
                     }}
                   />
-                  <div className="d-flex" style={{ gap: "15px" }}>
+                  <div
+                    className="d-flex justify-content-start mt-2"
+                    style={{ gap: "15px" }}
+                  >
                     <Button
                       type="primary"
                       className="mt-2"

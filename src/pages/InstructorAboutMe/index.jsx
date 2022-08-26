@@ -406,11 +406,14 @@ const InstructorAboutMe = () => {
       value: 6,
     },
   ];
-
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
   const compUserInfo = () => {
     return (
       <>
-        <div className="row" style={{ height: "100vh" }}>
+        <div className="row">
           <div className="col-lg-3 col-md-4 text-center">{userImage()}</div>
           <div className="col-lg-9 col-md-8">
             <div className="form-group row">
@@ -617,7 +620,7 @@ const InstructorAboutMe = () => {
       <div className="container mt-3">
         <div className="row">
           <div className="col-12">
-            <div className="card card-shadow mb-5">
+            <div className="card card-shadow mb-5" style={boxStyle}>
               <div className="card-body">
                 <h4>User Info</h4>
                 <hr />

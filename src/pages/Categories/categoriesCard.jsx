@@ -28,22 +28,25 @@ const CategoriesCard = (props) => {
     }
   };
 
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
+
   return (
     <>
       <div className="col-md-4 col-sm-6 col-lg-3 col-12 mt-3">
-        <div
-          className="card"
-          style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
-        >
+        <div className="card" style={boxStyle}>
           {renderImage()}
           <hr className="mb-0 mt-0" />
 
           <div className="card-body">
             <h6 className="mb-0">{props.name}</h6>
-            <p className="text-muted mb-0">{props.detail}</p>
+            <p className="text-muted mb-0">{props.detaill}</p>
 
             <div className="mt-2 d-flex justify-content-start">
               <a
+                href="#"
                 onClick={(e) => {
                   navigate("/detailInstructor/" + props.id);
                 }}

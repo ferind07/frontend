@@ -78,3 +78,6 @@
   border-radius: 12px;
 }
 
+.menu-bars a {
+  margin-left: 0px;
+}

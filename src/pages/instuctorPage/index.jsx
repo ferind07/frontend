@@ -10,7 +10,7 @@ import Calendar from "react-awesome-calendar";
 import moment from "moment";
 import NumberFormat from "react-number-format";
 import ScheduleComp from "./ScheduleComp";
-import { Rate, Empty } from "antd";
+import { Rate, Empty, Select } from "antd";
 import { Bar } from "react-chartjs-2";
 import CommentComp from "./CommentComp";
 import "chart.js/auto";
@@ -21,6 +21,8 @@ const InstructorPage = () => {
   const [listEvent, setListEvent] = useState([]);
   const [detailUser, setDetailUser] = useState({});
   const [listReview, setListReview] = useState([]);
+
+  const { Option } = Select;
 
   const options = {
     responsive: true,
@@ -199,6 +201,8 @@ const InstructorPage = () => {
             name={review.name}
             rating={review.rating}
             comment={review.comment}
+            classTitle={review.title}
+            createAt={review.createAt}
           />
         );
       });
@@ -228,7 +232,7 @@ const InstructorPage = () => {
                             className="d-flex justify-content-start"
                             style={{ gap: "15px" }}
                           >
-                            <h4>Total course</h4>
+                            <h3 className="mb-0">Total course</h3>
                           </div>
                           <div
                             className="d-flex justify-content-start mt-2"
@@ -254,7 +258,7 @@ const InstructorPage = () => {
                             className="d-flex justify-content-start"
                             style={{ gap: "15px" }}
                           >
-                            <h3 className="mb-0">Total course</h3>
+                            <h3 className="mb-0">Waiting response</h3>
                           </div>
                           <div
                             className="d-flex justify-content-start mt-2"
@@ -313,35 +317,33 @@ const InstructorPage = () => {
               <div className="card-body">
                 <h3>Your review</h3>
                 <hr />
-                <div className="row">
+                <div className="row" style={{ height: "auto" }}>
                   <div className="col-6">
-                    <h5>Overall rating</h5>
-                    <div className="d-flex">
-                      <span>
-                        <Rate disabled value={averageReview()} />
-                      </span>
+                    <div className="card h-100" style={boxStyle}>
+                      <div className="card-body">
+                        <div className="d-flex justify-content-between">
+                          <h5 className="mb-0">Overall rating</h5>
+                          <span>
+                            <Rate disabled value={averageReview()} />
+                          </span>
+                        </div>
+                        <hr />
+                        <Bar options={options} data={dataReview()} />
+                      </div>
                     </div>
-                    <hr />
-                    <Bar options={options} data={dataReview()} />
                   </div>
                   <div className="col-6">
-                    <div className="card h-100">
+                    <div className="card" style={boxStyle}>
                       <div className="card-body">
                         <div className="d-flex justify-content-between">
                           <div className="d-flex center">
-                            <h5 className="mb-0">Comments</h5>
+                            <h5 className="mb-0">Latest comments</h5>
                           </div>
-
-                          <select>
-                            <option value="">paling bagus</option>
-                            <option value="">paling jelek</option>
-                          </select>
                         </div>
                         <hr />
                         <div style={{ overflowY: "auto", height: "400px" }}>
                           {reviewComp()}
                         </div>
-                        <hr />
                       </div>
                     </div>
                   </div>
@@ -356,12 +358,16 @@ const InstructorPage = () => {
                 <hr />
                 <div className="row">
                   <div className="col-6">
-                    <Calendar events={listEvent} />
+                    <div className="card" style={boxStyle}>
+                      <div className="card-body">
+                        <Calendar events={listEvent} />
+                      </div>
+                    </div>
                   </div>
                   <div className="col-6">
-                    <div className="card h-100">
+                    <div className="card h-100" style={boxStyle}>
                       <div className="card-body">
-                        <h5>Your Schedule</h5>
+                        <h5>Your Schedule (Upcoming)</h5>
                         <hr />
                         <div style={{ overflowY: "auto" }}>
                           {listEvent.map((event, index) => {

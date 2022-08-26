@@ -1,5 +1,6 @@
 import React from "react";
 import { Rate } from "antd";
+import { TeamOutlined } from "@ant-design/icons";
 
 const CommentComp = (props) => {
   return (
@@ -8,6 +9,7 @@ const CommentComp = (props) => {
         <div className="card-body">
           <div className="d-flex justify-content-between">
             <div className="d-flex center" style={{ gap: "10px" }}>
+              <TeamOutlined style={{ color: "#1890ff", fontSize: "20px" }} />
               <h6 className="mb-0">{props.name}</h6>
               <p className="mb-0 text-muted">({props.className})</p>
             </div>

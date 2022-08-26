@@ -6,6 +6,7 @@ import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import { Empty } from "antd";
 import BackendUrl from "../../components/BackendUrl";
+import { PlusCircleOutlined } from "@ant-design/icons";
 
 const AddClassContent = (props) => {
   const [value, setValue] = useState("");
@@ -14,7 +15,10 @@ const AddClassContent = (props) => {
   const [price, setPrice] = useState("");
   const [classCount, setClassCount] = useState(1);
   const [image, setImage] = useState();
-
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
   function addClass() {
     let bodyFormData = new FormData();
     bodyFormData.append("token", localStorage.getItem("token"));
@@ -163,54 +167,74 @@ const AddClassContent = (props) => {
     <>
       <form encType="multipart/form-data">
         <div style={{ height: "100%", minHeight: "75vh" }}>
-          <h3 className="mb-0">Add Class</h3>
-          <p className="text-muted">Create new class</p>
-          <hr className="mt-0" />
+          <div className="card mb-4" style={boxStyle}>
+            <div className="card-body d-flex">
+              <div>
+                <h3 className="mb-0">Add Class</h3>
+                <p className="text-muted mb-0">Create new class</p>
+              </div>
+              <div className="icon-box2">
+                <PlusCircleOutlined style={{ fontSize: "40px" }} />
+              </div>
+            </div>
+          </div>
+
           <div className="row">
             <div className="col-6">
-              <Input
-                type="text"
-                placeholder="Class title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <Input
-                type="number"
-                placeholder="Duration"
-                className="mt-2"
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-              />
-              <Input
-                type="number"
-                placeholder="Price"
-                className="mt-2 mb-2"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              />
+              <div className="card h-100" style={boxStyle}>
+                <div className="card-body">
+                  <Input
+                    type="text"
+                    placeholder="Class title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Duration"
+                    className="mt-2"
+                    value={duration}
+                    onChange={(e) => setDuration(e.target.value)}
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Price"
+                    className="mt-2 mb-2"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
 
-              <ReactQuill theme="snow" value={value} onChange={setValue} />
-              <p className="mb-0 mt-2">Class Count</p>
-              <Input
-                type="number"
-                placeholder="Price"
-                className="mt-1 mb-2"
-                value={classCount}
-                onChange={(e) => setClassCount(e.target.value)}
-                min={1}
-                max={3}
-              />
-              <p className="mb-0 mt-2">Class Image</p>
-              <input
-                type="file"
-                name="classImage"
-                className="mt-2"
-                onChange={(e) => handleImageChange(e)}
-              />
+                  <ReactQuill theme="snow" value={value} onChange={setValue} />
+                  <p className="mb-0 mt-2">Class Count</p>
+                  <Input
+                    type="number"
+                    placeholder="Price"
+                    className="mt-1 mb-2"
+                    value={classCount}
+                    onChange={(e) => setClassCount(e.target.value)}
+                    min={1}
+                    max={3}
+                  />
+                  <p className="mb-0 mt-2">Class Image</p>
+                  <input
+                    type="file"
+                    name="classImage"
+                    className="mt-2"
+                    onChange={(e) => handleImageChange(e)}
+                  />
+                </div>
+              </div>
             </div>
             <div className="col-6">
-              <div className="d-flex justify-content-center">
-                {renderImage()}
+              <div className="card h-100" style={boxStyle}>
+                <div className="card-body">
+                  <div
+                    className="d-flex justify-content-center h-100"
+                    style={{ alignItems: "center" }}
+                  >
+                    {renderImage()}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -224,28 +224,34 @@ const IncomeComp = () => {
     <>
       <div className="w-100">
         <h3 className="mb-2">Income</h3>
-        <hr className="mt-0" />
-        <div className="d-flex justify-content-start" style={{ gap: "20px" }}>
-          <div className="center">
-            <p className="mb-0">Filter</p>
+        <div className="card mt-3" style={boxStyle}>
+          <div className="card-body">
+            <div
+              className="d-flex justify-content-start"
+              style={{ gap: "20px" }}
+            >
+              <div className="center">
+                <p className="mb-0">Filter</p>
+              </div>
+
+              <RangePicker
+                value={time}
+                onChange={(value) => {
+                  setTime(value);
+                }}
+              />
+
+              <Button
+                type="primary"
+                onClick={() => {
+                  viewBtn();
+                }}
+              >
+                View
+              </Button>
+              <Button>Reset</Button>
+            </div>
           </div>
-
-          <RangePicker
-            value={time}
-            onChange={(value) => {
-              setTime(value);
-            }}
-          />
-
-          <Button
-            type="primary"
-            onClick={() => {
-              viewBtn();
-            }}
-          >
-            View
-          </Button>
-          <Button>Reset</Button>
         </div>
       </div>
 
