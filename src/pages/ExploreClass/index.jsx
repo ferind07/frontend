@@ -484,9 +484,7 @@ const ExploreClass = () => {
           <div className="col-12"></div>
         </div>
       </div>
-      <div className="mt-5">
-        <Footer />
-      </div>
+
       <Drawer
         title="Schedule"
         placement="right"

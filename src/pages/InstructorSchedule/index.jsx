@@ -54,8 +54,8 @@ const InstructorSchedule = () => {
         const event = [];
         for (let index = 0; index < success.data.length; index++) {
           const element = success.data[index];
-          const tFrom = moment(element.dateStart).add(7, "hours").format();
-          const tEnd = moment(element.dateEnd).add(7, "hours").format();
+          const tFrom = moment(element.dateStart).add(0, "hours").format();
+          const tEnd = moment(element.dateEnd).add(0, "hours").format();
           event.push({
             id: index,
             color: returnColorStatus(element.status),

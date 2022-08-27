@@ -53,28 +53,35 @@ const ForgetPassword = () => {
   return (
     <>
       <Navbarr />
-      <div className="container w-50">
-        <div className="row">
-          <div className="col-12 mt-4">
-            <div className="card">
-              <div className="card-body card-shadow">
-                <h2 className="text-center">Reset Password</h2>
-                <hr />
-                <p className="mb-0">Email</p>
-                <Input
-                  className="mt-2"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <Button
-                  type="primary"
-                  className="mt-2"
-                  onClick={(e) => {
-                    forgetPassword();
-                  }}
-                >
-                  Reset Password
-                </Button>
+      <div className="container-login">
+        <div className="container">
+          <div className="row">
+            <div className="col-12 mt-4">
+              <div className="card">
+                <div className="card-body card-shadow">
+                  <h2 className="text-center">Reset Password</h2>
+                  <hr />
+                  <div className="d-flex justify-content-start">
+                    <p className="mb-0">Email</p>
+                  </div>
+
+                  <Input
+                    className="mt-2"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <div className="d-flex justify-content-end">
+                    <Button
+                      type="primary"
+                      className="mt-2"
+                      onClick={(e) => {
+                        forgetPassword();
+                      }}
+                    >
+                      Reset Password
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -144,8 +144,10 @@ const AdminMaster = () => {
         <div className="row">
           <div className="col-12">
             <div className="card" style={boxStyle}>
+              <div className="card-header">
+                <h2 className="text-center mb-0">Master User</h2>
+              </div>
               <div className="card-body">
-                <h2 className="text-center">Master User</h2>
                 <div className="d-flex justify-content-between">
                   <div className="center">
                     <p className="mb-0">{listUser.length} User</p>

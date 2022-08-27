@@ -1,20 +1,14 @@
-/*!
-  =========================================================
-  * Muse Ant Design Dashboard - v1.0.0
-  =========================================================
-  * Product Page: https://www.creative-tim.com/product/muse-ant-design-dashboard
-  * Copyright 2021 Creative Tim (https://www.creative-tim.com)
-  * Licensed under MIT (https://github.com/creativetimofficial/muse-ant-design-dashboard/blob/main/LICENSE.md)
-  * Coded by Creative Tim
-  =========================================================
-  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import ReactApexChart from "react-apexcharts";
 import { Row, Col, Typography } from "antd";
-import eChart from "./configs/eChart";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import BackendUrl from "../BackendUrl";
 
 function EChart() {
+  // useEffect(() => {
+  //   getSales();
+  // }, []);
+
   const { Title, Paragraph } = Typography;
 
   const items = [
@@ -36,17 +30,31 @@ function EChart() {
     },
   ];
 
+  // const chart = () => {
+  //   if (eChart == undefined) {
+  //     return (
+  //       <>
+  //         <p>No chart</p>
+  //       </>
+  //     );
+  //   } else {
+  //     return (
+  //       <>
+  //         <ReactApexChart
+  //           className="bar-chart"
+  //           options={eChart.options}
+  //           series={eChart.series}
+  //           type="bar"
+  //           height={220}
+  //         />
+  //       </>
+  //     );
+  //   }
+  // };
+
   return (
     <>
-      <div id="chart">
-        <ReactApexChart
-          className="bar-chart"
-          options={eChart.options}
-          series={eChart.series}
-          type="bar"
-          height={220}
-        />
-      </div>
+      {/* <div id="chart">{eChart == undefined ? "Not Available" : chart()}</div> */}
       <div className="chart-vistior">
         <Title level={5}>Active Users</Title>
         <Paragraph className="lastweek">

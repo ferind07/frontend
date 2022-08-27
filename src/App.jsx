@@ -24,6 +24,7 @@ import ActiveUser from "./pages/ActiveUser";
 import ReportPage from "./pages/reportPage";
 import AdminDashboardTemplate from "./pages/AdminDashboardTemplate";
 import "./assets/styles/main.css";
+import Footer from "./components/Footer";
 
 const App = () => {
   const socket = useRef();
@@ -89,6 +90,9 @@ const App = () => {
           element={<AdminDashboardTemplate />}
         />
       </Routes>
+      <div className="mt-3">
+        <Footer />
+      </div>
     </>
   );
 };

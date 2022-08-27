@@ -145,7 +145,6 @@ const Login = (props) => {
           <a href="/forgetPassword">Forget password</a>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

@@ -149,7 +149,6 @@ const DetailInstructor = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

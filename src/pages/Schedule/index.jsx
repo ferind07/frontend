@@ -11,6 +11,7 @@ import {
   WarningTwoTone,
   ClockCircleTwoTone,
 } from "@ant-design/icons";
+import Footer from "../../components/Footer";
 
 const Schedule = () => {
   const [hSubmission, setHSubmission] = useState([]);

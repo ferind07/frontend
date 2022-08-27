@@ -1,19 +1,258 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
+import moment from "moment";
 import {
   UserOutlined,
   InfoCircleOutlined,
   ContainerOutlined,
+  UserDeleteOutlined,
+  LineChartOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
-import { Tag, Table } from "antd";
+import { Tag, Table, Button } from "antd";
 import { Pie, Line } from "react-chartjs-2";
 import "chart.js/auto";
+import Footer from "../../components/Footer";
+import ReactApexChart from "react-apexcharts";
+import { Row, Col, Typography } from "antd";
+import NumberFormat from "react-number-format";
+import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [listUser, setListUser] = useState([]);
   const [listInstructor, setListInstructor] = useState([]);
   const [listClass, setListClass] = useState([]);
+  const [sales, setSales] = useState([]);
+  const [report, setReport] = useState([]);
+
+  const [eChart, setEChart] = useState();
+
+  const { Title, Paragraph } = Typography;
+
+  var navigate = useNavigate();
+
+  var eChartData = {
+    series: [
+      {
+        name: "Sales",
+        data: [],
+        color: "#fff",
+      },
+    ],
+
+    options: {
+      chart: {
+        type: "bar",
+        width: "100%",
+        height: "auto",
+
+        toolbar: {
+          show: false,
+        },
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: "55%",
+          borderRadius: 5,
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        show: true,
+        width: 1,
+        colors: ["transparent"],
+      },
+      grid: {
+        show: true,
+        borderColor: "#ccc",
+        strokeDashArray: 2,
+      },
+      xaxis: {
+        categories: [],
+        labels: {
+          show: true,
+          align: "right",
+          minWidth: 0,
+          maxWidth: 160,
+          style: {
+            colors: [],
+          },
+        },
+      },
+      yaxis: {
+        labels: {
+          show: true,
+          align: "right",
+          minWidth: 0,
+          maxWidth: 160,
+          style: {
+            colors: [],
+          },
+        },
+      },
+
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return "Rp. " + val + " thousands";
+          },
+        },
+      },
+    },
+  };
+
+  function getNeedResponseReport() {
+    axios
+      .get(BackendUrl + "/admin/getNeedResponseReport")
+      .then((success) => {
+        setReport(success.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function getSales() {
+    axios
+      .get(BackendUrl + "/admin/getSales")
+      .then((success) => {
+        setEChart(success.data);
+        console.log(success.data);
+        setSales(success.data);
+
+        const value = [];
+        const label = [];
+        const color = [];
+
+        success.data.forEach((element) => {
+          value.push(element.sales);
+          label.push(element.monthName);
+          color.push("#fff");
+        });
+        var eChartData = {
+          series: [
+            {
+              name: "Sales",
+              data: value,
+              color: "#fff",
+            },
+          ],
+
+          options: {
+            chart: {
+              type: "bar",
+              width: "100%",
+              height: "auto",
+
+              toolbar: {
+                show: false,
+              },
+            },
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                columnWidth: "55%",
+                borderRadius: 5,
+              },
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            stroke: {
+              show: true,
+              width: 1,
+              colors: ["transparent"],
+            },
+            grid: {
+              show: true,
+              borderColor: "#ccc",
+              strokeDashArray: 2,
+            },
+            xaxis: {
+              categories: label,
+              labels: {
+                show: true,
+                align: "right",
+                minWidth: 0,
+                maxWidth: 160,
+                style: {
+                  colors: color,
+                },
+              },
+            },
+            yaxis: {
+              labels: {
+                show: true,
+                align: "right",
+                minWidth: 0,
+                maxWidth: 160,
+                style: {
+                  colors: color,
+                },
+              },
+            },
+
+            tooltip: {
+              y: {
+                formatter: function (val) {
+                  return "Rp. " + val + " thousands";
+                },
+              },
+            },
+          },
+        };
+        console.log(eChartData);
+        setEChart(eChartData);
+      })
+
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const columnsReport = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "class",
+      dataIndex: "title",
+      key: "title",
+    },
+
+    {
+      title: "date",
+      dataIndex: "date",
+      render: (text, record) => {
+        const date = moment(text);
+
+        const formatedDate = date.format("dddd, DD MMMM yyyy kk:mm");
+
+        return formatedDate;
+      },
+    },
+    {
+      title: "action",
+      render: (text, record) => {
+        return (
+          <Button
+            type="primary"
+            onClick={(e) => {
+              navigate("/admin/detailProblem/" + record.id);
+            }}
+          >
+            Detail
+          </Button>
+        );
+      },
+    },
+  ];
 
   const getBannedUser = () => {
     var newArray = listUser.filter(function (user) {
@@ -136,10 +375,58 @@ const AdminDashboard = () => {
 
   function getInstructorData() {}
 
+  const renderChart = () => {
+    if (eChart == undefined) {
+      return (
+        <ReactApexChart
+          className="bar-chart"
+          options={eChartData.options}
+          series={eChartData.series}
+          type="bar"
+          height={220}
+        />
+      );
+    } else {
+      return (
+        <ReactApexChart
+          className="bar-chart"
+          options={eChart.options}
+          series={eChart.series}
+          type="bar"
+          height={220}
+        />
+      );
+    }
+  };
+
+  const getTopSales = () => {
+    if (sales.length == 0) {
+      return {
+        month: "No sales",
+        totalSales: 0,
+      };
+    } else {
+      var monthName = "";
+      var totalSales = -1;
+      sales.forEach((element) => {
+        if (element.sales > totalSales) {
+          totalSales = element.sales;
+          monthName = element.monthName;
+        }
+      });
+      return {
+        month: monthName,
+        totalSales: totalSales,
+      };
+    }
+  };
+
   useEffect(() => {
     getAllUser();
     getAllClass();
     getInstructorData();
+    getSales();
+    getNeedResponseReport();
   }, []);
   const boxStyle = {
     boxShadow: "0px 20px 27px #0000000d",
@@ -237,18 +524,82 @@ const AdminDashboard = () => {
           </div>
           <div className="col-12 mt-4">
             <div className="row">
+              <div className="col-6">
+                <div className="card h-100" style={boxStyle}>
+                  <div className="card-header d-flex justify-content-between">
+                    <div className="d-flex" style={{ gap: "15px" }}>
+                      <h3 className="mb-0">Total Sales</h3>
+                      <h6 className="mb-0 text-muted">(last 6 month)</h6>
+                    </div>
+
+                    <LineChartOutlined
+                      style={{ fontSize: "25px", color: "#1890ff" }}
+                    />
+                  </div>
+                  <div className="card-body">
+                    {renderChart()}
+                    <div className="chart-vistior">
+                      <Title level={5}>Top Sales</Title>
+                      <Paragraph className="lastweek">
+                        {getTopSales().month}{" "}
+                        <NumberFormat
+                          value={getTopSales().totalSales}
+                          className="foo"
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={" Rp. "}
+                          renderText={(value, props) => (
+                            <span className="bnb2">+ {value}</span>
+                          )}
+                        />
+                      </Paragraph>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-6">
+                <div className="card h-100" style={boxStyle}>
+                  <div className="card-header d-flex justify-content-between">
+                    <h3 className="mb-0">User Reports</h3>
+                    <WarningOutlined
+                      style={{ fontSize: "25px", color: "#1890ff" }}
+                    />
+                  </div>
+                  <div className="card-body">
+                    <Table
+                      dataSource={report}
+                      columns={columnsReport}
+                      pagination={{ pageSize: 10 }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-12 mt-4">
+            <div className="row">
               <div className="col-4">
                 <div className="card" style={boxStyle}>
+                  <div className="card-header">
+                    <h4 className="text-center mb-0">User and Instructor</h4>
+                  </div>
                   <div className="card-body">
-                    <h4 className="text-center">User and Instructor</h4>
                     <Pie data={data} />
                   </div>
                 </div>
               </div>
               <div className="col-8">
                 <div className="card h-100" style={boxStyle}>
+                  <div
+                    className="card-header d-flex justify-content-between"
+                    style={{ gap: "10px" }}
+                  >
+                    <h3 className="mb-0">Banned User</h3>
+                    <UserDeleteOutlined
+                      style={{ fontSize: "25px", color: "#1890ff" }}
+                    />
+                  </div>
                   <div className="card-body">
-                    <h3>Banned User</h3>
                     <Table
                       dataSource={getBannedUser()}
                       columns={columns}
@@ -260,28 +611,6 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
-
-          {/* <div className="col-12 mt-3 mb-5">
-            <div className="card card-shadow">
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-5">
-                    <h3>Transaction</h3>
-                    <Line options={options} data={dataLine} />
-                  </div>
-                  <div className="col-7">
-                    <h3>History Transaction</h3>
-                    <div
-                      className="card"
-                      style={{ height: "300px", overflowY: "auto" }}
-                    >
-                      <div className="card-body"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
     </>

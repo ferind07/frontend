@@ -27,8 +27,8 @@ const ScheduleCard = (props) => {
   if (dd < 10) dd = "0" + dd;
   if (mm < 10) mm = "0" + mm;
 
-  var formatteddatestr = moment(props.submissionDetail.timeInsert)
-    .add(0, "hours")
+  var formatteddatestr = moment(new Date(props.submissionDetail.timeInsert))
+    .add(-7, "hours")
     .format("dddd, DD MMMM yyyy kk:mm");
   const dateStr = formatteddatestr;
 
@@ -102,9 +102,9 @@ const ScheduleCard = (props) => {
   const btnStatus = () => {
     if (props.submissionDetail.status == 1) {
       return (
-        <button className="btn btn-primary btn-sm" onClick={showDrawer}>
+        <Button type="primary" onClick={showDrawer}>
           Detail
-        </button>
+        </Button>
       );
     }
   };
@@ -188,7 +188,7 @@ const ScheduleCard = (props) => {
             {submissionList.map((subMissionItem, i) => {
               //console.log(subMissionItem);
               const dateStart = moment(subMissionItem.dateStart).add(
-                0,
+                -7,
                 "hours"
               );
               const dateStartString =
@@ -205,7 +205,7 @@ const ScheduleCard = (props) => {
                 (dateStart.minutes() < 10
                   ? "0" + dateStart.minutes()
                   : dateStart.minutes());
-              const dateEnd = moment(subMissionItem.dateEnd).add(0, "hours");
+              const dateEnd = moment(subMissionItem.dateEnd).add(-7, "hours");
               const dateEndString =
                 dateEnd.date() +
                 "/" +
@@ -230,7 +230,7 @@ const ScheduleCard = (props) => {
                       </h6>
                       <div className="d-flex justify-content-between">
                         {renderButton(subMissionItem)}
-                        <button>Report</button>
+                        <Button danger>Report</Button>
                       </div>
                     </div>
                   </div>

@@ -101,7 +101,9 @@ const UnconfirmedSchedule = (props) => {
     const componentList = [];
     if (tempListSchedule.length > 0) {
       tempListSchedule.map((detailSchedule) => {
-        const today = new Date(detailSchedule.timeInsert);
+        const today = new Date(
+          moment(detailSchedule.timeInsert).add(-7, "hours")
+        );
         const yyyy = today.getFullYear();
         let mm = today.getMonth(); // Months start at 0!
         let dd = today.getDate();
@@ -135,7 +137,7 @@ const UnconfirmedSchedule = (props) => {
         //if (mm < 10) mm = "0" + mm;
 
         var formatteddatestr = moment(detailSchedule.timeInsert)
-          .add(0, "hours")
+          .add(-7, "hours")
           .format("hh:mm a");
         // var formatteddatestr = moment(detailSchedule.timeInsert).format(
         //   "hh:mm a"

@@ -78,7 +78,7 @@ const ReviewPage = () => {
   function filterDate(arrHistory) {
     //console.log(valRangePicker);
     var filtered = arrHistory.filter((detailHistory) => {
-      const date = new Date(detailHistory.timeInsert);
+      const date = new Date(moment(detailHistory.timeInsert).add(-7, "hours"));
       const dateStart = valRangePicker[0].set({ hour: 0 }).toDate();
       const dateEnd = valRangePicker[1].set({ hour: 23 }).toDate();
 

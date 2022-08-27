@@ -128,7 +128,7 @@ const InstructorDetailSchedule = () => {
 
   const renderTimeApliedAT = () => {
     var timeText = "";
-    const momentAppliedat = moment(hSubmission.timeInsert).add(0, "hours");
+    const momentAppliedat = moment(hSubmission.timeInsert).add(-7, "hours");
     timeText =
       momentAppliedat.date() +
       " " +
@@ -430,7 +430,7 @@ const InstructorDetailSchedule = () => {
                       {listSubmission.map((subMissionItem, i) => {
                         //console.log(subMissionItem);
                         const dateStart = moment(subMissionItem.dateStart).add(
-                          0,
+                          -7,
                           "hours"
                         );
                         const dateStartString =
@@ -448,7 +448,7 @@ const InstructorDetailSchedule = () => {
                             ? "0" + dateStart.minutes()
                             : dateStart.minutes());
                         const dateEnd = moment(subMissionItem.dateEnd).add(
-                          0,
+                          -7,
                           "hours"
                         );
                         const dateEndString =

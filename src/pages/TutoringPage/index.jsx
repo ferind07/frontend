@@ -14,6 +14,7 @@ import Peer from "simple-peer";
 import "./index.css";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
+import { useBeforeunload } from "react-beforeunload";
 
 const Video = (props) => {
   const ref = useRef();
@@ -443,6 +444,11 @@ const TutoringPage = (props) => {
     );
   };
 
+  // useBeforeunload((event) => {
+  //   console.log("refresh");
+  //   event.preventDefault();
+  // });
+
   useEffect(() => {
     getUserInfo();
 
@@ -475,6 +481,7 @@ const TutoringPage = (props) => {
         });
 
         socketRef.current.on("user joined", (payload) => {
+          notification.success({ message: "User Joined" });
           console.log("user join = " + payload.callerID);
           partnerSocketId.current = payload.callerID;
           const peer = addPeer(
@@ -500,7 +507,23 @@ const TutoringPage = (props) => {
           endMeet();
           navigate("/resultPage/" + id);
         });
+      })
+      .catch((error) => {
+        navigate(-1);
+        window.location.reload();
       });
+
+    socketRef.current.on("user left", (id) => {
+      notification.warning({ message: "User Left" });
+      const peerObj = peersRef.current.find((p) => p.peerID === id);
+      if (peerObj) {
+        peerObj.peer.destroy();
+      }
+
+      peersRef.current = [];
+
+      setPeers([]);
+    });
 
     socketRef.current.on("reciveShareScreen", (payload) => {
       //alert("user share screen");

@@ -25,7 +25,7 @@ const HistoryComp = (props) => {
     "December",
   ];
 
-  const time = moment(props.time);
+  const time = moment(props.time).add(-7, "hours");
   const orderId = props.orderId;
   const instructorName = props.instructorName;
   const idInstructor = props.idInstructor;
