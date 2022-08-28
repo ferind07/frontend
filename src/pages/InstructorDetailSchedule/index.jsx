@@ -362,125 +362,126 @@ const InstructorDetailSchedule = () => {
 
   return (
     <>
-      <div className="container mt-3 mb-4">
-        <div className="row">
-          <div className="col-7">
-            <div className="card mb-5" style={boxStyle}>
-              <div className="card-body">
-                <h3>Class Info</h3>
-                <div className="row">
-                  <div className="col-6">
-                    <img
-                      src={BackendUrl + hSubmission.image}
-                      className="w-100"
-                      style={{ aspectRatio: "4/3" }}
-                    />
+      <div className="container-style">
+        <div className="container mt-3 mb-4">
+          <div className="row">
+            <div className="col-7">
+              <div className="card mb-5" style={boxStyle}>
+                <div className="card-body">
+                  <h3>Class Info</h3>
+                  <div className="row">
+                    <div className="col-6">
+                      <img
+                        src={BackendUrl + hSubmission.image}
+                        className="w-100"
+                        style={{ aspectRatio: "4/3" }}
+                      />
+                    </div>
+                    <div className="col-6">
+                      <h5 className="mb-1">{hSubmission.title} class</h5>
+                      <p className="text-muted">
+                        Applied at {renderTimeApliedAT()}
+                      </p>
+                      <h6>Potential Income</h6>
+                      <NumberFormat
+                        value={renderPotentialIncome()}
+                        className="foo"
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        renderText={(value, props) => (
+                          <h5 {...props}>Rp. {value}</h5>
+                        )}
+                      />
+                      <div>{btnAction()}</div>
+                    </div>
                   </div>
-                  <div className="col-6">
-                    <h5 className="mb-1">{hSubmission.title} class</h5>
-                    <p className="text-muted">
-                      Applied at {renderTimeApliedAT()}
-                    </p>
-                    <h6>Potential Income</h6>
-                    <NumberFormat
-                      value={renderPotentialIncome()}
-                      className="foo"
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      renderText={(value, props) => (
-                        <h5 {...props}>Rp. {value}</h5>
-                      )}
-                    />
-                    <div>{btnAction()}</div>
-                  </div>
-                </div>
 
-                <Collapse className="mt-3">
-                  <Panel header="Detail Student" key="1">
-                    <div className="row">
-                      <div className="col-6 text-center">
-                        {renderUserImage()}
+                  <Collapse className="mt-3">
+                    <Panel header="Detail Student" key="1">
+                      <div className="row">
+                        <div className="col-6 text-center">
+                          {renderUserImage()}
+                        </div>
+                        <div className="col-6">{userDescription()}</div>
                       </div>
-                      <div className="col-6">{userDescription()}</div>
-                    </div>
-                  </Panel>
-                  <Panel header="Detail Class" key="2">
-                    <div className="row">
-                      <div className="col-5">
-                        <img
-                          src={BackendUrl + hSubmission.image}
-                          className="w-100"
-                          style={{ aspectRatio: "4/3" }}
-                        />
+                    </Panel>
+                    <Panel header="Detail Class" key="2">
+                      <div className="row">
+                        <div className="col-5">
+                          <img
+                            src={BackendUrl + hSubmission.image}
+                            className="w-100"
+                            style={{ aspectRatio: "4/3" }}
+                          />
+                        </div>
+                        <div className="col-7">{classDesciption()}</div>
                       </div>
-                      <div className="col-7">{classDesciption()}</div>
-                    </div>
-                  </Panel>
-                </Collapse>
+                    </Panel>
+                  </Collapse>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="col-5">
-            <div className="card" style={boxStyle}>
-              <div className="card-body">
-                <h3>Schedule</h3>
-                <div>
-                  <div className="row">
-                    <div className="col-12">
-                      {listSubmission.map((subMissionItem, i) => {
-                        //console.log(subMissionItem);
-                        const dateStart = moment(subMissionItem.dateStart).add(
-                          -7,
-                          "hours"
-                        );
-                        const dateStartString =
-                          dateStart.date() +
-                          "/" +
-                          (dateStart.month() + 1) +
-                          "/" +
-                          dateStart.year() +
-                          " " +
-                          (dateStart.hours() < 10
-                            ? "0" + dateStart.hours()
-                            : dateStart.hours()) +
-                          ":" +
-                          (dateStart.minutes() < 10
-                            ? "0" + dateStart.minutes()
-                            : dateStart.minutes());
-                        const dateEnd = moment(subMissionItem.dateEnd).add(
-                          -7,
-                          "hours"
-                        );
-                        const dateEndString =
-                          dateEnd.date() +
-                          "/" +
-                          (dateEnd.month() + 1) +
-                          "/" +
-                          dateEnd.year() +
-                          " " +
-                          (dateEnd.hours() < 10
-                            ? "0" + dateEnd.hours()
-                            : dateEnd.hours()) +
-                          ":" +
-                          (dateEnd.minutes() < 10
-                            ? "0" + dateEnd.minutes()
-                            : dateEnd.minutes());
-                        return (
-                          <>
-                            <div className="mt-2" key={i}>
-                              <div className="card">
-                                <div className="card-body">
-                                  <h6>Date start</h6>
-                                  <p>{dateStartString}</p>
-                                  <h6>Date end</h6>
-                                  <p>{dateEndString}</p>
-                                  {renderButton(subMissionItem)}
+            <div className="col-5">
+              <div className="card" style={boxStyle}>
+                <div className="card-body">
+                  <h3>Schedule</h3>
+                  <div>
+                    <div className="row">
+                      <div className="col-12">
+                        {listSubmission.map((subMissionItem, i) => {
+                          //console.log(subMissionItem);
+                          const dateStart = moment(
+                            subMissionItem.dateStart
+                          ).add(-7, "hours");
+                          const dateStartString =
+                            dateStart.date() +
+                            "/" +
+                            (dateStart.month() + 1) +
+                            "/" +
+                            dateStart.year() +
+                            " " +
+                            (dateStart.hours() < 10
+                              ? "0" + dateStart.hours()
+                              : dateStart.hours()) +
+                            ":" +
+                            (dateStart.minutes() < 10
+                              ? "0" + dateStart.minutes()
+                              : dateStart.minutes());
+                          const dateEnd = moment(subMissionItem.dateEnd).add(
+                            -7,
+                            "hours"
+                          );
+                          const dateEndString =
+                            dateEnd.date() +
+                            "/" +
+                            (dateEnd.month() + 1) +
+                            "/" +
+                            dateEnd.year() +
+                            " " +
+                            (dateEnd.hours() < 10
+                              ? "0" + dateEnd.hours()
+                              : dateEnd.hours()) +
+                            ":" +
+                            (dateEnd.minutes() < 10
+                              ? "0" + dateEnd.minutes()
+                              : dateEnd.minutes());
+                          return (
+                            <>
+                              <div className="mt-2" key={i}>
+                                <div className="card">
+                                  <div className="card-body">
+                                    <h6>Date start</h6>
+                                    <p>{dateStartString}</p>
+                                    <h6>Date end</h6>
+                                    <p>{dateEndString}</p>
+                                    {renderButton(subMissionItem)}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </>
-                        );
-                      })}
+                            </>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -6,6 +6,7 @@ import { Worker } from "@react-pdf-viewer/core";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
 import { Input, TimePicker, Checkbox } from "antd";
+import { FileAddOutlined } from "@ant-design/icons";
 
 const RegisterInstructorPage = () => {
   const { Option } = Select;
@@ -126,6 +127,11 @@ const RegisterInstructorPage = () => {
     }
   };
 
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
+
   const onCheckBoxChange = (checkedValue) => {
     //console.log(checkedValue);
     setAvailableDay(checkedValue);
@@ -136,9 +142,12 @@ const RegisterInstructorPage = () => {
       <div className="container myaccount">
         <div className="row">
           <div className="col-12">
-            <div className="card">
+            <div className="card box-style" style={boxStyle}>
+              <div className="card-header d-flex justify-content-between">
+                <h3 className="mb-0">Register as instructor</h3>
+                <FileAddOutlined style={{ fontSize: "25px" }} />
+              </div>
               <div className="card-body">
-                <h3>Register as instructor</h3>
                 <form
                   encType="multipart/form-data"
                   onSubmit={(e) => onClickSubmit(e)}

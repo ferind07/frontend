@@ -77,7 +77,7 @@ const ResultPage = () => {
   }
 
   function submitReport() {
-    console.log(localStorage.getItem("token"));
+    //console.log(localStorage.getItem("token"));
     if (checkInput()) {
       let bodyFormData = new FormData();
       bodyFormData.append("token", localStorage.getItem("token"));

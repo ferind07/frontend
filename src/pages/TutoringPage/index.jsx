@@ -514,10 +514,12 @@ const TutoringPage = (props) => {
       });
 
     socketRef.current.on("user left", (id) => {
-      notification.warning({ message: "User Left" });
+      console.log("user left " + id);
+
       const peerObj = peersRef.current.find((p) => p.peerID === id);
       if (peerObj) {
         peerObj.peer.destroy();
+        notification.warning({ message: "User Left" });
       }
 
       peersRef.current = [];

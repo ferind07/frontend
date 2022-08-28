@@ -14,6 +14,7 @@ import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 import { AiFillSave } from "react-icons/ai";
+import { UserOutlined } from "@ant-design/icons";
 
 const InstructorAboutMe = () => {
   const [userInfo, setUserInfo] = useState({});
@@ -621,9 +622,11 @@ const InstructorAboutMe = () => {
         <div className="row">
           <div className="col-12">
             <div className="card card-shadow mb-5" style={boxStyle}>
+              <div className="card-header d-flex justify-content-between">
+                <h4 className="mb-0">User Info</h4>
+                <UserOutlined style={{ fontSize: "25px" }} />
+              </div>
               <div className="card-body">
-                <h4>User Info</h4>
-                <hr />
                 <Tabs defaultActiveKey="1">
                   <TabPane tab="User Info" key="1">
                     {compUserInfo()}

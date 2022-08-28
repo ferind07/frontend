@@ -5,6 +5,7 @@ import Navbarr from "../../components/Navbar";
 import BackendUrl from "../../components/BackendUrl";
 import { AiFillSave } from "react-icons/ai";
 import { Input, notification, Tabs, Button } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 function MyAccount() {
   let [userData, setUserData] = useState({});
@@ -261,50 +262,60 @@ function MyAccount() {
     );
   };
 
+  const boxStyle = {
+    boxShadow: "0px 20px 27px #0000000d",
+    borderRadius: "12px",
+  };
+
   return (
     <>
       <Navbarr instructor />
-      <div className="container myaccount">
-        <div className="row">
-          <form encType="multipart/form-data" className="row">
-            <div className="col-lg-3 col-md-4">
-              <div className="card card-shadow">
-                <div className="card-body">
-                  {userImage()}
-                  <div className="mt-2">
-                    <div className="">
-                      <p className="text-center">Change image</p>
+      <div className="container-style">
+        <div className="container myaccount">
+          <div className="row">
+            <form encType="multipart/form-data" className="row">
+              <div className="col-lg-3 col-md-4">
+                <div className="card card-shadow" style={boxStyle}>
+                  <div className="card-body">
+                    {userImage()}
+                    <div className="mt-2">
+                      <div className="">
+                        <p className="text-center">Change image</p>
 
-                      <input
-                        type="file"
-                        onChange={(e) => handleImageChange(e)}
-                      />
-                    </div>
-                    <div className="d-flex justify-content-center mt-3">
-                      <Button type="danger" onClick={onClickDelete}>
-                        Delete Image
-                      </Button>
+                        <input
+                          type="file"
+                          onChange={(e) => handleImageChange(e)}
+                        />
+                      </div>
+                      <div className="d-flex justify-content-center mt-3">
+                        <Button type="danger" onClick={onClickDelete}>
+                          Delete Image
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col-lg-9 col-md-8">
-              <div className="card card-shadow">
-                <div className="card-body">
-                  <h4>My Account</h4>
-                  <Tabs defaultActiveKey="1">
-                    <TabPane tab="User Info" key="1">
-                      {compDetailUser()}
-                    </TabPane>
-                    <TabPane tab="Change password" key="2">
-                      {changePasswordComp()}
-                    </TabPane>
-                  </Tabs>
+              <div className="col-lg-9 col-md-8">
+                <div className="card card-shadow" style={boxStyle}>
+                  <div className="card-header d-flex justify-content-between">
+                    <h4 className="mb-0">My Account</h4>
+                    <UserOutlined style={{ fontSize: "25px" }} />
+                  </div>
+                  <div className="card-body">
+                    <Tabs defaultActiveKey="1">
+                      <TabPane tab="User Info" key="1">
+                        {compDetailUser()}
+                      </TabPane>
+                      <TabPane tab="Change password" key="2">
+                        {changePasswordComp()}
+                      </TabPane>
+                    </Tabs>
+                  </div>
                 </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </>

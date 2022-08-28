@@ -25,6 +25,7 @@ import ReportPage from "./pages/reportPage";
 import AdminDashboardTemplate from "./pages/AdminDashboardTemplate";
 import "./assets/styles/main.css";
 import Footer from "./components/Footer";
+import AddReport from "./pages/AddReport";
 
 const App = () => {
   const socket = useRef();
@@ -85,6 +86,7 @@ const App = () => {
         <Route path="/userCashOut" element={<UserCashOut />} />
         <Route path="/resultPage/:id" element={<ResultPage />} />
         <Route path="/activeUser/:id" element={<ActiveUser />} />
+        <Route path="/addReport/:id" element={<AddReport />} />
         <Route
           path="/adminDashboardTemplate"
           element={<AdminDashboardTemplate />}

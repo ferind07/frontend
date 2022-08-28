@@ -230,9 +230,9 @@ const AdminDashboard = () => {
       title: "date",
       dataIndex: "date",
       render: (text, record) => {
-        const date = moment(text);
+        const date = moment(text).add(-7, "hours");
 
-        const formatedDate = date.format("dddd, DD MMMM yyyy kk:mm");
+        const formatedDate = date.format("DD MMM yyyy kk:mm");
 
         return formatedDate;
       },

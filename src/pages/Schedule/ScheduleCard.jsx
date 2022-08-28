@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import BackendUrl from "../../components/BackendUrl";
 import moment from "moment";
 import axios from "axios";
-import { Drawer, notification, Button, Tag } from "antd";
+import { Drawer, notification, Button, Tag, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const ScheduleCard = (props) => {
@@ -12,9 +12,22 @@ const ScheduleCard = (props) => {
   const yyyy = today.getFullYear();
   let mm = today.getMonth() + 1; // Months start at 0!
   let dd = today.getDate();
+  const [childrenDrawer, setChildrenDrawer] = useState(false);
 
   const [submissionList, setSubmissionList] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState("");
+  const [file, setFile] = useState();
+
+  const { TextArea } = Input;
+
+  const showChildrenDrawer = () => {
+    setChildrenDrawer(true);
+  };
+
+  const onChildrenDrawerClose = () => {
+    setChildrenDrawer(false);
+  };
 
   const showDrawer = () => {
     setVisible(true);
@@ -100,7 +113,10 @@ const ScheduleCard = (props) => {
   };
 
   const btnStatus = () => {
-    if (props.submissionDetail.status == 1) {
+    if (
+      props.submissionDetail.status == 1 ||
+      props.submissionDetail.status == 6
+    ) {
       return (
         <Button type="primary" onClick={showDrawer}>
           Detail
@@ -150,6 +166,13 @@ const ScheduleCard = (props) => {
       );
     }
   };
+
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFile(e.target.files[0]);
+    }
+  };
+
   const boxStyle = {
     boxShadow: "0px 20px 27px #0000000d",
     borderRadius: "12px",
@@ -187,6 +210,30 @@ const ScheduleCard = (props) => {
           <div className="col-12">
             {submissionList.map((subMissionItem, i) => {
               //console.log(subMissionItem);
+
+              const rendeBtnReport = () => {
+                const dateNow = moment(new Date()).add(15, "minutes");
+                const dateEnd = moment(subMissionItem.dateEnd).add(-7, "hours");
+
+                if (dateNow > dateEnd && subMissionItem.status != 5) {
+                  return (
+                    <Button
+                      danger
+                      onClick={(e) => {
+                        navigate("/addReport/" + subMissionItem.id);
+                      }}
+                    >
+                      Report
+                    </Button>
+                  );
+                } else {
+                  return (
+                    <Button disabled danger>
+                      Report
+                    </Button>
+                  );
+                }
+              };
               const dateStart = moment(subMissionItem.dateStart).add(
                 -7,
                 "hours"
@@ -230,7 +277,7 @@ const ScheduleCard = (props) => {
                       </h6>
                       <div className="d-flex justify-content-between">
                         {renderButton(subMissionItem)}
-                        <Button danger>Report</Button>
+                        {rendeBtnReport()}
                       </div>
                     </div>
                   </div>
