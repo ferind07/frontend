@@ -40,24 +40,28 @@ const InstructorClass = () => {
   }
 
   return (
-    <div className="container mt-3">
-      <div className="row">
-        <div className="col-12">
-          <div className="card card-shadow">
-            <div className="card-body">
-              <Tabs defaultActiveKey="1" onChange={callback}>
-                <TabPane tab="My Class" key="1">
-                  <MyClassContent classList={classList} />
-                </TabPane>
-                <TabPane tab="Add Class" key="2">
-                  <AddClassContent functionGetClass={getClass} />
-                </TabPane>
-              </Tabs>
+    <>
+      <div className="container-style">
+        <div className="container mt-3">
+          <div className="row">
+            <div className="col-12">
+              <div className="card card-shadow">
+                <div className="card-body">
+                  <Tabs defaultActiveKey="1" onChange={callback}>
+                    <TabPane tab="My Class" key="1">
+                      <MyClassContent classList={classList} />
+                    </TabPane>
+                    <TabPane tab="Add Class" key="2">
+                      <AddClassContent functionGetClass={getClass} />
+                    </TabPane>
+                  </Tabs>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

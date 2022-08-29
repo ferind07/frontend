@@ -123,25 +123,29 @@ const AdminInstructor = () => {
     borderRadius: "12px",
   };
   return (
-    <div className="container mt-3">
-      <div className="row">
-        <div className="col-12">
-          <div className="card" style={boxStyle}>
-            <div className="card-header">
-              <h5 className="card-title">Approve New Instructor</h5>
-            </div>
-            <div className="card-body">
-              <Table
-                columns={columns}
-                dataSource={dataInstructor}
-                rowKey={(record) => record.uid}
-                scroll={{ x: 1000 }}
-              />
+    <>
+      <div className="container-style">
+        <div className="container mt-3">
+          <div className="row">
+            <div className="col-12">
+              <div className="card" style={boxStyle}>
+                <div className="card-header">
+                  <h5 className="card-title">Approve New Instructor</h5>
+                </div>
+                <div className="card-body">
+                  <Table
+                    columns={columns}
+                    dataSource={dataInstructor}
+                    rowKey={(record) => record.uid}
+                    scroll={{ x: 1000 }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

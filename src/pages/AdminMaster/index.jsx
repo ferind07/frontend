@@ -140,28 +140,30 @@ const AdminMaster = () => {
   }, []);
   return (
     <>
-      <div className="container mt-3">
-        <div className="row">
-          <div className="col-12">
-            <div className="card" style={boxStyle}>
-              <div className="card-header">
-                <h2 className="text-center mb-0">Master User</h2>
-              </div>
-              <div className="card-body">
-                <div className="d-flex justify-content-between">
-                  <div className="center">
-                    <p className="mb-0">{listUser.length} User</p>
-                  </div>
-                  <Input
-                    placeholder="Search"
-                    style={{ width: "200px" }}
-                    onChange={(e) => {
-                      search(e);
-                    }}
-                  />
+      <div className="container-style">
+        <div className="container mt-3">
+          <div className="row">
+            <div className="col-12">
+              <div className="card" style={boxStyle}>
+                <div className="card-header">
+                  <h2 className="text-center mb-0">Master User</h2>
                 </div>
-                <hr />
-                <Table dataSource={listUser} columns={columns} />
+                <div className="card-body">
+                  <div className="d-flex justify-content-between">
+                    <div className="center">
+                      <p className="mb-0">{listUser.length} User</p>
+                    </div>
+                    <Input
+                      placeholder="Search"
+                      style={{ width: "200px" }}
+                      onChange={(e) => {
+                        search(e);
+                      }}
+                    />
+                  </div>
+                  <hr />
+                  <Table dataSource={listUser} columns={columns} />
+                </div>
               </div>
             </div>
           </div>

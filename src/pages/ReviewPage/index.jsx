@@ -116,74 +116,76 @@ const ReviewPage = () => {
   return (
     <>
       <Navbarr />
-      <div className="container mt-3">
-        <div className="row">
-          <div className="col-12">
-            <h4>History Course</h4>
-          </div>
+      <div className="container-style">
+        <div className="container mt-3">
           <div className="row">
-            <div className="col-3">
-              <div className="card card-shadow">
-                <div className="card-body">
-                  <h5>Filter</h5>
-                  <div className="">
-                    <Search
-                      placeholder="Search your course"
-                      style={{ width: "100%" }}
-                      onChange={(e) => {
-                        setKeyword(e.target.value);
+            <div className="col-12">
+              <h4>History Course</h4>
+            </div>
+            <div className="row">
+              <div className="col-3">
+                <div className="card card-shadow">
+                  <div className="card-body">
+                    <h5>Filter</h5>
+                    <div className="">
+                      <Search
+                        placeholder="Search your course"
+                        style={{ width: "100%" }}
+                        onChange={(e) => {
+                          setKeyword(e.target.value);
+                        }}
+                      />
+                    </div>
+                    <p className="mb-0 mt-3">Sort from</p>
+                    <div className="mt-1">
+                      <Select
+                        defaultValue="Newest"
+                        style={{ width: "100%" }}
+                        onChange={handleChange}
+                      >
+                        <Option value="1">Newest</Option>
+                        <Option value="2">Oldest</Option>
+                      </Select>
+                    </div>
+                    <p className="mb-0 mt-3">Date course</p>
+                    <RangePicker
+                      format={dateFormat}
+                      className="mt-1"
+                      value={valRangePicker}
+                      onChange={(value) => {
+                        setValRangePicker(value);
                       }}
                     />
-                  </div>
-                  <p className="mb-0 mt-3">Sort from</p>
-                  <div className="mt-1">
-                    <Select
-                      defaultValue="Newest"
-                      style={{ width: "100%" }}
-                      onChange={handleChange}
+                    <div
+                      className="d-flex justify-content-start mt-2"
+                      style={{ gap: "15px" }}
                     >
-                      <Option value="1">Newest</Option>
-                      <Option value="2">Oldest</Option>
-                    </Select>
-                  </div>
-                  <p className="mb-0 mt-3">Date course</p>
-                  <RangePicker
-                    format={dateFormat}
-                    className="mt-1"
-                    value={valRangePicker}
-                    onChange={(value) => {
-                      setValRangePicker(value);
-                    }}
-                  />
-                  <div
-                    className="d-flex justify-content-start mt-2"
-                    style={{ gap: "15px" }}
-                  >
-                    <Button
-                      type="primary"
-                      className="mt-2"
-                      onClick={() => {
-                        onClickFilter();
-                      }}
-                    >
-                      Filter
-                    </Button>
-                    <Button
-                      className="mt-2"
-                      onClick={() => {
-                        onClickReset();
-                      }}
-                    >
-                      Reset
-                    </Button>
+                      <Button
+                        type="primary"
+                        className="mt-2"
+                        onClick={() => {
+                          onClickFilter();
+                        }}
+                      >
+                        Filter
+                      </Button>
+                      <Button
+                        className="mt-2"
+                        onClick={() => {
+                          onClickReset();
+                        }}
+                      >
+                        Reset
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col-9">
-              <div className="card card-shadow" style={{ height: "80vh" }}>
-                <div className="card-body" style={{ overflowY: "auto" }}>
-                  {renderData()}
+              <div className="col-9">
+                <div className="card card-shadow" style={{ height: "80vh" }}>
+                  <div className="card-body" style={{ overflowY: "auto" }}>
+                    {renderData()}
+                  </div>
                 </div>
               </div>
             </div>

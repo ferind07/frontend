@@ -116,47 +116,51 @@ const AdminDetailProblem = () => {
 
   return (
     <>
-      <div className="container">
-        <div className="col-12">
-          <div className="card mt-3 mb-5" style={boxStyle}>
-            <div className="card-body">
-              <div className="d-flex mb-3 justify-content-between">
-                <div>
-                  <p className="text-muted mb-1">Problem id : {id}</p>
-                  <p className="mb-0">
-                    {moment(report.date).format("dddd, DD MMMM yyyy kk:mm")}
-                  </p>
-                </div>
+      <div className="container-style">
+        <div className="container">
+          <div className="col-12">
+            <div className="card mt-3 mb-5" style={boxStyle}>
+              <div className="card-body">
+                <div className="d-flex mb-3 justify-content-between">
+                  <div>
+                    <p className="text-muted mb-1">Problem id : {id}</p>
+                    <p className="mb-0">
+                      {moment(report.date)
+                        .add(-7, "hours")
+                        .format("dddd, DD MMMM yyyy kk:mm")}
+                    </p>
+                  </div>
 
-                <div className="d-flex center" style={{ gap: "10px" }}>
-                  {renderButton()}
+                  <div className="d-flex center" style={{ gap: "10px" }}>
+                    {renderButton()}
+                  </div>
                 </div>
-              </div>
-              <hr />
-              <div className="row">
-                <div className="col-5">
-                  <h5>Reported by: {report.name}</h5>
-                  <p className="text-muted">{report.email}</p>
-                  <h5>Class: {report.title}</h5>
-                  <p className="text-muted">
-                    by{" "}
-                    <a
-                      style={{ color: "blueviolet" }}
-                      onClick={(e) => {
-                        navigate(
-                          "/admin/detailInstructor/" + report.idInstructor
-                        );
-                      }}
-                    >
-                      {instructor.name}
-                    </a>{" "}
-                    ({instructor.email})
-                  </p>
-                  <h5>Message: </h5>
-                  <p>{report.message}</p>
-                </div>
-                <div className="col-7">
-                  <Image src={BackendUrl + report.image} className="w-100" />
+                <hr />
+                <div className="row">
+                  <div className="col-5">
+                    <h5>Reported by: {report.name}</h5>
+                    <p className="text-muted">{report.email}</p>
+                    <h5>Class: {report.title}</h5>
+                    <p className="text-muted">
+                      by{" "}
+                      <a
+                        style={{ color: "blueviolet" }}
+                        onClick={(e) => {
+                          navigate(
+                            "/admin/detailInstructor/" + report.idInstructor
+                          );
+                        }}
+                      >
+                        {instructor.name}
+                      </a>{" "}
+                      ({instructor.email})
+                    </p>
+                    <h5>Message: </h5>
+                    <p>{report.message}</p>
+                  </div>
+                  <div className="col-7">
+                    <Image src={BackendUrl + report.image} className="w-100" />
+                  </div>
                 </div>
               </div>
             </div>

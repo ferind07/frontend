@@ -133,7 +133,7 @@ const IncomeComp = () => {
         let arrCatagory = [0, 0, 0, 0, 0];
         let data = success.data;
         data.forEach((element) => {
-          arrCatagory[element.katagori]++;
+          arrCatagory[element.katagori - 1]++;
         });
         //console.log(arrCatagory);
         setInstructorCatagory(arrCatagory);
@@ -151,7 +151,7 @@ const IncomeComp = () => {
         let arrCatagory = [0, 0, 0, 0, 0];
         let data = success.data;
         data.forEach((element) => {
-          arrCatagory[element.katagori]++;
+          arrCatagory[element.katagori - 1]++;
         });
         setCatagoryData(arrCatagory);
       })

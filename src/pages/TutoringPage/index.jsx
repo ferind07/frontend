@@ -25,11 +25,6 @@ const Video = (props) => {
       console.log(stream);
       ref.current.srcObject = stream;
     });
-    props.peer.on("track", (track, stream) => {
-      console.log(track);
-      console.log(stream.getVideoTracks().length);
-      ref.current.srcObject = stream;
-    });
   }, []);
   if (props.panjang == 0) {
     return (
@@ -133,6 +128,35 @@ const TutoringPage = (props) => {
 
   const shareScreenRef = useRef();
 
+  const [isShareScreen, setIsShareScreen] = useState(false);
+
+  // function onClickShareScreen(e) {
+  //   if (isShareScreen == false) {
+  //     //tidak sedang sharescreen
+  //     navigator.mediaDevices
+  //       .getDisplayMedia({ video: true, audio: true })
+  //       .then((stream) => {
+  //         peersRef.current.forEach((element) => {
+  //           element.peer.replaceTrack(
+  //             element.peer.streams[0].getVideoTracks()[0],
+  //             stream.getVideoTracks()[0],
+  //             element.peer.streams[0]
+  //           );
+  //         });
+  //       });
+  //   } else {
+  //     //sedang sharescreen
+  //     peersRef.current.forEach((element) => {
+  //       element.peer.replaceTrack(
+  //         element.peer.streams[0].getVideoTracks()[0],
+  //         userVideo.current.srcObject.getVideoTracks()[0],
+  //         element.peer.streams[0]
+  //       );
+  //     });
+  //   }
+  //   setIsShareScreen(!isShareScreen);
+  // }
+
   function onClickShareScreen(e) {
     e.preventDefault();
     if (shareScreen) {
@@ -217,6 +241,7 @@ const TutoringPage = (props) => {
                 //console.log(userVideo.current.srcObject.getVideoTracks()[0]);
               });
               socketRef.emit("shareScreenError", { to: partnerSocketId });
+              setShareScreenError(true);
             });
 
             peer1.on("close", () => {
@@ -453,7 +478,7 @@ const TutoringPage = (props) => {
     getUserInfo();
 
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: false })
+      .getUserMedia({ video: true, audio: true })
       .then((stream) => {
         userVideo.current.srcObject = stream;
         socketRef.current.emit("join room", id);
@@ -519,7 +544,7 @@ const TutoringPage = (props) => {
       const peerObj = peersRef.current.find((p) => p.peerID === id);
       if (peerObj) {
         peerObj.peer.destroy();
-        notification.warning({ message: "User Left" });
+        // notification.warning({ message: "User Left" });
       }
 
       peersRef.current = [];
@@ -581,6 +606,7 @@ const TutoringPage = (props) => {
         console.log("error from reciving peer");
         console.log(error);
         console.log(error.code);
+        resetSC();
       });
 
       peer.signal(signal);
@@ -600,20 +626,20 @@ const TutoringPage = (props) => {
         description: "Partner stopped share screen",
       });
 
-      console.log(shareScreenPeer);
-      // shareScreenPeerRef.current.forEach((peer) => {
-      //   console.log(peer);
-      //   peer.removeAllListeners("signal");
-      //   peer.peer.destroy();
-      // });
-      // //console.log(userVideo.current);
+      // console.log(shareScreenPeer);
+      // // shareScreenPeerRef.current.forEach((peer) => {
+      // //   console.log(peer);
+      // //   peer.removeAllListeners("signal");
+      // //   peer.peer.destroy();
+      // // });
+      // // //console.log(userVideo.current);
 
-      // console.log(shareScreenVideo);
+      // // console.log(shareScreenVideo);
 
-      // let tracks = shareScreenVideo.current.srcObject.getTracks();
+      // // let tracks = shareScreenVideo.current.srcObject.getTracks();
 
-      // tracks.forEach((track) => track.stop());
-      // shareScreenVideo.current.srcObject = null;
+      // // tracks.forEach((track) => track.stop());
+      // // shareScreenVideo.current.srcObject = null;
 
       resetSC();
     });
@@ -797,7 +823,7 @@ const TutoringPage = (props) => {
       <div className="container-tutor">
         <div className="content-atas">
           {renderShareScreen()}
-          {/* {peers.map((peer, index) => {
+          {peers.map((peer, index) => {
             const panjang = shareScreenPeer.length;
             return (
               <Video
@@ -807,8 +833,8 @@ const TutoringPage = (props) => {
                 panjang={panjang}
               />
             );
-          })} */}
-          {renderPeer()}
+          })}
+          {/* {renderPeer()} */}
           <video
             ref={userVideo}
             autoPlay

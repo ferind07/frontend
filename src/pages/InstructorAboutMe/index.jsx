@@ -618,26 +618,28 @@ const InstructorAboutMe = () => {
 
   return (
     <>
-      <div className="container mt-3">
-        <div className="row">
-          <div className="col-12">
-            <div className="card card-shadow mb-5" style={boxStyle}>
-              <div className="card-header d-flex justify-content-between">
-                <h4 className="mb-0">User Info</h4>
-                <UserOutlined style={{ fontSize: "25px" }} />
-              </div>
-              <div className="card-body">
-                <Tabs defaultActiveKey="1">
-                  <TabPane tab="User Info" key="1">
-                    {compUserInfo()}
-                  </TabPane>
-                  <TabPane tab="Change Password" key="2">
-                    {changePasswordComp()}
-                  </TabPane>
-                  <TabPane tab="Document" key="3">
-                    {compBerkas()}
-                  </TabPane>
-                </Tabs>
+      <div className="container-style">
+        <div className="container mt-3">
+          <div className="row">
+            <div className="col-12">
+              <div className="card card-shadow mb-5" style={boxStyle}>
+                <div className="card-header d-flex justify-content-between">
+                  <h4 className="mb-0">User Info</h4>
+                  <UserOutlined style={{ fontSize: "25px" }} />
+                </div>
+                <div className="card-body">
+                  <Tabs defaultActiveKey="1">
+                    <TabPane tab="User Info" key="1">
+                      {compUserInfo()}
+                    </TabPane>
+                    <TabPane tab="Change Password" key="2">
+                      {changePasswordComp()}
+                    </TabPane>
+                    <TabPane tab="Document" key="3">
+                      {compBerkas()}
+                    </TabPane>
+                  </Tabs>
+                </div>
               </div>
             </div>
           </div>

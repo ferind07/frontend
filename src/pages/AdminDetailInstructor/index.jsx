@@ -163,52 +163,59 @@ const AdminDetailInstructor = () => {
   };
 
   return (
-    <div className="container mt-3">
-      <div className="card mb-5" style={boxStyle}>
-        <div className="card-body">
-          <h3>Detail Instructor</h3>
-          <hr />
-          <div className="row">
-            <div className="col-4">
-              <div>{renderImage(userInfo.image)}</div>
-              <div className="mt-3">
-                <h5 className="text-center text-muted">{userInfo.name}</h5>
-              </div>
-              <div className="text-center">{renderButton()}</div>
-            </div>
-            <div className="col-8">
-              <h6>Instructor Info</h6>
-              <Descriptions bordered size="middle">
-                <Descriptions.Item label="Email" span={3}>
-                  {userInfo.email}
-                </Descriptions.Item>
-                <Descriptions.Item label="Name" span={3}>
-                  {userInfo.name}
-                </Descriptions.Item>
-                <Descriptions.Item label="Phone number" span={2}>
-                  {userInfo.phoneNumber}
-                </Descriptions.Item>
-                <Descriptions.Item label="Katagori" span={1}>
-                  {katagori()}
-                </Descriptions.Item>
-                <Descriptions.Item label="Available time" span={3}>
-                  {time()}
-                </Descriptions.Item>
-                <Descriptions.Item label="Instructor document" span={3}>
-                  <a href={BackendUrl + instructorInfo.berkas} target="_blank">
-                    View document
-                  </a>
-                </Descriptions.Item>
-              </Descriptions>
-              <div className="mt-3">
-                <h6>Instructor Detail</h6>
-                <p>{instructorInfo.instructorDetail}</p>
+    <>
+      <div className="container-style">
+        <div className="container mt-3">
+          <div className="card mb-5" style={boxStyle}>
+            <div className="card-body">
+              <h3>Detail Instructor</h3>
+              <hr />
+              <div className="row">
+                <div className="col-4">
+                  <div>{renderImage(userInfo.image)}</div>
+                  <div className="mt-3">
+                    <h5 className="text-center text-muted">{userInfo.name}</h5>
+                  </div>
+                  <div className="text-center">{renderButton()}</div>
+                </div>
+                <div className="col-8">
+                  <h6>Instructor Info</h6>
+                  <Descriptions bordered size="middle">
+                    <Descriptions.Item label="Email" span={3}>
+                      {userInfo.email}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Name" span={3}>
+                      {userInfo.name}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Phone number" span={2}>
+                      {userInfo.phoneNumber}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Katagori" span={1}>
+                      {katagori()}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Available time" span={3}>
+                      {time()}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Instructor document" span={3}>
+                      <a
+                        href={BackendUrl + instructorInfo.berkas}
+                        target="_blank"
+                      >
+                        View document
+                      </a>
+                    </Descriptions.Item>
+                  </Descriptions>
+                  <div className="mt-3">
+                    <h6>Instructor Detail</h6>
+                    <p>{instructorInfo.instructorDetail}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
