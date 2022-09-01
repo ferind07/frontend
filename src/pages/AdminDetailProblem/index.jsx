@@ -140,7 +140,20 @@ const AdminDetailProblem = () => {
                   <div className="col-5">
                     <h5>Reported by: {report.name}</h5>
                     <p className="text-muted">{report.email}</p>
-                    <h5>Class: {report.title}</h5>
+                    <div
+                      className="d-flex justify-content-start"
+                      style={{ gap: "10px" }}
+                    >
+                      <h5 className="mb-0">Class: {report.title}</h5>
+                      <a
+                        onClick={(e) => {
+                          navigate("/admin/detailClass/" + report.idClass);
+                        }}
+                      >
+                        Detail
+                      </a>
+                    </div>
+
                     <p className="text-muted">
                       by{" "}
                       <a

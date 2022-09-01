@@ -240,7 +240,9 @@ const TutoringPage = (props) => {
                 //console.log(stream.getVideoTracks()[0]);
                 //console.log(userVideo.current.srcObject.getVideoTracks()[0]);
               });
-              socketRef.emit("shareScreenError", { to: partnerSocketId });
+              socketRef.current.emit("shareScreenError", {
+                to: partnerSocketId,
+              });
               setShareScreenError(true);
             });
 
