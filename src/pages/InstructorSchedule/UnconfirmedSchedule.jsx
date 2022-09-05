@@ -186,14 +186,17 @@ const UnconfirmedSchedule = (props) => {
         return element.status == status;
       });
 
+      console.log(temp);
+
       if (temp.length > 0) {
         if (keyword != "") {
           hasil = temp.filter((item) => {
             return item.title.toLowerCase().includes(keyword.toLowerCase());
           });
+          setTempListSchedule(hasil);
+        } else {
+          setTempListSchedule(temp);
         }
-        console.log(hasil);
-        setTempListSchedule(hasil);
       } else {
         setTempListSchedule(temp);
       }

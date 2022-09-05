@@ -231,6 +231,7 @@ const TutoringPage = (props) => {
 
             //shareScreenVideo.current.srcObject = stream;
             //setShareScreenVideoStream(stream);
+
             //   const peer1 = new window.SimplePeer({
             //     initiator: true,
             //     trickle: false,
@@ -288,6 +289,75 @@ const TutoringPage = (props) => {
             //   );
             //   //userVideo.current.srcObject = stream;
             //   setShareScreen(!shareScreen);
+
+            const peer1 = new window.SimplePeer({
+              initiator: true,
+              trickle: false,
+              stream: stream,
+              iceServers: [
+                {
+                  urls: "stun:coturn.ferryindra.xyz",
+                  username: "ferry",
+                  credential: "150699",
+                },
+                {
+                  urls: "turn:coturn.ferryindra.xyz",
+                  username: "ferry",
+                  credential: "150699",
+                },
+              ],
+            });
+            peer1._debug = console.log;
+
+            peer1.on("signal", (data) => {
+              socketRef.current.emit("share screen", {
+                to: partnerSocketId.current,
+                signal: data,
+              });
+            });
+
+            peer1.on("error", (error) => {
+              console.log("error from send peer");
+              console.log(error);
+              console.log(error.code);
+              peersRef.current.forEach((element) => {
+                // const vidTrack = stream.getVideoTracks()[0];
+
+                element.peer.replaceTrack(
+                  element.peer.streams[0].getVideoTracks()[0],
+                  stream.getVideoTracks()[0],
+                  element.peer.streams[0]
+                );
+
+                console.log(element.peer.streams[0].getVideoTracks());
+
+                //console.log(stream.getVideoTracks()[0]);
+                //console.log(userVideo.current.srcObject.getVideoTracks()[0]);
+              });
+              socketRef.current.emit("shareScreenError", {
+                to: partnerSocketId,
+              });
+              setShareScreenError(true);
+            });
+
+            peer1.on("close", () => {
+              console.log("close");
+              socketRef.current.off("receiving returned share screen signal");
+            });
+
+            shareScreenPeerRef.current.push(peer1);
+
+            socketRef.current.on(
+              "receiving returned share screen signal",
+              (payload) => {
+                console.log("signal from reciving peer");
+                console.log(payload.signal);
+                peer1.signal(payload.signal);
+              }
+            );
+
+            //userVideo.current.srcObject = stream;
+            setShareScreen(!shareScreen);
           });
       }
 

@@ -9,6 +9,7 @@ import AdminDirbushment from "../AdminDirbushment";
 import AdminDetailInstructor from "../AdminDetailInstructor";
 import AdminProblem from "../AdminProblem";
 import AdminDetailProblem from "../AdminDetailProblem";
+import AdminDetailClass from "../AdminDetailClass";
 
 const AdminRoute = () => {
   return (
@@ -26,6 +27,7 @@ const AdminRoute = () => {
           element={<AdminDetailInstructor />}
         />
         <Route path="/detailProblem/:id" element={<AdminDetailProblem />} />
+        <Route path="/detailClass/:id" element={<AdminDetailClass />} />
       </Routes>
     </>
   );
