@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
-import { Descriptions, notification } from "antd";
+import { Descriptions, notification, Button } from "antd";
 import NumberFormat from "react-number-format";
 
 const HtmlToReactParser = require("html-to-react").Parser;
@@ -26,7 +26,7 @@ const InstructorDetailClass = () => {
       });
   }
 
-  function deleteClass(e) {
+  function deactivedClass(e) {
     e.preventDefault();
     axios
       .post(BackendUrl + "/user/deleteClass", {
@@ -38,6 +38,27 @@ const InstructorDetailClass = () => {
             message: "Success",
             description: success.data.msg,
           });
+          laodClass();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function activedClass(e) {
+    e.preventDefault();
+    axios
+      .post(BackendUrl + "/user/activedClass", {
+        idClass: id,
+      })
+      .then((success) => {
+        if (success.data.status == true) {
+          notification.success({
+            message: "Success",
+            description: success.data.msg,
+          });
+          laodClass();
         }
       })
       .catch((error) => {
@@ -49,29 +70,56 @@ const InstructorDetailClass = () => {
     laodClass();
   }, []);
 
+  const renderButton = () => {
+    if (classDetail.status == 0) {
+      return (
+        <Button
+          type="primary"
+          onClick={() => {
+            activedClass();
+          }}
+        >
+          Active
+        </Button>
+      );
+    } else {
+      return (
+        <Button
+          type="primary"
+          danger
+          onClick={() => {
+            deactivedClass();
+          }}
+        >
+          Deactived
+        </Button>
+      );
+    }
+  };
+
   return (
     <>
       <div className="container mt-3">
         <div className="row">
           <div className="col-12">
             <div className="card card-shadow">
-              <div className="card-body">
-                <div className="d-flex justify-content-between">
-                  <div className="center">
-                    <h6 className="text-muted mb-0">
-                      Class id : {classDetail.id}
-                    </h6>
-                  </div>
-                  <button
-                    className="btn btn-danger"
-                    onClick={(e) => {
-                      deleteClass(e);
-                    }}
-                  >
-                    Delete Class
-                  </button>
+              <div className="card-header d-flex justify-content-between">
+                <div className="center">
+                  <h6 className="text-muted mb-0">
+                    Class id : {classDetail.id}
+                  </h6>
                 </div>
-                <hr />
+                {renderButton()}
+                {/* <button
+                  className="btn btn-danger"
+                  onClick={(e) => {
+                    deleteClass(e);
+                  }}
+                >
+                  Delete Class
+                </button> */}
+              </div>
+              <div className="card-body">
                 <div className="row">
                   <div className="col-5">
                     <img
