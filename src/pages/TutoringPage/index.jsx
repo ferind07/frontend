@@ -81,6 +81,7 @@ const TutoringPage = (props) => {
   const shareScreenRef = useRef();
 
   const [isShareScreen, setIsShareScreen] = useState(false);
+  const [startShare, setStartShare] = useState(false);
 
   const peerRef = useRef();
 
@@ -116,8 +117,8 @@ const TutoringPage = (props) => {
     setMute(!mute);
   }
 
-  // const shareScreenVideo = useRef();
-  // const [shareScreenVideoStream, setShareScreenVideoStream] = useState();
+  //const shareScreenVideo = useRef();
+  const [shareScreenVideoStream, setShareScreenVideoStream] = useState();
 
   // function onClickShareScreen(e) {
   //   console.log(peersRef.current.length);
@@ -162,6 +163,57 @@ const TutoringPage = (props) => {
   //   setIsShareScreen(!isShareScreen);
   // }
 
+  // function onClickShareScreen(e) {
+  //   if (startShare) {
+  //     //stop share screen
+  //     peerJSRef.current.destroy();
+  //     setStartShare(false);
+  //     socketRef.current.emit("peerDestroy", { to: partnerSocketId.current });
+  //     setShareScreen(!shareScreen);
+  //   } else {
+  //     //mulai share screen
+  //     if (isShareScreen) {
+  //       notification.warn({
+  //         message: "Warning",
+  //         description: "Partner already share screen",
+  //       });
+  //     } else {
+  //       const peerJS = new Peer({
+  //         config: {
+  //           iceServers: [
+  //             {
+  //               urls: "stun:coturn.ferryindra.xyz",
+  //               username: "ferry",
+  //               credential: "150699",
+  //             },
+  //             {
+  //               urls: "turn:coturn.ferryindra.xyz",
+  //               username: "ferry",
+  //               credential: "150699",
+  //             },
+  //           ],
+  //         },
+  //       });
+  //       peerJS.on("open", function (id) {
+  //         console.log("My peer ID is: " + id);
+  //         console.log(partnerSocketId.current);
+  //         if (partnerSocketId.current !== undefined) {
+  //           socketRef.current.emit("callShareScreen", {
+  //             to: partnerSocketId.current,
+  //             peerJSid: id,
+  //           });
+  //         }
+  //         //socketRef.current.emit("callShareScreen");
+  //       });
+  //       peerJS.on("error", function (err) {
+  //         console.log(err);
+  //       });
+
+  //       peerJSRef.current = peerJS;
+  //     }
+  //   }
+  // }
+
   function onClickShareScreen(e) {
     e.preventDefault();
     if (shareScreen) {
@@ -193,172 +245,85 @@ const TutoringPage = (props) => {
           description: "Partner already share screen",
         });
       } else {
-        navigator.mediaDevices
-          .getDisplayMedia({ video: true, audio: true })
-          .then((stream) => {
-            const peerJS = new Peer({
-              host: "localhost",
-              port: 9000,
-              path: "/myapp",
-              config: {
-                iceServers: [
-                  {
-                    urls: "stun:coturn.ferryindra.xyz",
-                    username: "ferry",
-                    credential: "150699",
-                  },
-                  {
-                    urls: "turn:coturn.ferryindra.xyz",
-                    username: "ferry",
-                    credential: "150699",
-                  },
-                ],
-              },
-            });
-            peerJS.on("open", function (id) {
-              console.log("My peer ID is: " + id);
-              console.log(partnerSocketId.current);
-              if (partnerSocketId.current !== undefined) {
-                socketRef.current.emit("callShareScreen");
-              }
-              //socketRef.current.emit("callShareScreen");
-            });
-            peerJS.on("error", function (err) {
-              console.log(err);
-            });
+        if (peersRef.current.length > 0) {
+          navigator.mediaDevices
+            .getDisplayMedia({ video: true, audio: true })
+            .then((stream) => {
+              stream.getVideoTracks()[0].onended = function () {
+                resetSC();
+                socketRef.current.emit("stop share screen", {
+                  to: partnerSocketId.current,
+                });
+                setShareScreen(false);
+              };
 
-            peerJSRef.current = peerJS;
+              setShareScreenVideoStream(stream);
 
-            //shareScreenVideo.current.srcObject = stream;
-            //setShareScreenVideoStream(stream);
-
-            //   const peer1 = new window.SimplePeer({
-            //     initiator: true,
-            //     trickle: false,
-            //     stream: stream,
-            //     iceServers: [
-            //       {
-            //         urls: "stun:coturn.ferryindra.xyz",
-            //         username: "ferry",
-            //         credential: "150699",
-            //       },
-            //       {
-            //         urls: "turn:coturn.ferryindra.xyz",
-            //         username: "ferry",
-            //         credential: "150699",
-            //       },
-            //     ],
-            //   });
-            //   peer1._debug = console.log;
-            //   peer1.on("signal", (data) => {
-            //     socketRef.current.emit("share screen", {
-            //       to: partnerSocketId.current,
-            //       signal: data,
-            //     });
-            //   });
-            //   peer1.on("error", (error) => {
-            //     console.log("error from send peer");
-            //     console.log(error);
-            //     console.log(error.code);
-            //     peersRef.current.forEach((element) => {
-            //       // const vidTrack = stream.getVideoTracks()[0];
-            //       element.peer.replaceTrack(
-            //         element.peer.streams[0].getVideoTracks()[0],
-            //         stream.getVideoTracks()[0],
-            //         element.peer.streams[0]
-            //       );
-            //       console.log(element.peer.streams[0].getVideoTracks());
-            //       //console.log(stream.getVideoTracks()[0]);
-            //       //console.log(userVideo.current.srcObject.getVideoTracks()[0]);
-            //     });
-            //     socketRef.emit("shareScreenError", { to: partnerSocketId });
-            //     setShareScreenError(true);
-            //   });
-            //   peer1.on("close", () => {
-            //     console.log("close");
-            //     socketRef.current.off("receiving returned share screen signal");
-            //   });
-            //   shareScreenPeerRef.current.push(peer1);
-            //   socketRef.current.on(
-            //     "receiving returned share screen signal",
-            //     (payload) => {
-            //       console.log("signal from reciving peer");
-            //       console.log(payload.signal);
-            //       peer1.signal(payload.signal);
-            //     }
-            //   );
-            //   //userVideo.current.srcObject = stream;
-            //   setShareScreen(!shareScreen);
-
-            const peer1 = new window.SimplePeer({
-              initiator: true,
-              trickle: false,
-              stream: stream,
-              iceServers: [
-                {
-                  urls: "stun:coturn.ferryindra.xyz",
-                  username: "ferry",
-                  credential: "150699",
+              const peer1 = new window.SimplePeer({
+                initiator: true,
+                trickle: false,
+                stream: stream,
+                config: {
+                  iceServers: [
+                    {
+                      urls: "stun:coturn.ferryindra.xyz",
+                      username: "ferry",
+                      credential: "150699",
+                    },
+                    {
+                      urls: "turn:coturn.ferryindra.xyz",
+                      username: "ferry",
+                      credential: "150699",
+                    },
+                  ],
                 },
-                {
-                  urls: "turn:coturn.ferryindra.xyz",
-                  username: "ferry",
-                  credential: "150699",
-                },
-              ],
-            });
-            peer1._debug = console.log;
-
-            peer1.on("signal", (data) => {
-              socketRef.current.emit("share screen", {
-                to: partnerSocketId.current,
-                signal: data,
               });
-            });
-
-            peer1.on("error", (error) => {
-              console.log("error from send peer");
-              console.log(error);
-              console.log(error.code);
-              peersRef.current.forEach((element) => {
-                // const vidTrack = stream.getVideoTracks()[0];
-
-                element.peer.replaceTrack(
-                  element.peer.streams[0].getVideoTracks()[0],
-                  stream.getVideoTracks()[0],
-                  element.peer.streams[0]
-                );
-
-                console.log(element.peer.streams[0].getVideoTracks());
-
-                //console.log(stream.getVideoTracks()[0]);
-                //console.log(userVideo.current.srcObject.getVideoTracks()[0]);
+              peer1._debug = console.log;
+              peer1.on("signal", (data) => {
+                socketRef.current.emit("share screen", {
+                  to: partnerSocketId.current,
+                  signal: data,
+                });
               });
-              socketRef.current.emit("shareScreenError", {
-                to: partnerSocketId,
+              peer1.on("error", (error) => {
+                console.log("error from send peer");
+                console.log(error);
+                console.log(error.code);
+                peersRef.current.forEach((element) => {
+                  // const vidTrack = stream.getVideoTracks()[0];
+                  element.peer.replaceTrack(
+                    element.peer.streams[0].getVideoTracks()[0],
+                    stream.getVideoTracks()[0],
+                    element.peer.streams[0]
+                  );
+                  console.log(element.peer.streams[0].getVideoTracks());
+                  //console.log(stream.getVideoTracks()[0]);
+                  //console.log(userVideo.current.srcObject.getVideoTracks()[0]);
+                });
+                socketRef.emit("shareScreenError", { to: partnerSocketId });
+                setShareScreenError(true);
               });
-              setShareScreenError(true);
+              peer1.on("close", () => {
+                console.log("close");
+                socketRef.current.off("receiving returned share screen signal");
+              });
+              shareScreenPeerRef.current.push(peer1);
+              socketRef.current.on(
+                "receiving returned share screen signal",
+                (payload) => {
+                  console.log("signal from reciving peer");
+                  console.log(payload.signal);
+                  peer1.signal(payload.signal);
+                }
+              );
+              //userVideo.current.srcObject = stream;
+              setShareScreen(!shareScreen);
             });
-
-            peer1.on("close", () => {
-              console.log("close");
-              socketRef.current.off("receiving returned share screen signal");
-            });
-
-            shareScreenPeerRef.current.push(peer1);
-
-            socketRef.current.on(
-              "receiving returned share screen signal",
-              (payload) => {
-                console.log("signal from reciving peer");
-                console.log(payload.signal);
-                peer1.signal(payload.signal);
-              }
-            );
-
-            //userVideo.current.srcObject = stream;
-            setShareScreen(!shareScreen);
+        } else {
+          notification.error({
+            message: "No person in the room",
           });
+        }
       }
 
       // navigator.mediaDevices
@@ -644,8 +609,8 @@ const TutoringPage = (props) => {
       }
 
       peersRef.current = [];
-
       setPeers([]);
+      setIsShareScreen(false);
     });
 
     socketRef.current.on("reciveShareScreen", (payload) => {
@@ -665,18 +630,20 @@ const TutoringPage = (props) => {
       const peer = new window.SimplePeer({
         initiator: false,
         trickle: false,
-        iceServers: [
-          {
-            urls: "stun:coturn.ferryindra.xyz",
-            username: "ferry",
-            credential: "150699",
-          },
-          {
-            urls: "turn:coturn.ferryindra.xyz",
-            username: "ferry",
-            credential: "150699",
-          },
-        ],
+        config: {
+          iceServers: [
+            {
+              urls: "stun:coturn.ferryindra.xyz",
+              username: "ferry",
+              credential: "150699",
+            },
+            {
+              urls: "turn:coturn.ferryindra.xyz",
+              username: "ferry",
+              credential: "150699",
+            },
+          ],
+        },
       });
       peer._debug = console.log;
 
@@ -749,16 +716,35 @@ const TutoringPage = (props) => {
       setShareScreenError(true);
     });
 
-    socketRef.current.on("aswerShareScreen", (payload) => {
+    socketRef.current.on("answerShareScreen", (payload) => {
       const peerJSid = payload.peerJSid;
+      console.log("share screen to " + peerJSid);
+
+      navigator.mediaDevices
+        .getDisplayMedia({ video: true, audio: true })
+        .then((stream) => {
+          setStartShare(true);
+          setShareScreen(!shareScreen);
+          peerJSRef.current.call(peerJSid, stream);
+          stream.getVideoTracks()[0].onended = function () {
+            peerJSRef.current.destroy();
+            setStartShare(false);
+            socketRef.current.emit("peerDestroy", {
+              to: partnerSocketId.current,
+            });
+            setShareScreen(!shareScreen);
+          };
+        });
+    });
+
+    socketRef.current.on("peerDestroy", () => {
+      setIsShareScreen(false);
     });
 
     socketRef.current.on("callShareScreen", (payload) => {
-      const callerPeerJSid = payload.caller;
+      const callerPeerJSid = payload.peerJSid;
+      console.log(callerPeerJSid);
       var peerJS = new Peer({
-        host: "localhost",
-        port: 9000,
-        path: "/myapp",
         config: {
           iceServers: [
             {
@@ -778,15 +764,35 @@ const TutoringPage = (props) => {
         console.log("My peer ID is: " + id);
         console.log(partnerSocketId.current);
 
-        if (partnerSocketId.current !== undefined) {
-          socketRef.current.emit("answerShareScreen", {
-            peerJSid: id,
-          });
-        }
+        socketRef.current.emit("answerShareScreen", {
+          to: partnerSocketId.current,
+          peerJSid: id,
+        });
       });
+
+      peerJS.on("call", function (call) {
+        setIsShareScreen(true);
+
+        call.answer(new MediaStream());
+        call.on("stream", (remoteStream) => {
+          //alert("got call");
+          notification.info({
+            message: "Partner start share screen",
+          });
+          console.log(remoteStream);
+          shareScreenStream.current.srcObject = remoteStream;
+        });
+      });
+
+      peerJS.on("close", function () {
+        peerJSRef.current.destroy();
+        isShareScreen(false);
+      });
+
+      peerJSRef.current = peerJS;
     });
   }, []);
-
+  const shareScreenStream = useRef();
   function resetSC() {
     shareScreenPeerRef.current.forEach((peer) => {
       peer.destroy();
@@ -802,16 +808,6 @@ const TutoringPage = (props) => {
       trickle: false,
       config: {
         iceServers: [
-          // {
-          //   urls: "stun:coturn.ivanchristian.me",
-          //   username: "ivan",
-          //   credential: "5521",
-          // },
-          // {
-          //   urls: "turn:coturn.ivanchristian.me",
-          //   username: "ivan",
-          //   credential: "5521",
-          // },
           {
             urls: "stun:coturn.ferryindra.xyz",
             username: "ferry",
@@ -855,16 +851,6 @@ const TutoringPage = (props) => {
       trickle: false,
       config: {
         iceServers: [
-          // {
-          //   urls: "stun:coturn.ivanchristian.me",
-          //   username: "ivan",
-          //   credential: "5521",
-          // },
-          // {
-          //   urls: "turn:coturn.ivanchristian.me",
-          //   username: "ivan",
-          //   credential: "5521",
-          // },
           {
             urls: "stun:coturn.ferryindra.xyz",
             username: "ferry",
@@ -908,6 +894,21 @@ const TutoringPage = (props) => {
           <FaPhoneSlash size={45} />
           <p className="unselectable">End</p>
         </div>
+      );
+    }
+  };
+
+  const renderPeerJSShareScreen = () => {
+    if (isShareScreen) {
+      return (
+        <video
+          ref={shareScreenStream}
+          autoPlay
+          playsInline
+          muted
+          controls
+          style={{ height: "85%" }}
+        ></video>
       );
     }
   };
@@ -956,8 +957,12 @@ const TutoringPage = (props) => {
       <div className="container-tutor">
         <div className="content-atas">
           {renderShareScreen()}
+          {renderPeerJSShareScreen()}
           {peers.map((peer, index) => {
-            const panjang = shareScreenPeer.length;
+            let panjang = shareScreenPeer.length;
+            if (isShareScreen) {
+              panjang = 1;
+            }
             return (
               <Video
                 key={index}

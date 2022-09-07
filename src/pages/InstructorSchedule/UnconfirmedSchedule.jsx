@@ -78,7 +78,11 @@ const UnconfirmedSchedule = (props) => {
               </div>
               <div className="col-8">
                 <h5 className="mb-2">{detailSchedule.title} Class</h5>
-                <p className="mb-2 font-italic">With {detailSchedule.name}</p>
+
+                <p className="mb-2">
+                  With <strong>{detailSchedule.name}</strong>{" "}
+                </p>
+
                 <p className="mb-2">Applied at {dateStr}</p>
                 <p>Status {statusText()}</p>
                 <button

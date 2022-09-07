@@ -190,7 +190,9 @@ const ScheduleCard = (props) => {
             </div>
             <div className="col-8">
               <h5 className="mb-1">{props.submissionDetail.title} Class</h5>
-              <p className="mb-1">With {props.submissionDetail.iName}</p>
+              <p className="mb-1">
+                With <strong>{props.submissionDetail.iName}</strong>
+              </p>
               <p className="mb-1">Applied at {dateStr}</p>
               <p className="mb-1">Status : {renderStatus()}</p>
               {btnStatus()}

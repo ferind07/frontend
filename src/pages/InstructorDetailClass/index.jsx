@@ -26,8 +26,7 @@ const InstructorDetailClass = () => {
       });
   }
 
-  function deactivedClass(e) {
-    e.preventDefault();
+  function deactivedClass() {
     axios
       .post(BackendUrl + "/user/deleteClass", {
         idClass: id,
@@ -46,8 +45,7 @@ const InstructorDetailClass = () => {
       });
   }
 
-  function activedClass(e) {
-    e.preventDefault();
+  function activedClass() {
     axios
       .post(BackendUrl + "/user/activedClass", {
         idClass: id,

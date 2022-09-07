@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DatePicker, Button } from "antd";
+import { DatePicker, Button, Checkbox } from "antd";
 import { UpCircleTwoTone, DownCircleTwoTone } from "@ant-design/icons";
 import moment from "moment";
 import axios from "axios";
@@ -11,6 +11,29 @@ const HistoryCashOutComp = () => {
 
   const [dirbushmentHistory, setDirbushmentHistory] = useState([]);
   const [tempDirbushmentHistory, setTempDirbushmentHistory] = useState([]);
+  const [incomeHistory, setIncomeHistory] = useState([]);
+  const [tempIncomeHistory, setTempIncomeHistory] = useState([]);
+  const [cashInChecked, setCashInChecked] = useState(false);
+
+  const onChange = (e) => {
+    console.log(`checked = ${e.target.checked}`);
+    setCashInChecked(e.target.checked);
+  };
+
+  function getIncome() {
+    axios
+      .get(
+        BackendUrl + "/user/getIncome?token=" + localStorage.getItem("token")
+      )
+      .then((success) => {
+        console.log(success.data);
+        setIncomeHistory(success.data);
+        setTempIncomeHistory(success.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   function getDirbushment() {
     axios
@@ -31,6 +54,7 @@ const HistoryCashOutComp = () => {
 
   useEffect(() => {
     getDirbushment();
+    getIncome();
   }, []);
 
   const compHistory = (type, amount, date) => {
@@ -61,7 +85,7 @@ const HistoryCashOutComp = () => {
       "December",
     ];
 
-    const dateText = moment(date);
+    const dateText = moment(date).add(-7, "hours").format("D MMMM YYYY");
 
     return (
       <>
@@ -72,7 +96,9 @@ const HistoryCashOutComp = () => {
 
               <div className="d-flex justify-content-between w-100">
                 <div>
-                  <h5 className="mb-0">Dirbushment</h5>
+                  <h5 className="mb-0">
+                    {type == 2 ? "Dirbushment" : "Income"}
+                  </h5>
                   <h6 className="mb-0 text-muted">
                     <NumberFormat
                       value={amount}
@@ -85,11 +111,7 @@ const HistoryCashOutComp = () => {
                 <div className="center">
                   <div>
                     <p className="mb-0 text-muted" style={{ fontSize: "15px" }}>
-                      {dateText.date() +
-                        " " +
-                        month[dateText.month()] +
-                        " " +
-                        dateText.year()}
+                      {dateText}
                     </p>
                   </div>
                 </div>
@@ -103,27 +125,55 @@ const HistoryCashOutComp = () => {
 
   const renderHistory = () => {
     const compList = [];
-    dirbushmentHistory.map((dirbushmentDetail) => {
-      compList.push(
-        compHistory(2, dirbushmentDetail.amount, dirbushmentDetail.time)
-      );
-    });
+    if (cashInChecked) {
+      incomeHistory.map((incomeDetail) => {
+        compList.push(compHistory(1, incomeDetail.amount, incomeDetail.time));
+      });
+    } else {
+      dirbushmentHistory.map((dirbushmentDetail) => {
+        compList.push(
+          compHistory(2, dirbushmentDetail.amount, dirbushmentDetail.time)
+        );
+      });
+    }
+
     return compList;
   };
 
   const [valRangePicker, setValRangePicker] = useState([]);
 
   function onClickFilter() {
-    //console.log(valRangePicker);
-    var filtered = tempDirbushmentHistory.filter((dirbushmentHistory) => {
-      const date = new Date(dirbushmentHistory.time);
-      const dateStart = valRangePicker[0].set({ hour: 0 }).toDate();
-      const dateEnd = valRangePicker[1].set({ hour: 23 }).toDate();
+    console.log(valRangePicker);
+    if (valRangePicker.length > 0) {
+      //user memberi inputan waktu
+      if (cashInChecked) {
+        var filtered = tempIncomeHistory.filter((incomeDetail) => {
+          const date = new Date(incomeDetail.time);
+          const dateStart = valRangePicker[0].set({ hour: 0 }).toDate();
+          const dateEnd = valRangePicker[1].set({ hour: 23 }).toDate();
 
-      return date >= dateStart && date <= dateEnd;
-    });
+          return date >= dateStart && date <= dateEnd;
+        });
+        setTempIncomeHistory(filtered);
+      } else {
+        var filtered = tempDirbushmentHistory.filter((dirbushmentHistory) => {
+          const date = new Date(dirbushmentHistory.time);
+          const dateStart = valRangePicker[0].set({ hour: 0 }).toDate();
+          const dateEnd = valRangePicker[1].set({ hour: 23 }).toDate();
+
+          return date >= dateStart && date <= dateEnd;
+        });
+        setDirbushmentHistory(filtered);
+      }
+    } else {
+      if (cashInChecked) {
+        setIncomeHistory(tempIncomeHistory);
+      } else {
+        setDirbushmentHistory(tempDirbushmentHistory);
+      }
+    }
+
     //console.log(filtered);
-    setDirbushmentHistory(filtered);
   }
 
   return (
@@ -140,6 +190,7 @@ const HistoryCashOutComp = () => {
                 setValRangePicker(value);
               }}
             />
+            <Checkbox onChange={onChange}>Cash in</Checkbox>
             <Button
               type="primary"
               onClick={() => {

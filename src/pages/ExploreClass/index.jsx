@@ -249,15 +249,25 @@ const ExploreClass = () => {
         const dStart = moment(dateStart[i]);
         const dEnd = moment(dateEnd[i]);
         const dNow = moment();
+        const nextMonth = moment().add(1, "month");
 
-        // if (dStart < dNow) {
-        //   console.log("invalid date");
-        //   valid = false;
-        //   notification.error({
-        //     message: "Error",
-        //     description: "Invalid time " + (i + 1),
-        //   });
-        // }
+        if (dStart > nextMonth) {
+          valid = false;
+          notification.error({
+            message: "Error",
+            description:
+              "Only can select interval in 1 month schedule  " + (i + 1),
+          });
+        }
+
+        if (dStart < dNow) {
+          console.log("invalid date");
+          valid = false;
+          notification.error({
+            message: "Error",
+            description: "can't select past days at schedule  " + (i + 1),
+          });
+        }
 
         const tStart = String(classDetail.timeStart);
         const tEnd = String(classDetail.timeEnd);
@@ -289,7 +299,7 @@ const ExploreClass = () => {
           valid = false;
           notification.error({
             message: "Error",
-            description: "Invalid instructor time " + (i + 1),
+            description: "Instructor inactive time at schedule " + (i + 1),
           });
         }
         // console.log(dStart.hour());

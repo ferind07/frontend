@@ -12,7 +12,7 @@ const MyClassContent = (props) => {
         {classList.map((classItem) => {
           return (
             <div className="col-lg-3 col-md-6 col-sm-6">
-              <div className="card h-100">
+              <div className="card h-100 box-style">
                 <img
                   src={BackendUrl + classItem.image}
                   width="100%"
@@ -22,6 +22,8 @@ const MyClassContent = (props) => {
                   <h5 className="mt-0 mb-1">{classItem.title}</h5>
                   <p className="mb-1">{classItem.duration} minutes</p>
                   <p className="text-muted">{classItem.classCount} Class</p>
+                </div>
+                <div className="card-footer d-flex justify-content-end">
                   <button
                     className="btn btn-primary"
                     onClick={(e) => {
