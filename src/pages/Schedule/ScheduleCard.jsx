@@ -115,7 +115,8 @@ const ScheduleCard = (props) => {
   const btnStatus = () => {
     if (
       props.submissionDetail.status == 1 ||
-      props.submissionDetail.status == 6
+      props.submissionDetail.status == 6 ||
+      props.submissionDetail.status == 0
     ) {
       return (
         <Button type="primary" onClick={showDrawer}>
@@ -135,7 +136,7 @@ const ScheduleCard = (props) => {
           Join Class
         </button>
       );
-    } else if (subMissionItem.status == 2) {
+    } else if (subMissionItem.status == 2 || subMissionItem.status == 0) {
       return (
         <button
           className="btn btn-dark"
@@ -194,7 +195,9 @@ const ScheduleCard = (props) => {
                 With <strong>{props.submissionDetail.iName}</strong>
               </p>
               <p className="mb-1">Applied at {dateStr}</p>
-              <p className="mb-1">Status : {renderStatus()}</p>
+              <p className="mb-1">
+                Status : <strong>{renderStatus()}</strong>
+              </p>
               {btnStatus()}
               {renderLinkPayment()}
             </div>
