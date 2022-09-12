@@ -77,18 +77,20 @@ const ReportPage = () => {
   return (
     <>
       <Navbarr />
-      <div className="container">
-        <div className="row">
-          <div className="col-12">
-            <div className="card mt-3 mb-5">
-              <div className="card-body">
-                <h3>My Report</h3>
-                <hr />
-                <Table
-                  dataSource={report}
-                  columns={columns}
-                  pagination={{ pageSize: 10 }}
-                />
+      <div className="container-style">
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <div className="card mt-3 mb-5">
+                <div className="card-body">
+                  <h3>My Report</h3>
+                  <hr />
+                  <Table
+                    dataSource={report}
+                    columns={columns}
+                    pagination={{ pageSize: 10 }}
+                  />
+                </div>
               </div>
             </div>
           </div>
