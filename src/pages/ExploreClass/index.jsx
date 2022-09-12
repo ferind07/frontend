@@ -353,9 +353,15 @@ const ExploreClass = () => {
               xenditPay(success.data.data.insertId, classDetail.price);
               navigate("/schedule");
             } else {
+              console.log(success.data);
+              const classData = success.data.data[0];
+              const classTitle = classData.title;
+              const dateStart = moment(classData.dateStart)
+                .add(-7, "hours")
+                .format("D MMM YYYY HH:mm");
               notification.error({
-                description: "Error",
-                message: success.data.msg,
+                message: `You have ${classTitle} class`,
+                description: "at " + dateStart,
               });
             }
             //if payment success

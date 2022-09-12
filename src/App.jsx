@@ -21,7 +21,7 @@ import ForgetPassword from "./pages/ForgetPassword";
 import UserCashOut from "./pages/UserCashOut";
 import ResultPage from "./pages/ResultPage";
 import ActiveUser from "./pages/ActiveUser";
-import ReportPage from "./pages/reportPage";
+import ReportPage from "./pages/ReportPage";
 import AdminDashboardTemplate from "./pages/AdminDashboardTemplate";
 import "./assets/styles/main.css";
 import Footer from "./components/Footer";

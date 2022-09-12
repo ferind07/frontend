@@ -8,6 +8,12 @@ const CalendarComp = (props) => {
   const idInstructor = props.idInstructor;
   const [schedule, setSchedule] = useState([]);
   const [event, setEvent] = useState([]);
+  const [userSchedule, setUserSchedule] = useState([]);
+  const [userEvent, setUserEvent] = useState([]);
+
+  function loadUserSchedule() {
+    const token = localStorage.getItem("token");
+  }
 
   function loadSchedule() {
     axios
@@ -20,7 +26,6 @@ const CalendarComp = (props) => {
         data.forEach((element, index) => {
           //console.log(element);
           const temp = {
-            id: index + 1,
             color: "#fd3153",
             from: moment(element.dateStart).add(0, "hours").format(),
             to: moment(element.dateEnd).add(0, "hours").format(),
@@ -28,6 +33,8 @@ const CalendarComp = (props) => {
           };
           eventDataArr.push(temp);
         });
+
+        console.log(eventDataArr);
         setEvent(eventDataArr);
       })
       .catch((error) => {
@@ -37,6 +44,7 @@ const CalendarComp = (props) => {
 
   useEffect(() => {
     loadSchedule();
+    loadUserSchedule();
   }, []);
   return (
     <>
