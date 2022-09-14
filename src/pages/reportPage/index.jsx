@@ -14,7 +14,7 @@ const ReportPage = () => {
         BackendUrl + "/user/getReport?token=" + localStorage.getItem("token")
       )
       .then((success) => {
-        console.log(success.data);
+        //console.log(success.data);
         setReport(success.data);
       })
       .catch((error) => {
