@@ -11,6 +11,8 @@ import {
   Drawer,
   Rate,
   Input,
+  Table,
+  Empty,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import NumberFormat from "react-number-format";
@@ -30,10 +32,11 @@ const InstructorDetailSchedule = () => {
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [userReview, setUserReview] = useState([]);
 
   const showDrawer = () => {
     setOpen(true);
-    getUserReview();
+    getListUserReview();
   };
 
   const onClose = () => {
@@ -46,13 +49,14 @@ const InstructorDetailSchedule = () => {
       .then((success) => {
         setUserDetail(success.data);
         console.log(success.data);
+        getUserReview(success.data.id);
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  function getUserReview() {
+  function getListUserReview() {
     axios
       .get(
         BackendUrl +
@@ -82,8 +86,20 @@ const InstructorDetailSchedule = () => {
             message: "Success",
             description: success.data.msg,
           });
-          getUserReview();
+          getListUserReview();
         }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function getUserReview(idUser) {
+    axios
+      .get(BackendUrl + `/user/getUserReview?idUser=${idUser}`)
+      .then((success) => {
+        console.log(success.data);
+        setUserReview(success.data);
       })
       .catch((error) => {
         console.log(error);
@@ -484,6 +500,47 @@ const InstructorDetailSchedule = () => {
       );
     }
   };
+
+  const reviewComp = (detailReview) => {
+    const dateStr = moment(detailReview.createAt).format("D MMM YYYY");
+    return (
+      <>
+        <div className="card mt-1" style={boxStyle}>
+          <div className="card-body">
+            <div className="d-flex justify-content-between">
+              <div className="d-flex center" style={{ gap: "20px" }}>
+                <h6 className="mb-0">{detailReview.name}</h6>
+              </div>
+              <Rate disabled value={detailReview.rating} />
+            </div>
+            <hr className="mt-1 mb-1" />
+            <div className="d-flex justify-content-between">
+              <p className="mb-0">{detailReview.comment}</p>
+              <p className="mb-0 text-muted" style={{ fontWeight: "bold" }}>
+                {dateStr}
+              </p>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  const renderUserReview = () => {
+    if (userReview.length == 0) {
+      return <Empty description="No reviews yet" />;
+    } else {
+      return (
+        <>
+          <div style={{ height: "300px", overflowY: "auto" }}>
+            {userReview.map((detailReview) => {
+              return reviewComp(detailReview);
+            })}
+          </div>
+        </>
+      );
+    }
+  };
   const { TextArea } = Input;
   return (
     <>
@@ -542,6 +599,9 @@ const InstructorDetailSchedule = () => {
                         </div>
                         <div className="col-7">{classDesciption()}</div>
                       </div>
+                    </Panel>
+                    <Panel header="User review" key="3">
+                      <div>{renderUserReview()}</div>
                     </Panel>
                   </Collapse>
                 </div>
