@@ -2,7 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import BackendUrl from "../../components/BackendUrl";
-import { notification, Button, Collapse, Descriptions, Tag } from "antd";
+import {
+  notification,
+  Button,
+  Collapse,
+  Descriptions,
+  Tag,
+  Drawer,
+  Rate,
+  Input,
+} from "antd";
 import { useNavigate } from "react-router-dom";
 import NumberFormat from "react-number-format";
 import moment from "moment";
@@ -15,8 +24,21 @@ const InstructorDetailSchedule = () => {
   const [listSubmission, setListSubmission] = useState([]);
   const [userDetail, setUserDetail] = useState({});
   const [classDetail, setClassDetail] = useState({});
+  const [review, setReview] = useState([]);
 
   const { Panel } = Collapse;
+  const [open, setOpen] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+
+  const showDrawer = () => {
+    setOpen(true);
+    getUserReview();
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
 
   function getUserDetail(idUser) {
     axios
@@ -29,6 +51,90 @@ const InstructorDetailSchedule = () => {
         console.log(error);
       });
   }
+
+  function getUserReview() {
+    axios
+      .get(
+        BackendUrl +
+          `/user/userReview?idUser=${userDetail.id}&idHSubmission=${hSubmission.id}`
+      )
+      .then((success) => {
+        console.log(success.data);
+        setReview(success.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function placeReview() {
+    axios
+      .post(BackendUrl + "/user/placeUserReview", {
+        token: localStorage.getItem("token"),
+        idUser: userDetail.id,
+        rating: rating,
+        comment: comment,
+        idHSubmission: hSubmission.id,
+      })
+      .then((success) => {
+        if (success.data.status == true) {
+          notification.success({
+            message: "Success",
+            description: success.data.msg,
+          });
+          getUserReview();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const renderReviewComp = () => {
+    console.log(review.length);
+    if (review.length == 0) {
+      return (
+        <>
+          <Rate
+            value={rating}
+            onChange={(value) => {
+              setRating(value);
+            }}
+          />
+          <TextArea
+            className="mt-2"
+            placeholder="Place your review here"
+            value={comment}
+            onChange={(e) => {
+              setComment(e.target.value);
+            }}
+          />
+          <div className="d-flex justify-content-end mt-2">
+            <Button
+              type="primary"
+              onClick={() => {
+                placeReview();
+              }}
+            >
+              Place review
+            </Button>
+          </div>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Rate disabled value={review[0].rating} />
+          <TextArea
+            className="mt-2"
+            placeholder="Place your review here"
+            disabled
+            value={review[0].comment}
+          />
+        </>
+      );
+    }
+  };
 
   const days = [
     "Sunday",
@@ -360,6 +466,25 @@ const InstructorDetailSchedule = () => {
     borderRadius: "12px",
   };
 
+  const renderReviewStudent = () => {
+    if (hSubmission.status == 3) {
+      return (
+        <>
+          <Button onClick={showDrawer}>Review Student</Button>
+          <Drawer
+            title="Review student"
+            placement="right"
+            onClose={onClose}
+            visible={open}
+          >
+            <h5>Give review to your student</h5>
+            {renderReviewComp()}
+          </Drawer>
+        </>
+      );
+    }
+  };
+  const { TextArea } = Input;
   return (
     <>
       <div className="container-style">
@@ -393,6 +518,7 @@ const InstructorDetailSchedule = () => {
                         )}
                       />
                       <div>{btnAction()}</div>
+                      <div>{renderReviewStudent()}</div>
                     </div>
                   </div>
 
