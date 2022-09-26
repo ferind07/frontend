@@ -457,16 +457,27 @@ const TutoringPage = (props) => {
   }
 
   function endMeet() {
-    peersRef.current.forEach((peer) => {
-      peer.peer.destroy();
-    });
     //console.log(userVideo.current);
-    userVideo.current.srcObject.getTracks().forEach((track) => {
-      if (track.readyState == "live") {
-        track.stop();
-        navigate("/resultPage/" + id);
-      }
-    });
+    axios
+      .post(BackendUrl + "/user/insEndClass", {
+        idSubmission: id,
+      })
+      .then((success) => {
+        if (success.data.status == true) {
+          peersRef.current.forEach((peer) => {
+            peer.peer.destroy();
+          });
+          userVideo.current.srcObject.getTracks().forEach((track) => {
+            if (track.readyState == "live") {
+              track.stop();
+              navigate("/resultPage/" + id);
+            }
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function onClickEnd(e) {

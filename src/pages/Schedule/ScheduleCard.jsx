@@ -148,6 +148,8 @@ const ScheduleCard = (props) => {
       );
     } else if (subMissionItem.status == 5) {
       return <Tag color="red">Reported</Tag>;
+    } else if (subMissionItem.status == 4) {
+      return <Tag color="blue">Class Ended</Tag>;
     }
   };
 
