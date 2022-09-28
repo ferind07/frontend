@@ -477,6 +477,42 @@ const InstructorDetailSchedule = () => {
     }
   };
 
+  function finishClass(id) {
+    axios
+      .post(BackendUrl + "/user/finishClass", {
+        idSubmission: id,
+      })
+      .then((success) => {
+        if (success.data.status == true) {
+          notification.success({
+            message: "Success",
+            description: success.data.msg,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const renderBtnFinish = (subMissionItem) => {
+    const dateEnd = moment(subMissionItem.dateEnd)
+      .add(-7, "hours")
+      .add(1, "day");
+
+    if (moment().isAfter(dateEnd) && subMissionItem.status !== 5) {
+      return (
+        <Button
+          onClick={(e) => {
+            finishClass(subMissionItem.id);
+          }}
+        >
+          Finish Class
+        </Button>
+      );
+    }
+  };
+
   const boxStyle = {
     boxShadow: "0px 20px 27px #0000000d",
     borderRadius: "12px",
@@ -660,7 +696,10 @@ const InstructorDetailSchedule = () => {
                                     <p>{dateStartString}</p>
                                     <h6>Date end</h6>
                                     <p>{dateEndString}</p>
-                                    {renderButton(subMissionItem)}
+                                    <div className="d-flex justify-content-between">
+                                      {renderButton(subMissionItem)}
+                                      {renderBtnFinish(subMissionItem)}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
