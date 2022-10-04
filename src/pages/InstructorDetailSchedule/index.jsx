@@ -488,6 +488,8 @@ const InstructorDetailSchedule = () => {
             message: "Success",
             description: success.data.msg,
           });
+          getListSubmission();
+          getHSumbission();
         }
       })
       .catch((error) => {
@@ -500,7 +502,11 @@ const InstructorDetailSchedule = () => {
       .add(-7, "hours")
       .add(1, "day");
 
-    if (moment().isAfter(dateEnd) && subMissionItem.status !== 5) {
+    if (
+      moment().isAfter(dateEnd) &&
+      subMissionItem.status !== 5 &&
+      subMissionItem.status !== 2
+    ) {
       return (
         <Button
           onClick={(e) => {
