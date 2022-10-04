@@ -42,6 +42,11 @@ const ForgetPassword = () => {
               message: "Error",
               description: success.data.msg,
             });
+          } else {
+            notification.success({
+              message: "Success",
+              description: success.data.msg,
+            });
           }
         })
         .catch((error) => {
