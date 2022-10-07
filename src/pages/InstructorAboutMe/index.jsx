@@ -165,6 +165,8 @@ const InstructorAboutMe = () => {
         axios
           .post(BackendUrl + "/user/changePassword", {
             token: localStorage.getItem("token"),
+            currentPassword: currentPassword,
+            newPassword: newPassword,
           })
           .then((response) => {
             console.log(response);
