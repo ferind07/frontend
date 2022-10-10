@@ -59,12 +59,30 @@ const Categories = () => {
     setListInstructor(data);
   }
 
+  const katagoriDetail = () => {
+    var katText = "";
+
+    if (id == 1) {
+      katText = "Another ways to learn language";
+    } else if (id == 2) {
+      katText = "Another ways to learn cooking";
+    } else if (id == 3) {
+      katText = "Another ways to learn sport";
+    } else if (id == 4) {
+      katText = "Another ways to learn design";
+    } else if (id == 5) {
+      katText = "Another ways to learn programming";
+    }
+
+    return katText;
+  };
+
   return (
     <>
       <Navbar />
       <div className="container" style={{ paddingBottom: "30px" }}>
         <h2 className="mt-5 mb-0">{katagoriText()}</h2>
-        <h5 className="mt-2 text-muted">Another ways to learn language</h5>
+        <h5 className="mt-2 text-muted">{katagoriDetail()}</h5>
         <div className="d-flex justify-content-between">
           <p style={{ fontSize: "0.8rem" }}>
             <AiOutlineTeam color="#00B4D8" size="1.5rem" />
