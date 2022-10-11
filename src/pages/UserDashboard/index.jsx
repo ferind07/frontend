@@ -48,7 +48,7 @@ const UserDashboard = () => {
             color: element.status == 0 ? "#A36A00" : "#0F7C4F",
             from: tFrom,
             to: tEnd,
-            title: element.title + " with " + element.name,
+            title: element.title,
           });
         }
 
