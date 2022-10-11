@@ -67,8 +67,8 @@ const RegisterInstructorPage = () => {
     bodyFormData.append("katagoriDetail", catagoryDetail);
     bodyFormData.append("berkas", fileBerkas);
     bodyFormData.append("detail", aboutMe);
-    bodyFormData.append("timeStart", time[0]);
-    bodyFormData.append("timeEnd", time[1]);
+    bodyFormData.append("timeStart", time[0].add(7, "hours"));
+    bodyFormData.append("timeEnd", time[1].add(7, "hours"));
     bodyFormData.append("availableDay", availableDay);
     bodyFormData.append("token", localStorage.getItem("token"));
     axios({

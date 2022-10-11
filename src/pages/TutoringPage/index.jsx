@@ -421,11 +421,6 @@ const TutoringPage = (props) => {
     );
   };
 
-  // useBeforeunload((event) => {
-  //   console.log("refresh");
-  //   event.preventDefault();
-  // });
-
   useEffect(() => {
     getUserInfo();
 

@@ -584,13 +584,15 @@ const InstructorAboutMe = () => {
 
   const saveOnclick = (e) => {
     e.preventDefault();
+    // var waktu = time[0].add(-7, "hours");
+    // console.log(waktu);
     let bodyFormData = new FormData();
     bodyFormData.append("token", localStorage.getItem("token"));
     bodyFormData.append("name", name);
     bodyFormData.append("phoneNumber", phone);
     bodyFormData.append("detail", detail);
-    bodyFormData.append("timeStart", time[0]);
-    bodyFormData.append("timeEnd", time[1]);
+    bodyFormData.append("timeStart", time[0].add(7, "hours"));
+    bodyFormData.append("timeEnd", time[1].add(7, "hours"));
     bodyFormData.append("userProfile", image);
     bodyFormData.append("activeDays", activeDays);
     bodyFormData.append("katagoriDetail", katagoriDetail);
