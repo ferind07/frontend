@@ -51,7 +51,7 @@ const ComponentCard = (props) => {
   const navigate = useNavigate();
   return (
     <div className="col-4">
-      <div className="card card-shadow">
+      <div className="card card-shadow mt-2">
         <img
           src={BackendUrl + props.image}
           style={{ width: "100%", aspectRatio: "4 / 3" }}

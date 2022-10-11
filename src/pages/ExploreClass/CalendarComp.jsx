@@ -26,6 +26,7 @@ const CalendarComp = (props) => {
         data.forEach((element, index) => {
           //console.log(element);
           const temp = {
+            id: index,
             color: "#fd3153",
             from: moment(element.dateStart).add(0, "hours").format(),
             to: moment(element.dateEnd).add(0, "hours").format(),

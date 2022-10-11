@@ -359,9 +359,13 @@ const ExploreClass = () => {
               const dateStart = moment(classData.dateStart)
                 .add(-7, "hours")
                 .format("D MMM YYYY HH:mm");
+              // notification.error({
+              //   message: `You have ${classTitle} class`,
+              //   description: "at " + dateStart,
+              // });
               notification.error({
-                message: `You have ${classTitle} class`,
-                description: "at " + dateStart,
+                message: "Error",
+                description: success.data.msg,
               });
             }
             //if payment success
