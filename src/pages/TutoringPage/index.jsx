@@ -146,7 +146,7 @@ const TutoringPage = (props) => {
       } else {
         if (peersRef.current.length > 0) {
           navigator.mediaDevices
-            .getDisplayMedia({ video: true, audio: true })
+            .getDisplayMedia({ video: true, audio: false })
             .then((stream) => {
               stream.getVideoTracks()[0].onended = function () {
                 resetSC();
@@ -425,7 +425,7 @@ const TutoringPage = (props) => {
     getUserInfo();
 
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
+      .getUserMedia({ video: true, audio: false })
       .then((stream) => {
         userVideo.current.srcObject = stream;
         socketRef.current.emit("join room", id);
@@ -644,7 +644,6 @@ const TutoringPage = (props) => {
   }
 
   function addPeer(incomingSignal, callerID, stream) {
-    //initiator false
     const peer = new window.SimplePeer({
       initiator: false,
       trickle: false,
@@ -662,7 +661,6 @@ const TutoringPage = (props) => {
           },
         ],
       },
-      //streams: [stream],
       stream,
     });
 
